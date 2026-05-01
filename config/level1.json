@@ -1,0 +1,14 @@
+{
+  "level": 1,
+  "target_money": 650,
+  "time_limit": 60,
+  "minerals": [
+    {"type": "small_gold", "x": 300, "y": 350, "value": 200, "weight": 5, "size": 25},
+    {"type": "small_gold", "x": 500, "y": 400, "value": 200, "weight": 5, "size": 25},
+    {"type": "big_gold",   "x": 400, "y": 350, "value": 500, "weight": 10, "size": 40},
+    {"type": "diamond",    "x": 200, "y": 280, "value": 600, "weight": 1, "size": 12},
+    {"type": "stone",      "x": 550, "y": 420, "value": 20, "weight": 15, "size": 35},
+    {"type": "stone",      "x": 150, "y": 430, "value": 20, "weight": 15, "size": 35},
+    {"type": "small_gold", "x": 350, "y": 450, "value": 200, "weight": 5, "size": 25}
+  ]
+}
