@@ -5,23 +5,17 @@
 #include "gesture/HandTracker.h"
 #include "data/UserDataManager.h"
 #include <QGraphicsView>
-#include <QMessageBox>
 
 SceneManager::SceneManager(QGraphicsView *view, QObject *parent)
     : QObject(parent), m_view(view)
 {
-    // 创建手势追踪器（工作线程）
     m_handTracker = new HandTracker(this);
-
-    // 显示首页
     showHome();
 }
 
 SceneManager::~SceneManager()
 {
-    if (m_handTracker) {
-        m_handTracker->stop();
-    }
+    m_handTracker->stop();
 }
 
 // ==================== 场景切换 ====================
@@ -33,15 +27,10 @@ void SceneManager::showHome()
     if (!m_homeScene) {
         m_homeScene = new HomeScene(this);
         connect(m_homeScene, &HomeScene::startGame, this, [this]() {
-            // 首次游戏 → 直接进入游戏场景
-            int stage = UserDataManager::getInstance()->getStageNum();
-            if (stage <= 1) {
-                // 没有记录，直接开始第一关
-                showGame(false, false, false, false, 0);
-            } else {
-                // 有记录，进入商店
+            if (UserDataManager::getInstance()->getStageNum() <= 1)
+                showGame();
+            else
                 showShop();
-            }
         });
     }
 
@@ -54,14 +43,14 @@ void SceneManager::showShop()
 
     if (!m_shopScene) {
         m_shopScene = new ShopScene(this);
-        connect(m_shopScene, &ShopScene::startGame, this, [this](
-                bool bomb, bool potion, bool diamonds, bool stoneBook, int pay) {
-            m_isBuyBomb     = bomb;
-            m_isBuyPotion   = potion;
-            m_isBuyDiamonds = diamonds;
-            m_isStoneBook   = stoneBook;
-            m_payMoney      = pay;
-            showGame(bomb, potion, diamonds, stoneBook, pay);
+        connect(m_shopScene, &ShopScene::startGame, this,
+                [this](bool bomb, bool potion, bool diamond, bool book, int pay) {
+            m_buyBomb     = bomb;
+            m_buyPotion   = potion;
+            m_buyDiamonds = diamond;
+            m_buyStoneBook = book;
+            m_payMoney    = pay;
+            showGame(bomb, potion, diamond, book, pay);
         });
         connect(m_shopScene, &ShopScene::backToHome, this, &SceneManager::showHome);
     }
@@ -70,33 +59,23 @@ void SceneManager::showShop()
     m_view->setScene(m_shopScene);
 }
 
-void SceneManager::showGame(bool isBuyBomb, bool isBuyPotion,
-                             bool isBuyDiamonds, bool isStoneBook, int payMoney)
+void SceneManager::showGame(bool bomb, bool potion, bool diamonds,
+                             bool stoneBook, int pay)
 {
     m_currentPage = GamePage;
 
-    m_isBuyBomb     = isBuyBomb;
-    m_isBuyPotion   = isBuyPotion;
-    m_isBuyDiamonds = isBuyDiamonds;
-    m_isStoneBook   = isStoneBook;
-    m_payMoney      = payMoney;
-
-    // 删除旧场景，创建新游戏场景
+    // 清理旧游戏场景
     if (m_gameScene) {
+        disconnectGameSignals(m_gameScene);
         m_gameScene->deleteLater();
+        m_gameScene = nullptr;
     }
 
-    m_gameScene = GameScene::create(isBuyBomb, isBuyPotion,
-                                     isBuyDiamonds, isStoneBook, payMoney);
+    m_gameScene = GameScene::create(bomb, potion, diamonds, stoneBook, pay);
     connectGameSignals(m_gameScene);
 
     m_view->setScene(m_gameScene);
-    m_gameScene->setFocus(); // 确保接收键盘事件
-}
-
-void SceneManager::showGameFromShop()
-{
-    showGame(m_isBuyBomb, m_isBuyPotion, m_isBuyDiamonds, m_isStoneBook, m_payMoney);
+    m_gameScene->setFocus();
 }
 
 // ==================== 模式控制 ====================
@@ -111,12 +90,15 @@ void SceneManager::setVisionMode(VisionMode mode)
     }
 
     if (mode == ModeLocalCV) {
+        m_handTracker->setMode(HandTracker::LocalCV);
+        m_handTracker->start();
+    } else if (mode == ModeAIVision) {
+        m_handTracker->setMode(HandTracker::AIVision);
         m_handTracker->start();
     }
-    // AI 模式由 HandTracker 内部切换
 }
 
-// ==================== 游戏信号连接 ====================
+// ==================== 游戏信号 ====================
 
 void SceneManager::connectGameSignals(GameScene *game)
 {
@@ -124,7 +106,6 @@ void SceneManager::connectGameSignals(GameScene *game)
     connect(game, &GameScene::levelFailed, this, &SceneManager::onLevelFailed);
     connect(game, &GameScene::backToHome, this, &SceneManager::onBackToHome);
 
-    // 连接手势信号到游戏场景
     if (m_handTracker) {
         connect(m_handTracker, &HandTracker::handTilt,
                 game, &GameScene::onHandTilt);
@@ -137,24 +118,28 @@ void SceneManager::connectGameSignals(GameScene *game)
     }
 }
 
-void SceneManager::onLevelPassed(int score)
+void SceneManager::disconnectGameSignals(GameScene *game)
 {
-    Q_UNUSED(score);
-    // 过关后进入商店准备下一关
+    disconnect(game, nullptr, this, nullptr);
+    if (m_handTracker)
+        disconnect(m_handTracker, nullptr, game, nullptr);
+}
+
+void SceneManager::onLevelPassed(int)
+{
     showShop();
 }
 
-void SceneManager::onLevelFailed(int score)
+void SceneManager::onLevelFailed(int)
 {
-    Q_UNUSED(score);
-    // 失败后重试本关
-    showGameFromShop();
+    // 失败重试：使用相同道具状态
+    showGame(m_buyBomb, m_buyPotion, m_buyDiamonds, m_buyStoneBook, m_payMoney);
 }
 
 void SceneManager::onBackToHome()
 {
-    // 清理游戏场景
     if (m_gameScene) {
+        disconnectGameSignals(m_gameScene);
         m_gameScene->deleteLater();
         m_gameScene = nullptr;
     }

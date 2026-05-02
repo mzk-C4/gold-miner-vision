@@ -1,8 +1,6 @@
 /**
  * HomeScene — 首页场景
- *
- * Logo 动画 + 开始按钮 + 音效/音乐开关
- * 参考原项目 MainRoot / 首页场景设计
+ * Logo 缩放弹出动画 + 开始按钮 + 音效/音乐开关
  */
 #ifndef HOMESCENE_H
 #define HOMESCENE_H
@@ -10,29 +8,29 @@
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
 #include <QGraphicsProxyWidget>
-#include <QPushButton>
-#include <QPropertyAnimation>
+#include <QVariantAnimation>
 
 class HomeScene : public QGraphicsScene
 {
     Q_OBJECT
+    Q_PROPERTY(qreal logoScale READ logoScale WRITE setLogoScale)
 
 public:
     explicit HomeScene(QObject *parent = nullptr);
+
+    qreal logoScale() const { return m_logoScale; }
+    void setLogoScale(qreal s);
 
 signals:
     void startGame();
 
 private:
-    void setupLogo();
-    void setupButtons();
+    void setupUI();
     void playLogoAnimation();
 
-    QGraphicsTextItem    *m_titleText  = nullptr;
-    QGraphicsProxyWidget *m_startProxy = nullptr;
-    QGraphicsProxyWidget *m_musicProxy = nullptr;
-    QGraphicsProxyWidget *m_soundProxy = nullptr;
-    QPropertyAnimation   *m_logoAnim  = nullptr;
+    QGraphicsTextItem *m_titleText = nullptr;
+    qreal m_logoScale = 0.1;
+    QVariantAnimation *m_logoAnim = nullptr;
 };
 
 #endif // HOMESCENE_H

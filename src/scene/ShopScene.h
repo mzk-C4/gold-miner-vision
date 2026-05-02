@@ -1,13 +1,12 @@
 /**
  * ShopScene — 商店场景
- *
  * 四种道具购买（各限购一次），道具效果仅下一关有效
- * 参考原项目 ShopScene / goodsDesVec 设计
  */
 #ifndef SHOPSCENE_H
 #define SHOPSCENE_H
 
 #include <QGraphicsScene>
+#include <QGraphicsTextItem>
 #include <QGraphicsProxyWidget>
 #include <QPushButton>
 #include <QLabel>
@@ -18,8 +17,7 @@ class ShopScene : public QGraphicsScene
 
 public:
     explicit ShopScene(QObject *parent = nullptr);
-
-    void refresh();  // 刷新金币显示
+    void refresh();
 
 signals:
     void startGame(bool isBuyBomb, bool isBuyPotion,
@@ -31,27 +29,22 @@ private:
     void selectItem(int index);
     void buyItem();
 
-    // ========== 道具数据 ==========
     struct GoodsInfo {
         QString name;
-        QString description;
-        int     price;
-        bool    purchased;
+        QString desc;
+        int price = 0;
+        bool purchased = false;
     };
+
     GoodsInfo m_goods[4];
+    int m_selectedIndex = -1;
+    int m_payMoney = 0;
 
-    int m_selectedIndex = -1;  // 当前选中的道具索引
-    int m_payMoney      = 0;   // 累计消费金额
-
-    // ========== UI 元素 ==========
-    QGraphicsTextItem    *m_moneyText   = nullptr;
-    QGraphicsTextItem    *m_descText    = nullptr;
-    QGraphicsProxyWidget *m_buyProxy    = nullptr;
-    QPushButton          *m_buyButton   = nullptr;
-    QPushButton          *m_goodsButtons[4] = {};
-
-    // 道具图标（标记是否已购买）
-    QGraphicsProxyWidget *m_purchasedMarkers[4] = {};
+    QGraphicsTextItem    *m_moneyText = nullptr;
+    QGraphicsTextItem    *m_descText  = nullptr;
+    QPushButton          *m_buyButton = nullptr;
+    QPushButton          *m_goodsBtns[4] = {};
+    QGraphicsProxyWidget *m_markers[4] = {};
 };
 
 #endif // SHOPSCENE_H

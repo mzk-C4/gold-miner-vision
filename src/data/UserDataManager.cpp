@@ -1,13 +1,11 @@
 #include "UserDataManager.h"
 
-// 单例指针
 UserDataManager* UserDataManager::s_instance = nullptr;
 
 UserDataManager* UserDataManager::getInstance()
 {
-    if (s_instance == nullptr) {
+    if (!s_instance)
         s_instance = new UserDataManager();
-    }
     return s_instance;
 }
 
@@ -15,7 +13,6 @@ UserDataManager::UserDataManager(QObject *parent)
     : QObject(parent)
     , m_settings("GoldMiner", "GoldMiner")
 {
-    // 从 QSettings 恢复数据，设置默认值
     m_musicMuted = m_settings.value("musicMuted", false).toBool();
     m_soundMuted = m_settings.value("soundMuted", false).toBool();
     m_allMoney   = m_settings.value("allMoney", 0).toInt();
@@ -44,11 +41,6 @@ void UserDataManager::setStageNum(int stage)
 {
     m_stageNum = stage;
     m_settings.setValue("stageNum", stage);
-}
-
-void UserDataManager::save()
-{
-    m_settings.sync();
 }
 
 bool UserDataManager::spendMoney(int amount)
