@@ -1,0 +1,33 @@
+{
+  "cocos": {
+    "name": "GoldMiner",
+    "version": "3.8.5",
+    "engine_version": "3.8.5",
+    "compiler_version": 4
+  },
+  "compiler": {
+    "type": "cocos",
+    "version": "3.8.5"
+  },
+  "build": {
+    "app_key": "",
+    "android": {
+      "NdkMode": false,
+      "app_abi": "armeabi-v7a:arm64-v8a:x86",
+      "orientation": "landscape"
+    },
+    "ios": {
+      "isLandScape": true,
+      "_orientation": "landscape"
+    },
+    "mac": {
+      "isLandScape": true
+    },
+    "win32": {
+      "isLandScape": true
+    }
+  },
+  "first-run": false,
+  "knownPaths": {},
+  "custom": {}
+}
