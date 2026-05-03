@@ -35,17 +35,23 @@ private:
 
 #pragma mark - Action
     void startButtonTouch(Ref *sender, Widget::TouchEventType type);
-    void playerButtonTouch(Ref *sender, Widget::TouchEventType type);
-    void historyButtonTouch(Ref *sender, Widget::TouchEventType type);
 
     void showPlayerPanel();
     void hidePlayerPanel();
     void refreshPlayerList();
-    void showHistoryPanel();
-    void hideHistoryPanel();
+    void updatePlayerLabel();
 
     Node *_playerPanel = nullptr;
-    Node *_historyPanel = nullptr;
+    Button *_startBtn = nullptr;
+    Button *_playerBtn = nullptr;
+    bool _playerSelected = false;
+
+    // Mode selection
+    int _selectedMode = 0; // 0=TOUCH, 1=OPENCV, 2=AI
+    Button *_touchModeBtn = nullptr;
+    Button *_opencvModeBtn = nullptr;
+    Button *_aiModeBtn = nullptr;
+    void onModeBtnTouch(int mode);
 };
 
 #endif /* MainRoot_hpp */

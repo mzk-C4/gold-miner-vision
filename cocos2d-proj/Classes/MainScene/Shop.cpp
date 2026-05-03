@@ -33,7 +33,21 @@ bool Shop::init()
     
     auto csb = CSLoader::createNode("ShopScene.csb");
     this->addChild(csb);
-    
+
+    // Gesture mode: swap merchant image
+    if (Game::getDefaultInputMode() != InputMode::TOUCH) {
+        auto businessman = csb->getChildByName("businessman");
+        if (businessman) {
+            auto tex = Director::getInstance()->getTextureCache()
+                ->addImage("Resources/shopper exchange.png");
+            auto sprite = static_cast<Sprite*>(businessman);
+            sprite->setTexture(tex);
+            sprite->setTextureRect(Rect(0, 0,
+                tex->getContentSize().width, tex->getContentSize().height));
+            sprite->setScale(0.2f);
+        }
+    }
+
     goodsDesVec.push_back(Value("炸药.购买以后,当抓到较重且金额不多的物品时,按下上方炸药即可炸毁物品,以便节省时间.功效为下一关"));
     goodsDesVec.push_back(Value("力量药水.购买以后,在下一关力量会增加,抓到物品后拉回速度会增加20%.功效为下一关"));
     goodsDesVec.push_back(Value("优质矿石.购买后在下一关中收购钻石的价格将变成原价格的3倍,但不保证下一关一定会有钻石~其效果为下一关"));

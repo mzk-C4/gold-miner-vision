@@ -13,13 +13,14 @@ UserDataManager *UserDataManager::getInstance()
 {
     if (s_SharedUserDataManager == nullptr) {
         s_SharedUserDataManager = new UserDataManager();
-        
+
         s_SharedUserDataManager->_musicMute = SoundTool::getInstance()->getMusicIsMute();
         s_SharedUserDataManager->_soundMute = SoundTool::getInstance()->getEffectIsMute();
-        s_SharedUserDataManager->_allMoney = UserDefault::getInstance()->getIntegerForKey(userAllMoneyKey, 0);
-        s_SharedUserDataManager->_stageNum = UserDefault::getInstance()->getIntegerForKey(userStageNumKey, 1);
+        // Delegate to PlayerManager for per-player progress
+        s_SharedUserDataManager->_allMoney = PlayerManager::getInstance()->getAllMoney();
+        s_SharedUserDataManager->_stageNum = PlayerManager::getInstance()->getStageNum();
     }
-    
+
     return s_SharedUserDataManager;
 }
 

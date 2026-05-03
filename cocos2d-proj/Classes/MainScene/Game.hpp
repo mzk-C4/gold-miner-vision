@@ -22,6 +22,8 @@ public:
     static Scene *createScene(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney);
     virtual bool init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney);
     static Game *create(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney);
+    static void setDefaultInputMode(InputMode mode) { _defaultInputMode = mode; }
+    static InputMode getDefaultInputMode() { return _defaultInputMode; }
 
 private:
     Text *allMoney;
@@ -56,6 +58,7 @@ private:
     Button *bompButton;
 
     // Gesture / input mode
+    static InputMode _defaultInputMode;
     InputMode _inputMode = InputMode::TOUCH;
     Sprite *_cameraPreview = nullptr;
     float _gestureAngle = 0.0f;

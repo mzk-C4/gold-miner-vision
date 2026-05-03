@@ -14,8 +14,13 @@
 #include "GestureClient.hpp"
 #include "AIGestureService.hpp"
 #include "platform/CCImage.h"
+#include "SimpleAudioEngine.h"
+#include <vector>
+#include <cstdlib>
 
 #define kWorldTag 1000
+
+InputMode Game::_defaultInputMode = InputMode::TOUCH;
 
 Scene *Game::createScene(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney)
 {
@@ -161,6 +166,11 @@ bool Game::init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isSto
 
     loadStageInfo();
     setupModePanel(csb);
+
+    // Apply default mode from home screen
+    if (_defaultInputMode != InputMode::TOUCH) {
+        switchInputMode(_defaultInputMode);
+    }
 
     return true;
 }
@@ -326,6 +336,59 @@ void Game::updateTime(float dt)
 
 void Game::startGame()
 {
+    // Gesture mode: play random game music at lower volume
+    if (_inputMode != InputMode::TOUCH) {
+        static const std::vector<std::string> gameSongs = {
+            "music/game/David Tao/陶喆 - Angel.mp3",
+            "music/game/David Tao/陶喆 - Melody.mp3",
+            "music/game/David Tao/陶喆 - 二十二.mp3",
+            "music/game/David Tao/陶喆 - 寂寞的季节.mp3",
+            "music/game/David Tao/陶喆 - 小镇姑娘.mp3",
+            "music/game/David Tao/陶喆 - 就是爱你.mp3",
+            "music/game/David Tao/陶喆 - 找自己.mp3",
+            "music/game/David Tao/陶喆 - 普通朋友.mp3",
+            "music/game/David Tao/陶喆 - 暗恋.mp3",
+            "music/game/David Tao/陶喆 - 望春风.mp3",
+            "music/game/David Tao/陶喆 - 流沙.mp3",
+            "music/game/David Tao/陶喆 - 爱我还是他.mp3",
+            "music/game/David Tao/陶喆 - 爱，很简单.mp3",
+            "music/game/David Tao/陶喆 - 蝴蝶.mp3",
+            "music/game/David Tao/陶喆 - 讨厌红楼梦.mp3",
+            "music/game/David Tao/陶喆 - 飞机场的1030.mp3",
+            "music/game/JAY/周杰伦 - 三年二班.flac",
+            "music/game/JAY/周杰伦 - 上海一九四三.flac",
+            "music/game/JAY/周杰伦 - 东风破.flac",
+            "music/game/JAY/周杰伦 - 你听得到.flac",
+            "music/game/JAY/周杰伦 - 分裂.flac",
+            "music/game/JAY/周杰伦 - 双刀.flac",
+            "music/game/JAY/周杰伦 - 反方向的钟.flac",
+            "music/game/JAY/周杰伦 - 外婆.flac",
+            "music/game/JAY/周杰伦 - 大笨钟.flac",
+            "music/game/JAY/周杰伦 - 将军.flac",
+            "music/game/JAY/周杰伦 - 开不了口.flac",
+            "music/game/JAY/周杰伦 - 忍者.flac",
+            "music/game/JAY/周杰伦 - 手语.flac",
+            "music/game/JAY/周杰伦 - 斗牛.flac",
+            "music/game/JAY/周杰伦 - 时光机.flac",
+            "music/game/JAY/周杰伦 - 晴天.flac",
+            "music/game/JAY/周杰伦 - 火车叨位去.flac",
+            "music/game/JAY/周杰伦 - 爱你没差.flac",
+            "music/game/JAY/周杰伦 - 爱在西元前.flac",
+            "music/game/JAY/周杰伦 - 牛仔很忙.flac",
+            "music/game/JAY/周杰伦 - 稻香.flac",
+            "music/game/JAY/周杰伦 - 给我一首歌的时间.flac",
+            "music/game/JAY/周杰伦 - 说走就走.flac",
+            "music/game/JAY/周杰伦 - 逆鳞.flac",
+            "music/game/JAY/周杰伦 - 霍元甲.flac",
+            "music/game/JAY/周杰伦 - 飘移.flac",
+            "music/game/JAY/周杰伦 - 龙卷风.flac",
+        };
+        int idx = rand() % gameSongs.size();
+        SoundTool::getInstance()->playBackgroundMusic(
+            const_cast<char*>(gameSongs[idx].c_str()));
+        CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.35f);
+    }
+
     // 添加点击事件
     auto listener = EventListenerTouchOneByOne::create();
     listener->onTouchBegan = CC_CALLBACK_2(Game::touchCallBack, this);
@@ -357,7 +420,13 @@ void Game::stopGame()
     rope->stopAllActions();
     this->stopAllActions();
     this->unscheduleAllCallbacks();
-    
+
+    // Restore gesture-mode background music
+    if (_inputMode != InputMode::TOUCH) {
+        SoundTool::getInstance()->playBackgroundMusic("music/backMusic-exchange.flac");
+        CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.5f);
+    }
+
     SoundTool::getInstance()->playEffect("music/finish.mp3");
     
     // 判断获取的分数是否能过关
@@ -424,9 +493,10 @@ void Game::setupModePanel(Node *parent)
     parent->addChild(panel, 100);
 
     auto createModeBtn = [&](const std::string& text, InputMode mode) -> Button* {
-        auto btn = Button::create("Default/Button_Disable.png");
+        auto btn = Button::create("Resources/button.png");
         btn->setTitleText(text);
-        btn->setTitleFontSize(18);
+        btn->setTitleFontSize(20);
+        btn->setTitleColor(Color3B::BLACK);
         btn->setScale9Enabled(true);
         btn->setContentSize(Size(100, 35));
         btn->addTouchEventListener([this, mode](Ref*, Widget::TouchEventType type) {
@@ -465,6 +535,7 @@ void Game::setupModePanel(Node *parent)
 void Game::switchInputMode(InputMode mode)
 {
     if (_inputMode == mode) return;
+    InputMode oldMode = _inputMode;
     _inputMode = mode;
 
     // Update button highlights
@@ -496,13 +567,15 @@ void Game::switchInputMode(InputMode mode)
         if (_modeLabel) {
             _modeLabel->setString(mode == InputMode::OPENCV ? "OPENCV" : "AI");
         }
-        // Launch server and connect
-        auto* gc = GestureClient::getInstance();
-        gc->launchServer();
-        gc->connect();
-        gc->setCallback([this](const GestureData& data) {
-            this->onGestureData(data);
-        });
+        // Only launch server and connect when first entering gesture mode
+        if (oldMode == InputMode::TOUCH) {
+            auto* gc = GestureClient::getInstance();
+            gc->launchServer();
+            gc->connectHttp("http://localhost:5000");
+            gc->setCallback([this](const GestureData& data) {
+                this->onGestureData(data);
+            });
+        }
 
         this->schedule(CC_SCHEDULE_SELECTOR(Game::updateGestureAngle), 0.05);
         this->schedule(CC_SCHEDULE_SELECTOR(Game::updateCameraPreview), 0.1);
@@ -514,7 +587,8 @@ void Game::updateGestureAngle(float dt)
     if (_inputMode == InputMode::TOUCH) return;
 
     GestureData data = GestureClient::getInstance()->getData();
-    if (data.connected) {
+    // Only control angle during swing phase — lock direction when hook is extended
+    if (data.connected && !ropeChangeing && !isOpenHook) {
         _gestureAngle = data.angle;
         rope->setRotation(_gestureAngle);
     }
@@ -567,8 +641,8 @@ void Game::updateCameraPreview(float dt)
 
 void Game::onGestureData(const GestureData& data)
 {
-    if (data.gesture == "OPEN_PALM" && !ropeChangeing && !isOpenHook) {
-        // Trigger hook drop — same logic as touchCallBack
+    // FIST (握拳) → drop hook; OPEN_PALM (张开手掌) → aim (handled in updateGestureAngle)
+    if (data.gesture == "FIST" && !ropeChangeing && !isOpenHook) {
         SoundTool::getInstance()->playEffect("music/lastart.mp3");
 
         rope->stopAllActions();

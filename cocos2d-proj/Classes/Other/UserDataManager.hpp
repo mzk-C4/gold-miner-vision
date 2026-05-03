@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "Const.hpp"
 #include "SoundTool.hpp"
+#include "services/PlayerManager.hpp"
 
 class UserDataManager {
 
@@ -44,8 +45,9 @@ public:
     };
     
     void saveUserData() {
-        UserDefault::getInstance()->setIntegerForKey(userAllMoneyKey, _allMoney);
-        UserDefault::getInstance()->setIntegerForKey(userStageNumKey, _stageNum);
+        PlayerManager::getInstance()->setAllMoney(_allMoney);
+        PlayerManager::getInstance()->setStageNum(_stageNum);
+        PlayerManager::getInstance()->saveProfile();
     };
     
 private:
