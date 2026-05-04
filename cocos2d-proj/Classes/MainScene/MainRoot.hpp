@@ -45,6 +45,8 @@ private:
     Button *_startBtn = nullptr;
     Button *_playerBtn = nullptr;
     bool _playerSelected = false;
+    bool _playerExplicitlySelected = false;
+    EventListenerTouchOneByOne *_panelDismissListener = nullptr;
 
     // Mode selection
     int _selectedMode = 0; // 0=TOUCH, 1=OPENCV, 2=AI

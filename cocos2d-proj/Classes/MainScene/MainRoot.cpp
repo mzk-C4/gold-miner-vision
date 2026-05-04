@@ -8,12 +8,24 @@
 
 #include "MainRoot.hpp"
 #include "Game.hpp"
-#include "SimpleAudioEngine.h"
 #include "UserDataManager.hpp"
 #include "Shop.hpp"
 #include "SoundTool.hpp"
 #include "Const.hpp"
 #include "services/PlayerManager.hpp"
+
+// Create a button with predictable, clean appearance — no black edges
+static Button* makeCleanButton(const std::string& title, const Size& size, float fontSize)
+{
+    auto btn = Button::create("Resources/green.png");
+    btn->setScale9Enabled(true);
+    btn->setCapInsets(Rect(8, 4, 137, 46));
+    btn->setContentSize(size);
+    btn->setTitleText(title);
+    btn->setTitleFontSize(fontSize);
+    btn->setTitleColor(Color3B::BLACK);
+    return btn;
+}
 
 Scene *MainLayer::createScene()
 {
@@ -68,7 +80,7 @@ bool MainLayer::init()
     _playerBtn->setTitleFontSize(24);
     _playerBtn->setTitleColor(Color3B::BLACK);
     _playerBtn->setScale9Enabled(true);
-    _playerBtn->setContentSize(Size(160, 50));
+    _playerBtn->setContentSize(Size(400, 120));
     _playerBtn->addTouchEventListener([this](Ref*, Widget::TouchEventType type) {
         if (type == Widget::TouchEventType::ENDED) {
             kPlayClickSound
@@ -79,13 +91,8 @@ bool MainLayer::init()
 
     // Mode selection buttons at bottom-left
     auto makeModeBtn = [&](const std::string& text, int mode, float x, float y) -> Button* {
-        auto btn = Button::create("Resources/button.png");
+        auto btn = makeCleanButton(text, Size(140, 56), 18);
         btn->setPosition(Vec2(x, y));
-        btn->setTitleText(text);
-        btn->setTitleFontSize(20);
-        btn->setTitleColor(Color3B::BLACK);
-        btn->setScale9Enabled(true);
-        btn->setContentSize(Size(100, 40));
         btn->addTouchEventListener([this, mode](Ref*, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
                 onModeBtnTouch(mode);
@@ -98,14 +105,16 @@ bool MainLayer::init()
     _touchModeBtn = makeModeBtn("TOUCH", 0, mx, my);
     addChild(_touchModeBtn, 10);
 
-    _opencvModeBtn = makeModeBtn("OPENCV", 1, mx + 120, my);
+    _opencvModeBtn = makeModeBtn("OPENCV", 1, mx + 160, my);
     addChild(_opencvModeBtn, 10);
 
-    _aiModeBtn = makeModeBtn("AI", 2, mx + 240, my);
+    _aiModeBtn = makeModeBtn("AI", 2, mx + 320, my);
     addChild(_aiModeBtn, 10);
 
-    // Highlight default mode
-    onModeBtnTouch(0);
+    _selectedMode = 0;
+    if (_touchModeBtn) _touchModeBtn->setBright(true);
+    if (_opencvModeBtn) _opencvModeBtn->setBright(false);
+    if (_aiModeBtn) _aiModeBtn->setBright(false);
 
     updatePlayerLabel();
 
@@ -127,15 +136,13 @@ void MainLayer::onEnter()
     this->playMinerAnimation(leftLeg, "miner-leg-", 0.15);
     this->playMinerAnimation(face, "miner-face-whistle-", 0.25);
     this->playMinerAnimation(light, "cave-", 0.35);
-    
+
     SoundTool::getInstance()->playBackgroundMusic("music/backMusic.mp3");
 }
 
 void MainLayer::startButtonTouch(cocos2d::Ref *sender, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED) {
-        if (!_playerSelected) return;
-
         kPlayClickSound
 
         // Set the input mode for the game
@@ -143,6 +150,25 @@ void MainLayer::startButtonTouch(cocos2d::Ref *sender, Widget::TouchEventType ty
         if (_selectedMode == 1) mode = InputMode::OPENCV;
         else if (_selectedMode == 2) mode = InputMode::AI;
         Game::setDefaultInputMode(mode);
+
+        // Fresh character by default; use saved data only if explicitly selected
+        if (!_playerExplicitlySelected) {
+            // Switch to Guest profile so we don't overwrite saved player data
+            auto* pm = PlayerManager::getInstance();
+            if (pm->currentPlayer() != "Guest") {
+                auto players = pm->listPlayers();
+                bool hasGuest = false;
+                for (const auto& p : players) {
+                    if (p == "Guest") { hasGuest = true; break; }
+                }
+                if (!hasGuest) pm->createPlayer("Guest");
+                else pm->selectPlayer("Guest");
+            }
+            pm->setStageNum(1);
+            pm->setAllMoney(0);
+            UserDataManager::getInstance()->setStageNum(1);
+            UserDataManager::getInstance()->setAllMoney(0);
+        }
 
         if (UserDataManager::getInstance()->getStageNum() <= 1) {
             auto gameScene = Game::createScene(false, false, false, false, 0);
@@ -196,156 +222,68 @@ void MainLayer::showPlayerPanel()
     panel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     panel->setPosition(Vec2(kWinSizeWidth * 0.5f, kWinSizeHeight * 0.5f));
     panel->setName("PlayerPanel");
-    panel->addTouchEventListener([=](Ref*, Widget::TouchEventType type) {
-        if (type == Widget::TouchEventType::ENDED) hidePlayerPanel();
-    });
     this->addChild(panel, 50);
 
     auto inner = Layout::create();
-    inner->setContentSize(Size(720, 500));
+    inner->setContentSize(Size(720, 360));
     inner->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     inner->setPosition(Vec2(kWinSizeWidth * 0.5f, kWinSizeHeight * 0.5f));
     inner->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
     inner->setBackGroundColor(Color3B(50, 40, 30));
     inner->setBackGroundColorOpacity(255);
-    inner->setTouchEnabled(true);
-    inner->setSwallowTouches(true);
     inner->setName("InnerPanel");
     panel->addChild(inner);
 
+    // Dismiss: touch outside inner closes panel
+    auto dismissListener = EventListenerTouchOneByOne::create();
+    dismissListener->setSwallowTouches(false);
+    dismissListener->onTouchBegan = [this](Touch* touch, Event*) -> bool {
+        if (!_playerPanel) return false;
+        auto* inner = _playerPanel->getChildByName("InnerPanel");
+        if (!inner) return false;
+        Vec2 localPos = inner->convertToNodeSpace(touch->getLocation());
+        Size sz = inner->getContentSize();
+        Rect innerRect(-sz.width * 0.5f, -sz.height * 0.5f, sz.width, sz.height);
+        if (!innerRect.containsPoint(localPos)) {
+            hidePlayerPanel();
+            return true;
+        }
+        return false; // let touch pass through to children
+    };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(dismissListener, panel);
+    _panelDismissListener = dismissListener;
+
     // Title
     auto title = Text::create("Player Manager — " + pm->currentPlayer(), "", 24);
-    title->setPosition(Vec2(360, 470));
+    title->setPosition(Vec2(360, 330));
     title->setTextColor(Color4B::WHITE);
     inner->addChild(title);
 
     // Current player info
     auto curLabel = Text::create("Stage: " + to_string(pm->getStageNum()) + "  |  Money: $" + to_string(pm->getAllMoney()), "", 18);
-    curLabel->setPosition(Vec2(360, 440));
+    curLabel->setPosition(Vec2(360, 300));
     curLabel->setTextColor(Color4B(200, 200, 100, 255));
     curLabel->setName("curLabel");
     inner->addChild(curLabel);
 
-    // ── Left: Player List ──
+    // Player list (full width, no history panel)
     auto playerListView = ListView::create();
-    playerListView->setContentSize(Size(340, 220));
-    playerListView->setPosition(Vec2(20, 200));
+    playerListView->setContentSize(Size(600, 190));
+    playerListView->setPosition(Vec2(60, 100));
     playerListView->setDirection(ScrollView::Direction::VERTICAL);
     playerListView->setItemsMargin(4);
     playerListView->setName("playerList");
     inner->addChild(playerListView);
 
     auto playersLabel = Text::create("Players", "", 18);
-    playersLabel->setPosition(Vec2(190, 430));
+    playersLabel->setPosition(Vec2(360, 275));
     playersLabel->setTextColor(Color4B(180, 180, 180, 255));
     inner->addChild(playersLabel);
 
     refreshPlayerList();
 
-    // ── Right: History ──
-    auto historyLabel = Text::create("History", "", 18);
-    historyLabel->setPosition(Vec2(530, 430));
-    historyLabel->setTextColor(Color4B(180, 180, 180, 255));
-    inner->addChild(historyLabel);
-
-    auto historyList = ListView::create();
-    historyList->setContentSize(Size(350, 220));
-    historyList->setPosition(Vec2(370, 200));
-    historyList->setDirection(ScrollView::Direction::VERTICAL);
-    historyList->setItemsMargin(3);
-    historyList->setName("historyList");
-    inner->addChild(historyList);
-
-    auto refreshHistory = [this, pm]() {
-        if (!_playerPanel) return;
-        auto* inner = _playerPanel->getChildByName("InnerPanel");
-        if (!inner) return;
-        auto* listView = static_cast<ListView*>(inner->getChildByName("historyList"));
-        if (!listView) return;
-        listView->removeAllItems();
-
-        auto history = pm->getHistory();
-        if (history.empty()) {
-            auto emptyLabel = Text::create("No history yet", "", 16);
-            emptyLabel->setTextColor(Color4B(150, 150, 150, 255));
-            auto item = Layout::create();
-            item->setContentSize(Size(330, 30));
-            emptyLabel->setPosition(Vec2(165, 15));
-            item->addChild(emptyLabel);
-            listView->pushBackCustomItem(item);
-        } else {
-            for (auto it = history.rbegin(); it != history.rend(); ++it) {
-                auto item = Layout::create();
-                item->setContentSize(Size(330, 28));
-                item->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-                item->setBackGroundColor(Color3B(70, 60, 50));
-
-                std::string line = "Stage " + to_string(it->stageNum)
-                    + "  Score:" + to_string(it->score)
-                    + "  " + std::string(it->passed ? "PASS" : "FAIL");
-                auto lbl = Text::create(line, "", 13);
-                lbl->setPosition(Vec2(165, 14));
-                lbl->setTextColor(it->passed ? Color4B(100, 200, 100, 255) : Color4B(220, 100, 100, 255));
-                item->addChild(lbl);
-
-                listView->pushBackCustomItem(item);
-            }
-        }
-    };
-    refreshHistory();
-
-    // ── Bottom: Create new player ──
-    auto inputBg = Layout::create();
-    inputBg->setContentSize(Size(240, 36));
-    inputBg->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-    inputBg->setBackGroundColor(Color3B(80, 70, 60));
-    inputBg->setPosition(Vec2(20, 140));
-    inputBg->setName("inputBg");
-    inner->addChild(inputBg);
-
-    auto inputField = TextField::create("Enter name...", "", 16);
-    inputField->setPosition(Vec2(120, 18));
-    inputField->setMaxLength(12);
-    inputField->setMaxLengthEnabled(true);
-    inputField->setName("inputField");
-    inputField->setTextColor(Color4B::WHITE);
-    inputField->setCursorChar('|');
-    inputBg->addChild(inputField);
-
-    auto createBtn = Button::create("Resources/button.png");
-    createBtn->setTitleText("Create");
-    createBtn->setTitleFontSize(18);
-    createBtn->setTitleColor(Color3B::BLACK);
-    createBtn->setScale9Enabled(true);
-    createBtn->setContentSize(Size(100, 36));
-    createBtn->setPosition(Vec2(200, 140));
-    createBtn->addTouchEventListener([this, pm, refreshHistory](Ref*, Widget::TouchEventType type) {
-        if (type != Widget::TouchEventType::ENDED) return;
-        auto* node = this->getChildByName("PlayerPanel");
-        if (!node) return;
-        auto* inner = node->getChildByName("InnerPanel");
-        if (!inner) return;
-        auto* inputBg = inner->getChildByName("inputBg");
-        auto* tf = static_cast<TextField*>(inputBg->getChildByName("inputField"));
-        if (!tf) return;
-        std::string name = tf->getString();
-        if (name.empty()) return;
-        pm->createPlayer(name);
-        tf->setString("");
-        auto* curLabel = static_cast<Text*>(inner->getChildByName("curLabel"));
-        if (curLabel) curLabel->setString("Stage: " + to_string(pm->getStageNum()) + "  |  Money: $" + to_string(pm->getAllMoney()));
-        this->refreshPlayerList();
-        this->updatePlayerLabel();
-    });
-    inner->addChild(createBtn);
-
-    // Close button
-    auto closeBtn = Button::create("Resources/button.png");
-    closeBtn->setTitleText("Close");
-    closeBtn->setTitleFontSize(18);
-    closeBtn->setTitleColor(Color3B::BLACK);
-    closeBtn->setScale9Enabled(true);
-    closeBtn->setContentSize(Size(100, 35));
+    // ── Close button ──
+    auto closeBtn = makeCleanButton("Close", Size(200, 70), 22);
     closeBtn->setPosition(Vec2(360, 20));
     closeBtn->addTouchEventListener([this](Ref*, Widget::TouchEventType type) {
         if (type == Widget::TouchEventType::ENDED) hidePlayerPanel();
@@ -358,6 +296,10 @@ void MainLayer::showPlayerPanel()
 void MainLayer::hidePlayerPanel()
 {
     if (_playerPanel) {
+        if (_panelDismissListener) {
+            _eventDispatcher->removeEventListener(_panelDismissListener);
+            _panelDismissListener = nullptr;
+        }
         _playerPanel->removeFromParent();
         _playerPanel = nullptr;
     }
@@ -378,25 +320,25 @@ void MainLayer::refreshPlayerList()
 
     for (const auto& name : players) {
         auto item = Layout::create();
-        item->setContentSize(Size(320, 36));
+        item->setContentSize(Size(580, 56));
         item->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
         item->setBackGroundColor(Color3B(70, 60, 50));
 
         auto nameLabel = Text::create(name, "", 18);
-        nameLabel->setPosition(Vec2(80, 18));
+        nameLabel->setPosition(Vec2(80, 28));
         nameLabel->setTextColor(Color4B::WHITE);
         item->addChild(nameLabel);
 
-        auto selectBtn = Button::create("Resources/button.png");
-        selectBtn->setTitleText("Select");
-        selectBtn->setTitleFontSize(15);
-        selectBtn->setTitleColor(Color3B::BLACK);
-        selectBtn->setScale9Enabled(true);
-        selectBtn->setContentSize(Size(70, 28));
-        selectBtn->setPosition(Vec2(190, 18));
+        auto selectBtn = makeCleanButton("Select", Size(140, 56), 18);
+        selectBtn->setPosition(Vec2(330, 28));
         selectBtn->addTouchEventListener([this, pm, name](Ref*, Widget::TouchEventType type) {
             if (type != Widget::TouchEventType::ENDED) return;
             pm->selectPlayer(name);
+            // Sync UserDataManager for explicit player selection
+            _playerExplicitlySelected = true;
+            auto* udm = UserDataManager::getInstance();
+            udm->setStageNum(pm->getStageNum());
+            udm->setAllMoney(pm->getAllMoney());
             if (_playerPanel) {
                 auto* inner = _playerPanel->getChildByName("InnerPanel");
                 if (inner) {
@@ -409,13 +351,8 @@ void MainLayer::refreshPlayerList()
         });
         item->addChild(selectBtn);
 
-        auto deleteBtn = Button::create("Resources/button.png");
-        deleteBtn->setTitleText("Del");
-        deleteBtn->setTitleFontSize(15);
-        deleteBtn->setTitleColor(Color3B::BLACK);
-        deleteBtn->setScale9Enabled(true);
-        deleteBtn->setContentSize(Size(50, 28));
-        deleteBtn->setPosition(Vec2(280, 18));
+        auto deleteBtn = makeCleanButton("Del", Size(100, 56), 18);
+        deleteBtn->setPosition(Vec2(480, 28));
         deleteBtn->addTouchEventListener([this, pm, name](Ref*, Widget::TouchEventType type) {
             if (type != Widget::TouchEventType::ENDED) return;
             pm->deletePlayer(name);
@@ -437,18 +374,11 @@ void MainLayer::refreshPlayerList()
 
 void MainLayer::onModeBtnTouch(int mode)
 {
+    if (_selectedMode == mode) return;
     _selectedMode = mode;
 
-    // Switch background music based on mode
-    if (mode == 0) {
-        SoundTool::getInstance()->playBackgroundMusic("music/backMusic.mp3");
-    } else {
-        SoundTool::getInstance()->playBackgroundMusic("music/backMusic-exchange.flac");
-        CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.5f);
-    }
-
     auto highlight = [](Button* btn, bool active) {
-        if (btn) btn->setColor(active ? Color3B(100, 255, 100) : Color3B::WHITE);
+        if (btn) btn->setBright(active);
     };
     highlight(_touchModeBtn, mode == 0);
     highlight(_opencvModeBtn, mode == 1);
@@ -459,6 +389,10 @@ void MainLayer::updatePlayerLabel()
 {
     auto* pm = PlayerManager::getInstance();
     auto players = pm->listPlayers();
+    if (players.empty()) {
+        pm->createPlayer("Player1");
+        players = pm->listPlayers();
+    }
     _playerSelected = !players.empty();
 
     if (_playerBtn) {
@@ -466,7 +400,7 @@ void MainLayer::updatePlayerLabel()
             ? "Player: " + pm->currentPlayer() : "Player: --");
     }
     if (_startBtn) {
-        _startBtn->setEnabled(_playerSelected);
-        _startBtn->setBright(_playerSelected);
+        _startBtn->setEnabled(true);
+        _startBtn->setBright(true);
     }
 }

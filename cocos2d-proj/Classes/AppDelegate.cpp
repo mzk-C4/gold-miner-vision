@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "MainRoot.hpp"
+#include "services/AIGestureService.hpp"
 
 USING_NS_CC;
 
@@ -38,6 +39,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
+
+    // Configure AI gesture service
+    AIGestureService::getInstance()->setEndpointId("doubao-seed-2-0-mini-260215");
+    AIGestureService::getInstance()->setApiKey("09319510-56ea-4f89-9cdf-ced640510471");
 
     // create a scene. it's an autorelease object
     auto scene = MainLayer::createScene();

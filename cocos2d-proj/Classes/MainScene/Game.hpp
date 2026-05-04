@@ -62,9 +62,6 @@ private:
     InputMode _inputMode = InputMode::TOUCH;
     Sprite *_cameraPreview = nullptr;
     float _gestureAngle = 0.0f;
-    bool _gestureDropPending = false; // OPEN_PALM → trigger hook drop once
-    Node *_modePanel = nullptr;
-    Text *_modeLabel = nullptr;
     
 private:
     void addButtonAction(Node *csbNode);
@@ -89,11 +86,9 @@ private:
     void pullGold(PhysicsContact &contact);
 
     // Gesture mode
-    void setupModePanel(Node *parent);
     void switchInputMode(InputMode mode);
     void updateGestureAngle(float dt);
     void updateCameraPreview(float dt);
-    void onGestureData(const GestureData &data);
 };
 
 #endif /* Game_hpp */

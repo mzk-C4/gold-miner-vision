@@ -42,7 +42,7 @@ private:
     bool _musicMute;
     bool _effectMute;
     MusicStatus _musicStatus;
-    char* _lastMusic;
+    std::string _lastMusic;
     ValueMap _soundIDs;
 };
 

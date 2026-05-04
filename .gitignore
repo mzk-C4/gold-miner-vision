@@ -42,6 +42,11 @@ ui_*.h
 # Local config
 .claude/
 
+# External repositories (nested git dirs)
+GoldMiner/
+vision/OpenCVHandGuesture/
+vision/gesture-recognition/
+
 # Object files
 *.o
 *.obj

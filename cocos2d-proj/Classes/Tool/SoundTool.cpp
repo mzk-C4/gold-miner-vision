@@ -27,8 +27,10 @@ SoundTool *SoundTool::getInstance()
 SoundTool::SoundTool()
 {
     _musicStatus = Stop;
-    _musicMute = UserDefault::getInstance()->getBoolForKey(kMusicMute);
-    _effectMute = UserDefault::getInstance()->getBoolForKey(kEffectMute);
+    UserDefault::getInstance()->setBoolForKey(kMusicMute, false);
+    UserDefault::getInstance()->setBoolForKey(kEffectMute, false);
+    _musicMute = false;
+    _effectMute = false;
 }
 
 void SoundTool::setEffectMute(bool mute)
@@ -54,7 +56,7 @@ void SoundTool::setMusicMute(bool mute)
             CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
             _musicStatus = Playing;
         } else if (_musicStatus == Stop) {
-            CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(_lastMusic, true);
+            CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(_lastMusic.c_str(), true);
             _musicStatus = Playing;
         }
     }
@@ -63,7 +65,7 @@ void SoundTool::setMusicMute(bool mute)
 void SoundTool::playBackgroundMusic(char* pszFilePath)
 {
     if (_musicMute) {
-        _lastMusic = pszFilePath;
+        _lastMusic = std::string(pszFilePath);
         return;
     }
     
@@ -73,15 +75,15 @@ void SoundTool::playBackgroundMusic(char* pszFilePath)
             break;
         case Pause:
             
-            if (_lastMusic == pszFilePath) {
+            if (_lastMusic == std::string(pszFilePath)) {
                 CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
             } else {
                 CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(pszFilePath, true);
             }
-            
+
             break;
         case Playing:
-            if (_lastMusic == pszFilePath) {
+            if (_lastMusic == std::string(pszFilePath)) {
                 break;
             } else {
                 CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(pszFilePath, true);
@@ -91,7 +93,7 @@ void SoundTool::playBackgroundMusic(char* pszFilePath)
             break;
     }
     
-    _lastMusic = pszFilePath;
+    _lastMusic = std::string(pszFilePath);
     _musicStatus = Playing;
 }
 

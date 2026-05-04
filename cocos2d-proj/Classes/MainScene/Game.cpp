@@ -13,11 +13,8 @@
 #include "Shop.hpp"
 #include "GestureClient.hpp"
 #include "AIGestureService.hpp"
+#include "GestureFusion.hpp"
 #include "platform/CCImage.h"
-#include "SimpleAudioEngine.h"
-#include <vector>
-#include <cstdlib>
-
 #define kWorldTag 1000
 
 InputMode Game::_defaultInputMode = InputMode::TOUCH;
@@ -165,7 +162,6 @@ bool Game::init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isSto
     });
 
     loadStageInfo();
-    setupModePanel(csb);
 
     // Apply default mode from home screen
     if (_defaultInputMode != InputMode::TOUCH) {
@@ -310,6 +306,9 @@ void Game::onEnter()
 {
     Layer::onEnter();
 
+    // Keep background music playing continuously
+    SoundTool::getInstance()->playBackgroundMusic("music/backMusic.mp3");
+
     if (!showStageTips) {
         showStageTips = true;
 
@@ -336,67 +335,14 @@ void Game::updateTime(float dt)
 
 void Game::startGame()
 {
-    // Gesture mode: play random game music at lower volume
-    if (_inputMode != InputMode::TOUCH) {
-        static const std::vector<std::string> gameSongs = {
-            "music/game/David Tao/陶喆 - Angel.mp3",
-            "music/game/David Tao/陶喆 - Melody.mp3",
-            "music/game/David Tao/陶喆 - 二十二.mp3",
-            "music/game/David Tao/陶喆 - 寂寞的季节.mp3",
-            "music/game/David Tao/陶喆 - 小镇姑娘.mp3",
-            "music/game/David Tao/陶喆 - 就是爱你.mp3",
-            "music/game/David Tao/陶喆 - 找自己.mp3",
-            "music/game/David Tao/陶喆 - 普通朋友.mp3",
-            "music/game/David Tao/陶喆 - 暗恋.mp3",
-            "music/game/David Tao/陶喆 - 望春风.mp3",
-            "music/game/David Tao/陶喆 - 流沙.mp3",
-            "music/game/David Tao/陶喆 - 爱我还是他.mp3",
-            "music/game/David Tao/陶喆 - 爱，很简单.mp3",
-            "music/game/David Tao/陶喆 - 蝴蝶.mp3",
-            "music/game/David Tao/陶喆 - 讨厌红楼梦.mp3",
-            "music/game/David Tao/陶喆 - 飞机场的1030.mp3",
-            "music/game/JAY/周杰伦 - 三年二班.flac",
-            "music/game/JAY/周杰伦 - 上海一九四三.flac",
-            "music/game/JAY/周杰伦 - 东风破.flac",
-            "music/game/JAY/周杰伦 - 你听得到.flac",
-            "music/game/JAY/周杰伦 - 分裂.flac",
-            "music/game/JAY/周杰伦 - 双刀.flac",
-            "music/game/JAY/周杰伦 - 反方向的钟.flac",
-            "music/game/JAY/周杰伦 - 外婆.flac",
-            "music/game/JAY/周杰伦 - 大笨钟.flac",
-            "music/game/JAY/周杰伦 - 将军.flac",
-            "music/game/JAY/周杰伦 - 开不了口.flac",
-            "music/game/JAY/周杰伦 - 忍者.flac",
-            "music/game/JAY/周杰伦 - 手语.flac",
-            "music/game/JAY/周杰伦 - 斗牛.flac",
-            "music/game/JAY/周杰伦 - 时光机.flac",
-            "music/game/JAY/周杰伦 - 晴天.flac",
-            "music/game/JAY/周杰伦 - 火车叨位去.flac",
-            "music/game/JAY/周杰伦 - 爱你没差.flac",
-            "music/game/JAY/周杰伦 - 爱在西元前.flac",
-            "music/game/JAY/周杰伦 - 牛仔很忙.flac",
-            "music/game/JAY/周杰伦 - 稻香.flac",
-            "music/game/JAY/周杰伦 - 给我一首歌的时间.flac",
-            "music/game/JAY/周杰伦 - 说走就走.flac",
-            "music/game/JAY/周杰伦 - 逆鳞.flac",
-            "music/game/JAY/周杰伦 - 霍元甲.flac",
-            "music/game/JAY/周杰伦 - 飘移.flac",
-            "music/game/JAY/周杰伦 - 龙卷风.flac",
-        };
-        int idx = rand() % gameSongs.size();
-        SoundTool::getInstance()->playBackgroundMusic(
-            const_cast<char*>(gameSongs[idx].c_str()));
-        CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.35f);
-    }
-
-    // 添加点击事件
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = CC_CALLBACK_2(Game::touchCallBack, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-
     if (_inputMode == InputMode::TOUCH) {
+        // 触摸模式：点击屏幕释放钩子
+        auto listener = EventListenerTouchOneByOne::create();
+        listener->onTouchBegan = CC_CALLBACK_2(Game::touchCallBack, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
         this->startShakeHookAnimation();
     } else {
+        // 姿态模式：手势控制钩子，触摸仅用于 UI 按钮（炸弹等）
         this->schedule(CC_SCHEDULE_SELECTOR(Game::updateGestureAngle), 0.05);
         this->schedule(CC_SCHEDULE_SELECTOR(Game::updateCameraPreview), 0.1);
     }
@@ -420,12 +366,6 @@ void Game::stopGame()
     rope->stopAllActions();
     this->stopAllActions();
     this->unscheduleAllCallbacks();
-
-    // Restore gesture-mode background music
-    if (_inputMode != InputMode::TOUCH) {
-        SoundTool::getInstance()->playBackgroundMusic("music/backMusic-exchange.flac");
-        CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.5f);
-    }
 
     SoundTool::getInstance()->playEffect("music/finish.mp3");
     
@@ -479,77 +419,11 @@ void Game::stopShakeHookAnimation()
     rope->setRotation(0);
 }
 
-void Game::setupModePanel(Node *parent)
-{
-    auto panel = Layout::create();
-    panel->setContentSize(Size(kWinSizeWidth, 40));
-    panel->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
-    panel->setPosition(Vec2(kWinSizeWidth * 0.5f, kWinSizeHeight - 30));
-    panel->setLayoutType(Layout::Type::HORIZONTAL);
-    panel->setBackGroundColorType(Layout::BackGroundColorType::SOLID);
-    panel->setBackGroundColor(Color3B(30, 30, 30));
-    panel->setBackGroundColorOpacity(180);
-    panel->setName("ModePanel");
-    parent->addChild(panel, 100);
-
-    auto createModeBtn = [&](const std::string& text, InputMode mode) -> Button* {
-        auto btn = Button::create("Resources/button.png");
-        btn->setTitleText(text);
-        btn->setTitleFontSize(20);
-        btn->setTitleColor(Color3B::BLACK);
-        btn->setScale9Enabled(true);
-        btn->setContentSize(Size(100, 35));
-        btn->addTouchEventListener([this, mode](Ref*, Widget::TouchEventType type) {
-            if (type == Widget::TouchEventType::ENDED) {
-                switchInputMode(mode);
-            }
-        });
-        return btn;
-    };
-
-    auto touchBtn = createModeBtn("TOUCH", InputMode::TOUCH);
-    touchBtn->setName("touchBtn");
-    panel->addChild(touchBtn);
-
-    auto opencvBtn = createModeBtn("OPENCV", InputMode::OPENCV);
-    opencvBtn->setName("opencvBtn");
-    panel->addChild(opencvBtn);
-
-    auto aiBtn = createModeBtn("AI", InputMode::AI);
-    aiBtn->setName("aiBtn");
-    panel->addChild(aiBtn);
-
-    auto label = Text::create("TOUCH", "", 16);
-    label->setPosition(Vec2(kWinSizeWidth * 0.5f, kWinSizeHeight - 55));
-    label->setName("modeLabel");
-    parent->addChild(label, 100);
-    _modeLabel = label;
-
-    _modePanel = panel;
-
-    // Set initial highlight
-    auto* activeBtn = static_cast<Button*>(panel->getChildByName("touchBtn"));
-    if (activeBtn) activeBtn->setColor(Color3B(100, 200, 100));
-}
-
 void Game::switchInputMode(InputMode mode)
 {
     if (_inputMode == mode) return;
     InputMode oldMode = _inputMode;
     _inputMode = mode;
-
-    // Update button highlights
-    if (_modePanel) {
-        for (const char* name : {"touchBtn", "opencvBtn", "aiBtn"}) {
-            auto* btn = static_cast<Button*>(_modePanel->getChildByName(name));
-            if (!btn) continue;
-            bool active = false;
-            if (mode == InputMode::TOUCH && strcmp(name, "touchBtn") == 0) active = true;
-            if (mode == InputMode::OPENCV && strcmp(name, "opencvBtn") == 0) active = true;
-            if (mode == InputMode::AI && strcmp(name, "aiBtn") == 0) active = true;
-            btn->setColor(active ? Color3B(100, 200, 100) : Color3B::WHITE);
-        }
-    }
 
     // Stop current mode
     this->unschedule(CC_SCHEDULE_SELECTOR(Game::updateGestureAngle));
@@ -557,23 +431,46 @@ void Game::switchInputMode(InputMode mode)
     rope->stopActionByTag(100);
 
     if (mode == InputMode::TOUCH) {
-        if (_modeLabel) _modeLabel->setString("TOUCH");
-        GestureClient::getInstance()->disconnect();
+        // 关闭手势识别
+        GestureFusion::getInstance()->shutdown();
         if (_cameraPreview) {
             _cameraPreview->setVisible(false);
         }
         this->startShakeHookAnimation();
     } else {
-        if (_modeLabel) {
-            _modeLabel->setString(mode == InputMode::OPENCV ? "OPENCV" : "AI");
-        }
-        // Only launch server and connect when first entering gesture mode
         if (oldMode == InputMode::TOUCH) {
-            auto* gc = GestureClient::getInstance();
-            gc->launchServer();
-            gc->connectHttp("http://localhost:5000");
-            gc->setCallback([this](const GestureData& data) {
-                this->onGestureData(data);
+            // ── 双通道混合识别架构初始化 ──
+            // 本地通道：OpenCV (GestureServer.exe)
+            // 云端通道：仅在 AI 模式下启用（豆包大模型双保险）
+            auto* fusion = GestureFusion::getInstance();
+
+            std::string cloudEp, cloudKey;
+            if (mode == InputMode::AI) {
+                auto* ai = AIGestureService::getInstance();
+                cloudEp = "doubao-vision-pro-32k";  // FIXME: 从配置读取
+                cloudKey = "";                        // FIXME: 从配置读取
+                CCLOG("[Game] AI mode: dual-channel (local + cloud) gesture recognition");
+            } else {
+                CCLOG("[Game] OpenCV mode: local-only gesture recognition");
+            }
+
+            if (!fusion->initialize(cloudEp, cloudKey)) {
+                CCLOG("[Game] WARNING: GestureFusion init failed, falling back to touch");
+                _inputMode = InputMode::TOUCH;
+                this->startShakeHookAnimation();
+                return;
+            }
+
+            // 注册钩子释放回调
+            fusion->setCommandCallback([this](const GestureCommand& cmd) {
+                if (cmd.shouldReleaseHook && !ropeChangeing && !isOpenHook) {
+                    CCLOG("[Game] GestureFusion → RELEASE HOOK (angle=%.1f)", cmd.targetAngle);
+                    SoundTool::getInstance()->playEffect("music/lastart.mp3");
+                    rope->stopAllActions();
+                    ropeChangeing = true;
+                    minerTimeLine->gotoFrameAndPlay(0, 105, true);
+                    schedule(CC_SCHEDULE_SELECTOR(Game::addRopeHeight), 0.025);
+                }
             });
         }
 
@@ -586,10 +483,14 @@ void Game::updateGestureAngle(float dt)
 {
     if (_inputMode == InputMode::TOUCH) return;
 
-    GestureData data = GestureClient::getInstance()->getData();
-    // Only control angle during swing phase — lock direction when hook is extended
-    if (data.connected && !ropeChangeing && !isOpenHook) {
-        _gestureAngle = data.angle;
+    // 从融合器获取本帧指令（包含 EMA 平滑后的角度 + 钩子释放信号）
+    GestureCommand cmd = GestureFusion::getInstance()->tick(dt);
+
+    if (cmd.isValid && !ropeChangeing && !isOpenHook) {
+        // 将融合器输出的角度应用到钩子旋转
+        float target = cmd.targetAngle;
+        float smooth = 0.25f;
+        _gestureAngle += (target - _gestureAngle) * smooth;
         rope->setRotation(_gestureAngle);
     }
 }
@@ -598,8 +499,12 @@ void Game::updateCameraPreview(float dt)
 {
     if (_inputMode == InputMode::TOUCH) return;
 
+    // 相机预览帧仍由 GestureClient 提供（原始 JPEG）
     GestureData data = GestureClient::getInstance()->getData();
     if (!data.hasNewFrame || data.jpegFrame.empty()) return;
+
+    // 推送帧给融合器（AI 模式下，融合器会在 FIST 锁定时转发给云端）
+    GestureFusion::getInstance()->pushPreviewFrame(data.jpegFrame);
 
     Image* img = new (std::nothrow) Image();
     if (!img->initWithImageData(data.jpegFrame.data(), data.jpegFrame.size())) {
@@ -621,8 +526,8 @@ void Game::updateCameraPreview(float dt)
             delete img;
             return;
         }
-        _cameraPreview->setPosition(Vec2(kWinSizeWidth - 100, kWinSizeHeight - 120));
-        _cameraPreview->setScale(0.4f);
+        _cameraPreview->setPosition(Vec2(kWinSizeWidth - 70, kWinSizeHeight - 80));
+        _cameraPreview->setScale(0.22f);
         _cameraPreview->setGlobalZOrder(200);
         this->addChild(_cameraPreview, 200);
     }
@@ -632,22 +537,6 @@ void Game::updateCameraPreview(float dt)
 
     tex->release();
     img->release();
-
-    // In AI mode, also send frame to AI service
-    if (_inputMode == InputMode::AI) {
-        AIGestureService::getInstance()->sendFrame(data.jpegFrame);
-    }
 }
 
-void Game::onGestureData(const GestureData& data)
-{
-    // FIST (握拳) → drop hook; OPEN_PALM (张开手掌) → aim (handled in updateGestureAngle)
-    if (data.gesture == "FIST" && !ropeChangeing && !isOpenHook) {
-        SoundTool::getInstance()->playEffect("music/lastart.mp3");
-
-        rope->stopAllActions();
-        ropeChangeing = true;
-        minerTimeLine->gotoFrameAndPlay(0, 105, true);
-        schedule(CC_SCHEDULE_SELECTOR(Game::addRopeHeight), 0.025);
-    }
-}
+// onGestureData 已移除 — 钩子释放逻辑由 GestureFusion::setCommandCallback 处理

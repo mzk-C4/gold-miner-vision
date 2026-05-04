@@ -283,7 +283,7 @@ void GestureClient::httpThreadFunc(const std::string& baseUrl) {
                 }
 
                 // Fire callback on cocos thread for FIST (握拳 = drop hook)
-                if (gesture == "FIST" && stableCount == 5) {
+                if (gesture == "FIST" && stableCount == 3) {
                     Director::getInstance()->getScheduler()->performFunctionInCocosThread(
                         [this]() {
                             if (_callback) {
@@ -315,7 +315,7 @@ void GestureClient::httpThreadFunc(const std::string& baseUrl) {
         }
 
         curl_easy_cleanup(curl);
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 

@@ -9,11 +9,26 @@
 #include "Shop.hpp"
 #include "UserDataManager.hpp"
 #include "Game.hpp"
+#include "2d/CCSpriteFrameCache.h"
 
 #define kBombPrice 200
 #define kPotionPrice 300
 #define kDiamondsPrice 200
 #define kStoneBookPrice 100
+
+// Recursive search that traverses ALL children, not just Widgets.
+// Helper::seekWidgetByName only traverses Widget* nodes, so it misses
+// Sprite nodes (like "businessman") that are nested under other Sprites.
+static Node* seekNodeByName(Node* root, const std::string& name)
+{
+    if (!root) return nullptr;
+    if (root->getName() == name) return root;
+    for (const auto& child : root->getChildren()) {
+        Node* found = seekNodeByName(child, name);
+        if (found) return found;
+    }
+    return nullptr;
+}
 
 Scene *Shop::createScene()
 {
@@ -34,17 +49,39 @@ bool Shop::init()
     auto csb = CSLoader::createNode("ShopScene.csb");
     this->addChild(csb);
 
-    // Gesture mode: swap merchant image
-    if (Game::getDefaultInputMode() != InputMode::TOUCH) {
-        auto businessman = csb->getChildByName("businessman");
-        if (businessman) {
-            auto tex = Director::getInstance()->getTextureCache()
-                ->addImage("Resources/shopper exchange.png");
-            auto sprite = static_cast<Sprite*>(businessman);
-            sprite->setTexture(tex);
-            sprite->setTextureRect(Rect(0, 0,
-                tex->getContentSize().width, tex->getContentSize().height));
-            sprite->setScale(0.2f);
+    // Load the new sprite sheet and collect its frames
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "Resources/shopper_new.plist",
+        "Resources/shopper new.png");
+
+    Vector<SpriteFrame*> newFrames;
+    for (int i = 1; i <= 23; i++) {
+        char name[32];
+        snprintf(name, sizeof(name), "shopper_new%04d.png", i);
+        auto* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(name);
+        if (frame) {
+            newFrames.pushBack(frame);
+        }
+    }
+
+    // Replace the ORIGINAL shoper frames in SpriteFrameCache with our
+    // new ones. The CSB's built-in ActionTimeline keeps running with
+    // its original timing and sequence — only the texture data changes.
+    if (!newFrames.empty()) {
+        auto* frameCache = SpriteFrameCache::getInstance();
+        for (int i = 1; i <= 38; i++) {
+            char name[32];
+            snprintf(name, sizeof(name), "shoper%04d.png", i);
+            auto* oldFrame = frameCache->getSpriteFrameByName(name);
+            if (oldFrame) {
+                // Cycle new frames across old frame slots
+                auto* newFrame = newFrames.at((i - 1) % newFrames.size());
+                oldFrame->setTexture(newFrame->getTexture());
+                oldFrame->setRect(newFrame->getRect());
+                oldFrame->setRotated(newFrame->isRotated());
+                oldFrame->setOffsetInPixels(newFrame->getOffsetInPixels());
+                oldFrame->setOriginalSizeInPixels(newFrame->getOriginalSizeInPixels());
+            }
         }
     }
 
