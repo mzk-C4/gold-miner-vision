@@ -24,6 +24,7 @@ list(APPEND GAME_SOURCE
     Classes/MainScene/StageTipsLayer.cpp
     Classes/Other/UserDataManager.cpp
     Classes/Tool/SoundTool.cpp
+    Classes/Tool/MusicPlayer.cpp
     Classes/gameobjects/Mineral.cpp
     Classes/services/LevelLoader.cpp
     Classes/services/GestureClient.cpp
@@ -44,6 +45,7 @@ list(APPEND GAME_HEADER
     Classes/Other/Const.hpp
     Classes/Other/UserDataManager.hpp
     Classes/Tool/SoundTool.hpp
+    Classes/Tool/MusicPlayer.hpp
     Classes/gameobjects/Mineral.hpp
     Classes/services/LevelLoader.hpp
     Classes/services/GestureClient.hpp

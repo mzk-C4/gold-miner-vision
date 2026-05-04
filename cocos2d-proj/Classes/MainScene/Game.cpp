@@ -15,6 +15,7 @@
 #include "AIGestureService.hpp"
 #include "GestureFusion.hpp"
 #include "platform/CCImage.h"
+#include "base/CCEventListenerMouse.h"
 #define kWorldTag 1000
 
 InputMode Game::_defaultInputMode = InputMode::TOUCH;
@@ -82,27 +83,7 @@ bool Game::init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isSto
     bompButton->setVisible(isBuyBomb);
     bompButton->addTouchEventListener([=](Ref *ref, Widget::TouchEventType type){
         if (type == Widget::TouchEventType::ENDED) {
-            // click bomp
-            if (isOpenHook) {
-                bompButton->setVisible(false);
-                // 炸毁物品
-                backSpeed = 10;
-                
-                isOpenHook = false;
-                leftHook->setRotation(0);
-                rightHook->setRotation(0);
-                
-                //爆炸效果
-                auto postion = rope->convertToWorldSpace(middleCircle->getPosition());
-                ParticleSystemQuad *bompEm = ParticleSystemQuad::create("Boom.plist");
-                bompEm->setPosition(postion);
-                this->addChild(bompEm);
-                
-                SoundTool::getInstance()->playEffect("music/bomb.mp3");
-                
-                _hookedMineral->removeFromParent();
-                
-            }
+            this->detonateBomb();
         }
     });
     
@@ -236,6 +217,35 @@ void Game::pullGold(cocos2d::PhysicsContact &contact)
     gold->setVisible(false);
 }
 
+void Game::detonateBomb()
+{
+    if (!isOpenHook || !_hookedMineral) return;
+
+    bompButton->setVisible(false);
+    backSpeed = 10;
+
+    isOpenHook = false;
+    leftHook->setRotation(0);
+    rightHook->setRotation(0);
+
+    auto position = rope->convertToWorldSpace(middleCircle->getPosition());
+    ParticleSystemQuad* bombEm = ParticleSystemQuad::create("Boom.plist");
+    bombEm->setPosition(position);
+    this->addChild(bombEm);
+
+    SoundTool::getInstance()->playEffect("music/bomb.mp3");
+
+    _hookedMineral->removeFromParent();
+    _hookedMineral = nullptr;
+}
+
+void Game::onRightMouseClick(EventMouse* event)
+{
+    if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT) {
+        this->detonateBomb();
+    }
+}
+
 void Game::subRopeHeight(float dt)
 {
     middleCircle->setPosition(circlePosition);
@@ -306,8 +316,7 @@ void Game::onEnter()
 {
     Layer::onEnter();
 
-    // Keep background music playing continuously
-    SoundTool::getInstance()->playBackgroundMusic("music/backMusic.mp3");
+    // MusicPlayer handles background music — don't restart backMusic
 
     if (!showStageTips) {
         showStageTips = true;
@@ -335,6 +344,11 @@ void Game::updateTime(float dt)
 
 void Game::startGame()
 {
+    // 右键引爆（所有模式通用）
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(Game::onRightMouseClick, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
     if (_inputMode == InputMode::TOUCH) {
         // 触摸模式：点击屏幕释放钩子
         auto listener = EventListenerTouchOneByOne::create();
@@ -461,7 +475,7 @@ void Game::switchInputMode(InputMode mode)
                 return;
             }
 
-            // 注册钩子释放回调
+            // 注册手势指令回调（钩子释放 + 炸药引爆）
             fusion->setCommandCallback([this](const GestureCommand& cmd) {
                 if (cmd.shouldReleaseHook && !ropeChangeing && !isOpenHook) {
                     CCLOG("[Game] GestureFusion → RELEASE HOOK (angle=%.1f)", cmd.targetAngle);
@@ -470,6 +484,10 @@ void Game::switchInputMode(InputMode mode)
                     ropeChangeing = true;
                     minerTimeLine->gotoFrameAndPlay(0, 105, true);
                     schedule(CC_SCHEDULE_SELECTOR(Game::addRopeHeight), 0.025);
+                }
+                if (cmd.shouldDetonateBomb) {
+                    CCLOG("[Game] GestureFusion → DETONATE BOMB");
+                    this->detonateBomb();
                 }
             });
         }

@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄金矿工 - 手势识别版</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #FFD700;
+            --gold-dark: #B8860B;
+            --bg-dark: #0a0a1a;
+            --bg-card: #12122a;
+            --bg-card-hover: #1a1a3a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0c0;
+            --accent-blue: #4a90d9;
+            --accent-purple: #7c3aed;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: float linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 40px 24px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50px;
+            font-size: 14px;
+            color: var(--gold);
+            margin-bottom: 32px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero h1 .gold-text {
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .vision-text {
+            background: linear-gradient(135deg, #4a90d9, #7c3aed, #4a90d9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-subtitle .highlight {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #000;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-secondary);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Section Common ===== */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(74, 144, 217, 0.1);
+            border: 1px solid rgba(74, 144, 217, 0.3);
+            border-radius: 50px;
+            font-size: 13px;
+            color: var(--accent-blue);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== Tech Stack ===== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .tech-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .tech-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .tech-card h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .tech-card .version {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .tech-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        /* ===== Gesture Section ===== */
+        .gesture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .gesture-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gesture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gesture-card:hover::before {
+            opacity: 1;
+        }
+
+        .gesture-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .gesture-emoji {
+            font-size: 56px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .gesture-card h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .gesture-card .action {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(124, 58, 237, 0.15);
+            border-radius: 6px;
+            color: var(--accent-purple);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .gesture-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 12px;
+        }
+
+        /* ===== Recognition Mode ===== */
+        .mode-section {
+            background: linear-gradient(180deg, transparent, rgba(74, 144, 217, 0.03), transparent);
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .mode-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .mode-card.featured {
+            border-color: rgba(255, 215, 0, 0.3);
+            background: linear-gradient(135deg, var(--bg-card), rgba(255, 215, 0, 0.03));
+        }
+
+        .mode-label {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .mode-label.local {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+        }
+
+        .mode-label.cloud {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--accent-purple);
+        }
+
+        .mode-label.keyboard {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .mode-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .mode-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .mode-features {
+            list-style: none;
+        }
+
+        .mode-features li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-features li .check {
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        /* ===== Shop Section ===== */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .shop-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .shop-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .shop-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .shop-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .shop-card .price {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .shop-card p {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* ===== Mineral Section ===== */
+        .mineral-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .mineral-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .mineral-table thead th {
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .mineral-table tbody tr {
+            background: var(--bg-card);
+            transition: all 0.3s ease;
+        }
+
+        .mineral-table tbody tr:hover {
+            background: var(--bg-card-hover);
+            transform: scale(1.01);
+        }
+
+        .mineral-table tbody td {
+            padding: 20px 24px;
+        }
+
+        .mineral-table tbody td:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .mineral-table tbody td:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .mineral-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .mineral-name .icon {
+            font-size: 28px;
+        }
+
+        .value-bar {
+            width: 100px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .value-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .weight-bar .fill {
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-orange));
+        }
+
+        .value-bar .fill.gold {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+        }
+
+        .value-bar .fill.diamond {
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+        }
+
+        .value-bar .fill.stone {
+            background: linear-gradient(90deg, #666, #999);
+        }
+
+        /* ===== Architecture Section ===== */
+        .arch-diagram {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 48px;
+            overflow-x: auto;
+        }
+
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .arch-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            text-align: center;
+            min-width: 160px;
+            transition: all 0.3s ease;
+        }
+
+        .arch-box:hover {
+            transform: scale(1.05);
+        }
+
+        .arch-box.scene {
+            background: rgba(74, 144, 217, 0.15);
+            border: 1px solid rgba(74, 144, 217, 0.3);
+            color: var(--accent-blue);
+        }
+
+        .arch-box.core {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: var(--gold);
+        }
+
+        .arch-box.service {
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            color: var(--accent-purple);
+        }
+
+        .arch-box.data {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+
+        .arch-arrow {
+            font-size: 24px;
+            color: var(--text-secondary);
+            padding: 8px 0;
+        }
+
+        .arch-arrow-h {
+            font-size: 24px;
+            color: var(--text-secondary);
+            padding: 0 4px;
+        }
+
+        /* ===== Highlights ===== */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .highlight-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .highlight-number {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .highlight-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .highlight-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-copy {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 0;
+            }
+
+            .arch-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .arch-arrow-h {
+                transform: rotate(90deg);
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 215, 0, 0.5);
+        }
+
+        /* ===== Code Block ===== */
+        .code-showcase {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 48px;
+        }
+
+        .code-showcase .code-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ef4444; }
+        .code-dot.yellow { background: #f59e0b; }
+        .code-dot.green { background: #10b981; }
+
+        pre {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-x: auto;
+            color: #e0e0e0;
+        }
+
+        pre .keyword { color: #c792ea; }
+        pre .class-name { color: #82aaff; }
+        pre .method { color: #82aaff; }
+        pre .string { color: #c3e88d; }
+        pre .comment { color: #546e7a; }
+        pre .type { color: #ffcb6b; }
+        pre .number { color: #f78c6c; }
+    </style>
+</head>
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            C++ Course Project 2026
+        </div>
+        <h1>
+            <span class="gold-text">黄金矿工</span><br>
+            <span class="vision-text">手势识别版</span>
+        </h1>
+        <p class="hero-subtitle">
+            经典游戏的现代化重构 — 用 <span class="highlight">Cocos2d-x 4.0</span> + <span class="highlight">OpenCV</span> + <span class="highlight">AI视觉</span> 重新定义游戏交互
+        </p>
+        <div class="hero-buttons">
+            <a href="https://github.com/mzk-C4/gold-miner-vision" class="btn btn-primary" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                GitHub 仓库
+            </a>
+            <a href="#features" class="btn btn-secondary">
+                了解更多 ↓
+            </a>
+        </div>
+        <div class="scroll-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+        </div>
+    </section>
+
+    <!-- ===== Tech Stack ===== -->
+    <section id="tech">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Tech Stack</span>
+                <h2 class="section-title">技术栈</h2>
+                <p class="section-desc">现代化 C++ 游戏开发技术组合</p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">🎮</div>
+                    <h3>Cocos2d-x</h3>
+                    <span class="version">v4.0</span>
+                    <p>跨平台 2D 游戏引擎</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">👁️</div>
+                    <h3>OpenCV</h3>
+                    <span class="version">v4.5.5</span>
+                    <p>计算机视觉与手势识别</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🤖</div>
+                    <h3>AI Vision</h3>
+                    <span class="version">Cloud API</span>
+                    <p>云端高精度手势识别</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">⚡</div>
+                    <h3>C++17</h3>
+                    <span class="version">Modern C++</span>
+                    <p>面向对象 + 模板 + STL</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🔧</div>
+                    <h3>CMake</h3>
+                    <span class="version">v3.16+</span>
+                    <p>跨平台构建系统</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Gesture Control ===== -->
+    <section id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Gesture Control</span>
+                <h2 class="section-title">手势控制</h2>
+                <p class="section-desc">用手势操控钩子，体验全新的游戏交互方式</p>
+            </div>
+            <div class="gesture-grid">
+                <div class="gesture-card">
+                    <span class="gesture-emoji">🖐️</span>
+                    <h3>手掌张开</h3>
+                    <span class="action">释放钩子</span>
+                    <p>张开手掌，钩子立刻发射！快速抓取矿物</p>
+                </div>
+                <div class="gesture-card">
+                    <span class="gesture-emoji">✊</span>
+                    <h3>握拳</h3>
+                    <span class="action">加速回收</span>
+                    <p>握紧拳头，钩子加速回收，抢时间必备</p>
+                </div>
+                <div class="gesture-card">
+                    <span class="gesture-emoji">👋</span>
+                    <h3>左右倾斜</h3>
+                    <span class="action">控制方向</span>
+                    <p>手部左右倾斜，钩子跟随摇摆 -65° ~ +65°</p>
+                </div>
+                <div class="gesture-card">
+                    <span class="gesture-emoji">👍</span>
+                    <h3>点赞手势</h3>
+                    <span class="action">触发炸弹</span>
+                    <p>竖起大拇指，炸毁不想要的矿物（需购买炸药）</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Recognition Modes ===== -->
+    <section class="mode-section" id="modes">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Dual Mode</span>
+                <h2 class="section-title">双模式识别</h2>
+                <p class="section-desc">本地 CV + 云端 AI，灵活切换，确保任何环境都能游玩</p>
+            </div>
+            <div class="mode-grid">
+                <div class="mode-card">
+                    <span class="mode-label local">Local CV</span>
+                    <h3>🟢 本地 CV 模式</h3>
+                    <p>基于 OpenCV 颜色阈值识别，无需网络</p>
+                    <ul class="mode-features">
+                        <li><span class="check">✓</span> 零延迟响应</li>
+                        <li><span class="check">✓</span> 离线可用</li>
+                        <li><span class="check">✓</span> 低资源占用</li>
+                        <li><span class="check">✓</span> 需要彩色手套辅助</li>
+                    </ul>
+                </div>
+                <div class="mode-card featured">
+                    <span class="mode-label cloud">Cloud AI</span>
+                    <h3>🟣 云端 AI 模式</h3>
+                    <p>调用远程 AI 接口，高精度手势识别</p>
+                    <ul class="mode-features">
+                        <li><span class="check">✓</span> 无需手套</li>
+                        <li><span class="check">✓</span> 高精度识别</li>
+                        <li><span class="check">✓</span> 支持复杂手势</li>
+                        <li><span class="check">✓</span> 需要网络连接</li>
+                    </ul>
+                </div>
+                <div class="mode-card">
+                    <span class="mode-label keyboard">Keyboard</span>
+                    <h3>🟡 键盘兜底</h3>
+                    <p>传统按键操作，确保所有环境都能游玩</p>
+                    <ul class="mode-features">
+                        <li><span class="check">✓</span> 100% 兼容</li>
+                        <li><span class="check">✓</span> 无额外设备</li>
+                        <li><span class="check">✓</span> 空格释放钩子</li>
+                        <li><span class="check">✓</span> B键使用炸弹</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Shop System ===== -->
+    <section id="shop">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Shop System</span>
+                <h2 class="section-title">商店系统</h2>
+                <p class="section-desc">用金币购买道具，策略性地通关每一关</p>
+            </div>
+            <div class="shop-grid">
+                <div class="shop-card">
+                    <div class="shop-icon">💣</div>
+                    <h3>炸药</h3>
+                    <div class="price">💰 150 金币</div>
+                    <p>抓到重物时按下炸药，炸毁物品节省时间</p>
+                </div>
+                <div class="shop-card">
+                    <div class="shop-icon">💪</div>
+                    <h3>力量药水</h3>
+                    <div class="price">💰 200 金币</div>
+                    <p>提升钩子拉力，回收重物速度更快</p>
+                </div>
+                <div class="shop-card">
+                    <div class="shop-icon">💎</div>
+                    <h3>钻石升值书</h3>
+                    <div class="price">💰 250 金币</div>
+                    <p>钻石价值翻倍，高收益投资首选</p>
+                </div>
+                <div class="shop-card">
+                    <div class="shop-icon">📚</div>
+                    <h3>矿石收藏书</h3>
+                    <div class="price">💰 180 金币</div>
+                    <p>石头也能卖好价钱，变废为宝</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Mineral Table ===== -->
+    <section id="minerals">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Minerals</span>
+                <h2 class="section-title">矿物图鉴</h2>
+                <p class="section-desc">了解每种矿物的价值与重量，制定最佳策略</p>
+            </div>
+            <div class="mineral-table-wrapper">
+                <table class="mineral-table">
+                    <thead>
+                        <tr>
+                            <th>矿物</th>
+                            <th>价值</th>
+                            <th>价值条</th>
+                            <th>重量</th>
+                            <th>重量条</th>
+                            <th>策略建议</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="mineral-name"><span class="icon">💎</span> 钻石</span></td>
+                            <td style="color: var(--accent-purple); font-weight: 700;">600</td>
+                            <td><div class="value-bar"><div class="fill diamond" style="width: 100%"></div></div></td>
+                            <td style="color: var(--accent-green); font-weight: 700;">1</td>
+                            <td><div class="value-bar weight-bar"><div class="fill" style="width: 7%"></div></div></td>
+                            <td style="color: var(--accent-green);">⭐ 最佳目标</td>
+                        </tr>
+                        <tr>
+                            <td><span class="mineral-name"><span class="icon">🏆</span> 大金块</span></td>
+                            <td style="color: var(--gold); font-weight: 700;">500</td>
+                            <td><div class="value-bar"><div class="fill gold" style="width: 83%"></div></div></td>
+                            <td style="color: var(--accent-orange); font-weight: 700;">10</td>
+                            <td><div class="value-bar weight-bar"><div class="fill" style="width: 67%"></div></div></td>
+                            <td style="color: var(--gold);">👍 性价比高</td>
+                        </tr>
+                        <tr>
+                            <td><span class="mineral-name"><span class="icon">🪙</span> 小金块</span></td>
+                            <td style="color: var(--gold); font-weight: 700;">200</td>
+                            <td><div class="value-bar"><div class="fill gold" style="width: 33%"></div></div></td>
+                            <td style="color: var(--accent-green); font-weight: 700;">5</td>
+                            <td><div class="value-bar weight-bar"><div class="fill" style="width: 33%"></div></div></td>
+                            <td style="color: var(--text-secondary);">👌 稳定收益</td>
+                        </tr>
+                        <tr>
+                            <td><span class="mineral-name"><span class="icon">🪨</span> 石头</span></td>
+                            <td style="color: #999; font-weight: 700;">20</td>
+                            <td><div class="value-bar"><div class="fill stone" style="width: 3%"></div></div></td>
+                            <td style="color: var(--accent-red); font-weight: 700;">15</td>
+                            <td><div class="value-bar weight-bar"><div class="fill" style="width: 100%"></div></div></td>
+                            <td style="color: var(--accent-red);">❌ 尽量避开</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Architecture ===== -->
+    <section id="architecture">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Architecture</span>
+                <h2 class="section-title">系统架构</h2>
+                <p class="section-desc">清晰的分层架构，策略模式实现手势识别接口抽象</p>
+            </div>
+            <div class="arch-diagram">
+                <div class="arch-flow">
+                    <div class="arch-row">
+                        <div class="arch-box scene">🏠 MainRoot<br>主菜单</div>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-row">
+                        <div class="arch-box scene">🛒 Shop<br>商店</div>
+                        <div class="arch-arrow-h">↔</div>
+                        <div class="arch-box core">🎮 Game<br>游戏核心</div>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-row">
+                        <div class="arch-box core">⛏️ Mineral<br>矿物系统</div>
+                        <div class="arch-box service">🤚 GestureClient<br>手势客户端</div>
+                        <div class="arch-box data">💾 PlayerManager<br>玩家管理</div>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-row">
+                        <div class="arch-box service">IGestureRecognizer<br>手势识别接口</div>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-row">
+                        <div class="arch-box service">🟢 Local<br>本地OpenCV</div>
+                        <div class="arch-arrow-h">↔</div>
+                        <div class="arch-box service">🟣 Cloud<br>云端AI</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-showcase">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span style="color: var(--text-secondary); font-size: 13px; margin-left: 8px;">IGestureRecognizer.hpp — 策略模式接口</span>
+                </div>
+<pre>
+<span class="keyword">class</span> <span class="class-name">IGestureRecognizer</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">virtual</span> <span class="type">bool</span> <span class="method">start</span>() = <span class="number">0</span>;           <span class="comment">// 启动识别器</span>
+    <span class="keyword">virtual</span> <span class="type">void</span> <span class="method">stop</span>() = <span class="number">0</span>;            <span class="comment">// 停止识别器</span>
+    <span class="keyword">virtual</span> <span class="type">void</span> <span class="method">pushFrame</span>(...) = <span class="number">0</span>;    <span class="comment">// 推送一帧图像</span>
+    <span class="keyword">virtual</span> <span class="type">void</span> <span class="method">setCallback</span>(...) = <span class="number">0</span>; <span class="comment">// 设置回调</span>
+};
+
+<span class="comment">// 本地实现 — OpenCV 颜色阈值识别</span>
+<span class="keyword">class</span> <span class="class-name">LocalGestureRecognizer</span> : <span class="keyword">public</span> <span class="class-name">IGestureRecognizer</span> { ... };
+
+<span class="comment">// 云端实现 — HTTP API 调用</span>
+<span class="keyword">class</span> <span class="class-name">CloudGestureRecognizer</span> : <span class="keyword">public</span> <span class="class-name">IGestureRecognizer</span> { ... };
+
+<span class="comment">// 融合器 — 取置信度最高的结果</span>
+<span class="keyword">class</span> <span class="class-name">GestureFusion</span> : <span class="keyword">public</span> <span class="class-name">IGestureRecognizer</span> { ... };
+</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Highlights ===== -->
+    <section id="highlights">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Highlights</span>
+                <h2 class="section-title">项目亮点</h2>
+                <p class="section-desc">C++ 课程大作业中的技术亮点与设计模式应用</p>
+            </div>
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <div class="highlight-number">3</div>
+                    <h3>设计模式</h3>
+                    <p>单例模式、策略模式、观察者模式，代码架构清晰可扩展</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-number">2</div>
+                    <h3>识别引擎</h3>
+                    <p>本地 OpenCV + 云端 AI 双引擎，GestureFusion 自动融合</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-number">9</div>
+                    <h3>矿物类型</h3>
+                    <p>金块、钻石、石头、宝藏袋，丰富的矿物系统</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-number">5</div>
+                    <h3>游戏关卡</h3>
+                    <p>难度递增的5个关卡，JSON配置驱动</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Footer ===== -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://github.com/mzk-C4/gold-miner-vision" target="_blank">GitHub</a>
+                <a href="https://github.com/ZhongTaoTian/GoldMiner" target="_blank">原始项目</a>
+                <a href="https://docs.cocos2d-x.org/" target="_blank">Cocos2d-x 文档</a>
+                <a href="https://opencv.org/" target="_blank">OpenCV</a>
+            </div>
+            <p class="footer-copy">© 2026 黄金矿工手势识别版 — C++ Course Project @ NKU</p>
+        </div>
+    </footer>
+
+    <script>
+        // Create floating gold particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px';
+            particle.style.animationDuration = (Math.random() * 10 + 8) + 's';
+            particle.style.animationDelay = (Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.tech-card, .gesture-card, .mode-card, .shop-card, .highlight-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

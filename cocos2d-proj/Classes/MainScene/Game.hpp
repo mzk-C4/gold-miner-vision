@@ -85,6 +85,10 @@ private:
     bool physicsBegin(PhysicsContact &contact);
     void pullGold(PhysicsContact &contact);
 
+    // Bomb / explosive
+    void detonateBomb();
+    void onRightMouseClick(EventMouse* event);
+
     // Gesture mode
     void switchInputMode(InputMode mode);
     void updateGestureAngle(float dt);

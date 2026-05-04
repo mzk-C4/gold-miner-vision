@@ -11,6 +11,7 @@
 #include "UserDataManager.hpp"
 #include "Shop.hpp"
 #include "SoundTool.hpp"
+#include "MusicPlayer.hpp"
 #include "Const.hpp"
 #include "services/PlayerManager.hpp"
 
@@ -64,6 +65,7 @@ bool MainLayer::init()
     batchNode->addChild(face);
     
     light = Sprite::createWithSpriteFrameName("cave-0.png");
+    light->setScale(0.5f);
     light->setPosition(Vec2(kWinSizeWidth * 0.7083, kWinSizeHeight * 0.445));
     batchNode->addChild(light);
     
@@ -137,7 +139,7 @@ void MainLayer::onEnter()
     this->playMinerAnimation(face, "miner-face-whistle-", 0.25);
     this->playMinerAnimation(light, "cave-", 0.35);
 
-    SoundTool::getInstance()->playBackgroundMusic("music/backMusic.mp3");
+    MusicPlayer::getInstance()->start();
 }
 
 void MainLayer::startButtonTouch(cocos2d::Ref *sender, Widget::TouchEventType type)
