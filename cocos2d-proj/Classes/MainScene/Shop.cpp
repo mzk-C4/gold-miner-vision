@@ -46,8 +46,9 @@ bool Shop::init()
         return false;
     }
     
-    auto csb = CSLoader::createNode("ShopScene.csb");
-    this->addChild(csb);
+    // Pre-load original shoper.plist so CSB loader won't re-load it later
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "Resources/shoper.plist", "Resources/shoper.png");
 
     // Load the new sprite sheet and collect its frames
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
@@ -65,8 +66,8 @@ bool Shop::init()
     }
 
     // Replace the ORIGINAL shoper frames in SpriteFrameCache with our
-    // new ones. The CSB's built-in ActionTimeline keeps running with
-    // its original timing and sequence — only the texture data changes.
+    // new ones BEFORE creating the CSB node. This way the merchant
+    // sprite is created with the new look from the start.
     if (!newFrames.empty()) {
         auto* frameCache = SpriteFrameCache::getInstance();
         for (int i = 1; i <= 38; i++) {
@@ -84,6 +85,9 @@ bool Shop::init()
             }
         }
     }
+
+    auto csb = CSLoader::createNode("ShopScene.csb");
+    this->addChild(csb);
 
     goodsDesVec.push_back(Value("炸药.购买以后,当抓到较重且金额不多的物品时,按下上方炸药即可炸毁物品,以便节省时间.功效为下一关"));
     goodsDesVec.push_back(Value("力量药水.购买以后,在下一关力量会增加,抓到物品后拉回速度会增加20%.功效为下一关"));

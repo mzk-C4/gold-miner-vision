@@ -13,6 +13,7 @@
 #include "Shop.hpp"
 #include "GestureClient.hpp"
 #include "AIGestureService.hpp"
+#include "AIGestureRecognizer.hpp"
 #include "GestureFusion.hpp"
 #include "platform/CCImage.h"
 #include "base/CCEventListenerMouse.h"
@@ -453,22 +454,23 @@ void Game::switchInputMode(InputMode mode)
         this->startShakeHookAnimation();
     } else {
         if (oldMode == InputMode::TOUCH) {
-            // ── 双通道混合识别架构初始化 ──
-            // 本地通道：OpenCV (GestureServer.exe)
-            // 云端通道：仅在 AI 模式下启用（豆包大模型双保险）
+            // ── 手势识别架构初始化 ──
             auto* fusion = GestureFusion::getInstance();
+            bool initOk = false;
 
-            std::string cloudEp, cloudKey;
             if (mode == InputMode::AI) {
-                auto* ai = AIGestureService::getInstance();
-                cloudEp = "doubao-vision-pro-32k";  // FIXME: 从配置读取
-                cloudKey = "";                        // FIXME: 从配置读取
-                CCLOG("[Game] AI mode: dual-channel (local + cloud) gesture recognition");
+                // AI 模式：摄像头直连大模型，跳过 OpenCV/MediaPipe
+                std::string cloudEp = "doubao-vision-pro-32k";
+                std::string cloudKey = "";  // FIXME: 从配置文件读取 API Key
+                initOk = fusion->initializeAI(cloudEp, cloudKey);
+                CCLOG("[Game] AI mode: camera -> LLM direct gesture recognition");
             } else {
-                CCLOG("[Game] OpenCV mode: local-only gesture recognition");
+                // OpenCV 模式：本地 GestureServer 手势检测
+                initOk = fusion->initialize("", "");
+                CCLOG("[Game] OpenCV mode: local GestureServer gesture recognition");
             }
 
-            if (!fusion->initialize(cloudEp, cloudKey)) {
+            if (!initOk) {
                 CCLOG("[Game] WARNING: GestureFusion init failed, falling back to touch");
                 _inputMode = InputMode::TOUCH;
                 this->startShakeHookAnimation();
@@ -517,15 +519,25 @@ void Game::updateCameraPreview(float dt)
 {
     if (_inputMode == InputMode::TOUCH) return;
 
-    // 相机预览帧仍由 GestureClient 提供（原始 JPEG）
-    GestureData data = GestureClient::getInstance()->getData();
-    if (!data.hasNewFrame || data.jpegFrame.empty()) return;
+    std::vector<uint8_t> jpegFrame;
 
-    // 推送帧给融合器（AI 模式下，融合器会在 FIST 锁定时转发给云端）
-    GestureFusion::getInstance()->pushPreviewFrame(data.jpegFrame);
+    if (_inputMode == InputMode::AI) {
+        // AI 模式：帧来自 AIGestureRecognizer（摄像头直连，无 OpenCV）
+        jpegFrame = AIGestureRecognizer::getInstance()->getLatestFrame();
+    } else {
+        // OpenCV 模式：帧来自 GestureClient（GestureServer 摄像头）
+        GestureData data = GestureClient::getInstance()->getData();
+        if (data.hasNewFrame && !data.jpegFrame.empty())
+            jpegFrame = std::move(data.jpegFrame);
+    }
+
+    if (jpegFrame.empty()) return;
+
+    // 推送帧给融合器
+    GestureFusion::getInstance()->pushPreviewFrame(jpegFrame);
 
     Image* img = new (std::nothrow) Image();
-    if (!img->initWithImageData(data.jpegFrame.data(), data.jpegFrame.size())) {
+    if (!img->initWithImageData(jpegFrame.data(), jpegFrame.size())) {
         delete img;
         return;
     }

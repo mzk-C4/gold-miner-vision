@@ -65,7 +65,6 @@ bool MainLayer::init()
     batchNode->addChild(face);
     
     light = Sprite::createWithSpriteFrameName("cave-0.png");
-    light->setScale(0.5f);
     light->setPosition(Vec2(kWinSizeWidth * 0.7083, kWinSizeHeight * 0.445));
     batchNode->addChild(light);
     

@@ -33,6 +33,7 @@ list(APPEND GAME_SOURCE
     Classes/services/LocalGestureRecognizer.cpp
     Classes/services/CloudGestureRecognizer.cpp
     Classes/services/GestureFusion.cpp
+    Classes/services/AIGestureRecognizer.cpp
 )
 
 list(APPEND GAME_HEADER
@@ -56,6 +57,7 @@ list(APPEND GAME_HEADER
     Classes/services/LocalGestureRecognizer.hpp
     Classes/services/CloudGestureRecognizer.hpp
     Classes/services/GestureFusion.hpp
+    Classes/services/AIGestureRecognizer.hpp
 )
 
 if(WINDOWS)

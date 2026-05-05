@@ -1,6 +1,7 @@
 #include "GestureFusion.hpp"
 #include "LocalGestureRecognizer.hpp"
 #include "CloudGestureRecognizer.hpp"
+#include "AIGestureRecognizer.hpp"
 #include "GestureClient.hpp"
 #include <mutex>
 
@@ -46,10 +47,36 @@ bool GestureFusion::initialize(const std::string& cloudEndpointId,
     return true;
 }
 
+// ── AI 独占模式初始化（摄像头 → 大模型，跳过 OpenCV）──────────────────
+
+bool GestureFusion::initializeAI(const std::string& endpointId,
+                                  const std::string& apiKey) {
+    if (_initialized) return true;
+
+    auto* ai = AIGestureRecognizer::getInstance();
+    ai->setEndpointId(endpointId);
+    ai->setApiKey(apiKey);
+    ai->setCallback([this](const GestureResult& r) { onLocalResult(r); });
+    if (!ai->start()) {
+        CCLOG("[GestureFusion] AI recognizer failed to start");
+        return false;
+    }
+
+    _aiMode = true;
+    _initialized = true;
+    CCLOG("[GestureFusion] Initialized — AI-only mode (camera -> LLM)");
+    return true;
+}
+
 void GestureFusion::shutdown() {
     if (!_initialized) return;
-    LocalGestureRecognizer::getInstance()->stop();
-    CloudGestureRecognizer::getInstance()->stop();
+    if (_aiMode) {
+        AIGestureRecognizer::getInstance()->stop();
+    } else {
+        LocalGestureRecognizer::getInstance()->stop();
+        CloudGestureRecognizer::getInstance()->stop();
+    }
+    _aiMode = false;
     _initialized = false;
     CCLOG("[GestureFusion] Shutdown");
 }
@@ -62,8 +89,8 @@ void GestureFusion::onLocalResult(const GestureResult& result) {
         _latestLocal = result;
     }
 
-    // FIST 锁定 → 触发云端校验
-    if (result.gesture == GestureType::FIST && result.isLocked) {
+    // FIST 锁定 → 触发云端校验（仅双通道模式，AI 模式跳过）
+    if (!_aiMode && result.gesture == GestureType::FIST && result.isLocked) {
         bool shouldSend = false;
         {
             std::lock_guard<std::mutex> lock(_pendingMutex);
@@ -192,10 +219,12 @@ void GestureFusion::pushPreviewFrame(const std::vector<uint8_t>& jpegData) {
 // ── 状态查询 ──────────────────────────────────────────────────────────
 
 bool GestureFusion::isLocalRunning() const {
+    if (_aiMode) return AIGestureRecognizer::getInstance()->isRunning();
     return LocalGestureRecognizer::getInstance()->isRunning();
 }
 
 bool GestureFusion::isCloudEnabled() const {
+    if (_aiMode) return false;  // AI 模式无需独立云端校验
     return CloudGestureRecognizer::getInstance()->isEnabled();
 }
 
@@ -206,9 +235,10 @@ std::string GestureFusion::statusString() const {
         local = _latestLocal;
     }
     bool pending = _fistPendingCloud;
-    char buf[128];
+    char buf[160];
     snprintf(buf, sizeof(buf),
-             "Local: %s | Angle: %.1f | Cloud: %s | Pending: %s",
+             "%s: %s | Angle: %.1f | Cloud: %s | Pending: %s",
+             _aiMode ? "AI" : "Local",
              local.gesture == GestureType::OPEN_PALM ? "OPEN" :
              local.gesture == GestureType::FIST ? "FIST" : "NONE",
              _gameAngle,

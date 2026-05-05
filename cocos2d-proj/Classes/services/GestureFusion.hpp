@@ -9,6 +9,7 @@
 
 class LocalGestureRecognizer;
 class CloudGestureRecognizer;
+class AIGestureRecognizer;
 
 /// 手势融合器 —— 双通道混合识别架构的核心
 ///
@@ -38,8 +39,12 @@ public:
 
     static GestureFusion* getInstance();
 
-    /// 初始化并启动双通道
+    /// 初始化并启动双通道（本地 OpenCV + 可选云端校验）
     bool initialize(const std::string& cloudEndpointId, const std::string& cloudApiKey);
+
+    /// 初始化 AI 独占模式（摄像头直连大模型，跳过 OpenCV/MediaPipe）
+    bool initializeAI(const std::string& endpointId, const std::string& apiKey);
+
     void shutdown();
 
     /// 注册指令回调（发往游戏逻辑）
@@ -91,4 +96,5 @@ private:
     static constexpr float BOMB_HOLD_DURATION = 1.5f;
 
     bool _initialized = false;
+    bool _aiMode = false;  // true: AI 独占模式，false: 本地+云端双通道
 };
