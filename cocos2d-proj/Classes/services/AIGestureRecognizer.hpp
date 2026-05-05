@@ -43,7 +43,6 @@ private:
     ~AIGestureRecognizer();
 
     void inferenceLoop();
-    static std::string encodeB64(const std::vector<uint8_t>& data);
 
     std::string _endpointId;
     std::string _apiKey;
