@@ -41,22 +41,21 @@ static std::string encodeB64(const std::vector<uint8_t>& data) {
 // ── 构建 API 请求体（增强提示词：手势分类 + 手部水平位置）─────────────
 
 static std::string buildBody(const std::string& imageB64, const std::string& model) {
-    using namespace rapidjson;
-    Document doc;
+    rapidjson::Document doc;
     doc.SetObject();
     auto& alloc = doc.GetAllocator();
 
-    doc.AddMember("model", Value(model.c_str(), alloc), alloc);
+    doc.AddMember("model", rapidjson::Value(model.c_str(), alloc), alloc);
     doc.AddMember("temperature", 0.0, alloc);
 
-    Value responseFormat(kObjectType);
+    rapidjson::Value responseFormat(rapidjson::kObjectType);
     responseFormat.AddMember("type", "json_object", alloc);
     doc.AddMember("response_format", responseFormat, alloc);
 
-    Value messages(kArrayType);
+    rapidjson::Value messages(rapidjson::kArrayType);
 
     // System prompt
-    Value sysMsg(kObjectType);
+    rapidjson::Value sysMsg(rapidjson::kObjectType);
     sysMsg.AddMember("role", "system", alloc);
     sysMsg.AddMember("content",
         "You are a high-precision hand gesture analyzer for a real-time game. "
@@ -71,14 +70,14 @@ static std::string buildBody(const std::string& imageB64, const std::string& mod
     messages.PushBack(sysMsg, alloc);
 
     // User message with image
-    Value userMsg(kObjectType);
+    rapidjson::Value userMsg(rapidjson::kObjectType);
     userMsg.AddMember("role", "user", alloc);
 
-    Value contentArr(kArrayType);
+    rapidjson::Value contentArr(rapidjson::kArrayType);
 
-    Value textPart(kObjectType);
+    rapidjson::Value textPart(rapidjson::kObjectType);
     textPart.AddMember("type", "text", alloc);
-    textPart.AddMember("text", Value(
+    textPart.AddMember("text", rapidjson::Value(
         "仔细观察图片中最清晰的一只手，判断手势和位置：\n"
         "1. GESTURE 手势：\n"
         "   - \"open_palm\": 手指完全伸展，5指清晰可见\n"
@@ -91,11 +90,11 @@ static std::string buildBody(const std::string& imageB64, const std::string& mod
         alloc), alloc);
     contentArr.PushBack(textPart, alloc);
 
-    Value imagePart(kObjectType);
+    rapidjson::Value imagePart(rapidjson::kObjectType);
     imagePart.AddMember("type", "image_url", alloc);
-    Value imageUrl(kObjectType);
+    rapidjson::Value imageUrl(rapidjson::kObjectType);
     std::string url = "data:image/jpeg;base64," + imageB64;
-    imageUrl.AddMember("url", Value(url.c_str(), alloc), alloc);
+    imageUrl.AddMember("url", rapidjson::Value(url.c_str(), alloc), alloc);
     imageUrl.AddMember("detail", "low", alloc);
     imagePart.AddMember("image_url", imageUrl, alloc);
     contentArr.PushBack(imagePart, alloc);
@@ -104,8 +103,8 @@ static std::string buildBody(const std::string& imageB64, const std::string& mod
     messages.PushBack(userMsg, alloc);
     doc.AddMember("messages", messages, alloc);
 
-    StringBuffer buffer;
-    Writer<StringBuffer> writer(buffer);
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
     doc.Accept(writer);
     return buffer.GetString();
 }
