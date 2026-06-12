@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黄金矿工 - 手势识别版</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0A0E27;
+    font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    background: #0A0E27;
+    overflow: hidden;
+  }
+
+  /* Paper grain texture overlay */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Radial vignette */
+  .slide::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(10, 14, 39, 0.6) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* === ROPE + HOOK === */
+  .hook-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+  }
+
+  .rope {
+    width: 3px;
+    height: 200px;
+    margin: 0 auto;
+    background: linear-gradient(to bottom,
+      #A08060 0%, #C4A87C 20%, #8B7355 40%,
+      #B8946E 60%, #9B7D5C 80%, #C4A87C 100%
+    );
+    position: relative;
+    box-shadow: 0 0 1px rgba(0,0,0,0.5);
+  }
+
+  .rope::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent,
+      transparent 3px,
+      rgba(255,255,255,0.03) 3px,
+      rgba(255,255,255,0.03) 4px
+    );
+  }
+
+  /* Hook SVG wrapper */
+  .hook-svg {
+    display: block;
+    margin: -10px auto 0;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+  }
+
+  /* === TITLE AREA === */
+  .title-area {
+    position: absolute;
+    top: 290px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 6;
+  }
+
+  .main-title {
+    font-family: 'Noto Serif SC', 'SimSun', 'STSong', serif;
+    font-size: 128px;
+    font-weight: 900;
+    letter-spacing: 12px;
+    background: linear-gradient(180deg,
+      #F0D68A 0%,
+      #D4A843 25%,
+      #C49530 40%,
+      #E8C870 55%,
+      #B8860B 75%,
+      #D4A843 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .sub-title {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: #E0DDD8;
+    letter-spacing: 16px;
+    margin-bottom: 28px;
+  }
+
+  .separator {
+    width: 180px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #A08050, #D4A843, #A08050, transparent);
+    margin: 0 auto 28px;
+    opacity: 0.7;
+  }
+
+  .course-label {
+    font-size: 20px;
+    font-weight: 300;
+    color: #8A8FA8;
+    letter-spacing: 8px;
+  }
+
+  /* === RIGHT SIDE: HAND SILHOUETTE === */
+  .hand-container {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    opacity: 0.35;
+  }
+
+  .hand-svg {
+    filter: drop-shadow(0 0 30px rgba(74, 127, 181, 0.15));
+  }
+
+  /* === BOTTOM: GOLD NUGGETS === */
+  .nuggets-area {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 40px;
+    align-items: flex-end;
+    z-index: 5;
+  }
+
+  .nugget {
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+  }
+
+  /* Bottom spotlight on nuggets */
+  .spotlight {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 180px;
+    background: radial-gradient(ellipse at center bottom,
+      rgba(212, 168, 67, 0.08) 0%,
+      transparent 70%
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* Subtle top light source */
+  .top-light {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(ellipse at center top,
+      rgba(200, 180, 140, 0.04) 0%,
+      transparent 70%
+    );
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* Finger trace lines */
+  .finger-traces {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    opacity: 0.25;
+  }
+
+  /* === BOTTOM: GOLD NUGGETS (Real Game Sprites) === */
+  .nuggets-area {
+    position: absolute;
+    bottom: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 18px;
+    align-items: flex-end;
+    z-index: 5;
+  }
+
+  .nugget-img {
+    display: block;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.55));
+    image-rendering: auto;
+    transition: none;
+  }
+
+  /* Sizes for different mineral types */
+  .nugget-gold-lg  { height: 95px; width: auto; }
+  .nugget-gold-md  { height: 72px; width: auto; }
+  .nugget-gold-sm  { height: 55px; width: auto; }
+  .nugget-diamond  { height: 65px; width: auto; }
+  .nugget-stone    { height: 50px; width: auto; }
+  .nugget-treasure { height: 70px; width: auto; }
+  .nugget-tnt      { height: 68px; width: auto; }
+</style>
+</head>
+<body>
+
+<div class="slide">
+
+  <!-- Top light -->
+  <div class="top-light"></div>
+
+  <!-- Rope + Hook -->
+  <div class="hook-container">
+    <div class="rope"></div>
+    <svg class="hook-svg" width="120" height="140" viewBox="0 0 120 140">
+      <defs>
+        <linearGradient id="hookGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#D4A843"/>
+          <stop offset="30%" stop-color="#E8D080"/>
+          <stop offset="55%" stop-color="#B8860B"/>
+          <stop offset="80%" stop-color="#D4A843"/>
+          <stop offset="100%" stop-color="#8B6914"/>
+        </linearGradient>
+        <filter id="hookShadow">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.4"/>
+        </filter>
+      </defs>
+      <!-- Rope ring at top -->
+      <circle cx="60" cy="20" r="8" fill="none" stroke="url(#hookGrad)" stroke-width="3" filter="url(#hookShadow)"/>
+      <!-- Hook body - left side curve -->
+      <path d="M60 28 L60 60 Q60 85 42 100 Q30 110 35 125 Q40 135 55 130 Q65 126 62 112 Q58 98 45 92"
+            fill="none" stroke="url(#hookGrad)" stroke-width="6" stroke-linecap="round" filter="url(#hookShadow)"/>
+      <!-- Hook tip point -->
+      <path d="M35 125 L28 138" fill="none" stroke="url(#hookGrad)" stroke-width="5" stroke-linecap="round" filter="url(#hookShadow)"/>
+      <!-- Inner curve highlight -->
+      <path d="M58 35 L58 58 Q58 80 44 95 Q34 105 38 118"
+            fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- Title Area -->
+  <div class="title-area">
+    <div class="main-title">黄金矿工</div>
+    <div class="sub-title">手势识别版</div>
+    <div class="separator"></div>
+    <div class="course-label">C++ 课程设计汇报</div>
+  </div>
+
+  <!-- Hand Silhouette (Right side) -->
+  <div class="hand-container">
+    <svg class="hand-svg" width="320" height="400" viewBox="0 0 320 400">
+      <defs>
+        <linearGradient id="handGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#4A7FB5" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#3A6090" stop-opacity="0.2"/>
+        </linearGradient>
+        <filter id="handBlur">
+          <feGaussianBlur stdDeviation="1.5"/>
+        </filter>
+        <filter id="handGlow">
+          <feGaussianBlur stdDeviation="6" result="glow"/>
+          <feMerge>
+            <feMergeNode in="glow"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <!-- Palm -->
+      <path d="M120 200
+               Q100 150 110 100 Q115 70 130 60
+               Q140 55 145 65 L145 140
+               Q148 100 152 55 Q155 30 165 25
+               Q175 22 178 40 L175 130
+               Q180 85 185 45 Q188 20 198 18
+               Q208 20 205 60 L198 140
+               Q205 100 215 65 Q220 40 228 42
+               Q236 50 230 95 L210 170
+               Q200 210 180 240 Q160 260 140 260
+               Q120 258 115 240 Q108 220 120 200Z"
+            fill="url(#handGrad)" filter="url(#handGlow)" opacity="0.7"/>
+      <!-- Wrist -->
+      <path d="M115 240 Q110 270 105 310 Q108 340 120 360
+               Q140 370 160 365 Q175 355 178 330
+               Q175 290 170 260"
+            fill="url(#handGrad)" opacity="0.3" filter="url(#handBlur)"/>
+
+      <!-- Fingertip trace lines -->
+      <g opacity="0.5" stroke="#4A7FB5" stroke-width="0.8" fill="none">
+        <!-- Index finger trace -->
+        <path d="M145 65 L155 40 Q158 25 162 15 Q165 5 170 10" stroke-dasharray="3,3"/>
+        <circle cx="170" cy="10" r="2.5" fill="rgba(74,127,181,0.6)"/>
+        <!-- Middle finger trace -->
+        <path d="M178 40 L182 20 Q185 8 190 2" stroke-dasharray="3,3"/>
+        <circle cx="190" cy="2" r="2.5" fill="rgba(74,127,181,0.6)"/>
+        <!-- Ring finger trace -->
+        <path d="M205 60 L210 42 Q213 28 216 18" stroke-dasharray="3,3"/>
+        <circle cx="216" cy="18" r="2.5" fill="rgba(74,127,181,0.6)"/>
+        <!-- Pinky trace -->
+        <path d="M230 95 L235 78 Q238 62 240 50" stroke-dasharray="3,3"/>
+        <circle cx="240" cy="50" r="2.5" fill="rgba(74,127,181,0.6)"/>
+        <!-- Thumb trace -->
+        <path d="M130 60 L115 55 Q100 50 90 55" stroke-dasharray="3,3"/>
+        <circle cx="90" cy="55" r="2.5" fill="rgba(74,127,181,0.6)"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Bottom spotlight on nuggets -->
+  <div class="spotlight"></div>
+
+  <!-- Gold Nuggets & Minerals (Real Game Sprites) -->
+  <div class="nuggets-area">
+    <!-- Large gold nugget (pulled) -->
+    <img src="assets/gold-large-2.png" class="nugget-img nugget-gold-lg" alt="Gold">
+
+    <!-- Diamond -->
+    <img src="assets/diamond-2.png" class="nugget-img nugget-diamond" alt="Diamond">
+
+    <!-- Medium gold nugget -->
+    <img src="assets/gold-nugget-4.png" class="nugget-img nugget-gold-md" alt="Gold">
+
+    <!-- Treasure bag -->
+    <img src="assets/treasure.png" class="nugget-img nugget-treasure" alt="Treasure">
+
+    <!-- Stone -->
+    <img src="assets/stone-2.png" class="nugget-img nugget-stone" alt="Stone">
+
+    <!-- Small gold nugget -->
+    <img src="assets/gold-nugget-3.png" class="nugget-img nugget-gold-sm" alt="Gold">
+
+    <!-- Another diamond -->
+    <img src="assets/gen-diamond.png" class="nugget-img nugget-diamond" alt="Diamond">
+
+    <!-- Small gold -->
+    <img src="assets/gold-nugget-1.png" class="nugget-img nugget-gold-sm" alt="Gold">
+
+    <!-- TNT -->
+    <img src="assets/tnt.png" class="nugget-img nugget-tnt" alt="TNT">
+  </div>
+
+</div>
+
+</body>
+</html>

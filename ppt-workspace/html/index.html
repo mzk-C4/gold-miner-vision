@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黄金矿工 - 手势识别版 | C++ 课程设计汇报</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg-deep:#0A0E27;--bg-card:#1E2340;--bg-card2:#161A35;--bg-code:#0D1120;--gold:#D4A843;--gold-light:#F0D68A;--gold-dark:#B8860B;--blue:#4A7FB5;--blue-light:#6CA0D8;--blue-bright:#8BB8F0;--mint:#5BAF8A;--mint-bright:#7DD4AA;--violet:#7B6BA0;--violet-light:#A090C0;--rose:#C57B8A;--gray:#8A8FA8;--gray-light:#B0B5C8;--white:#E8E8EC;--border:rgba(212,168,67,0.18);--border-blue:rgba(74,127,181,0.25);--border-mint:rgba(91,175,138,0.25)}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;-webkit-font-smoothing:antialiased}
+#ppt-wrapper{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+.slide-stage{width:1920px;height:1080px;transform-origin:center center;position:relative}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;background:var(--bg-deep);overflow:hidden;display:none;flex-direction:column}
+.slide.active{display:flex}
+.slide::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");background-size:256px 256px;pointer-events:none;z-index:100}
+.gold-text{background:linear-gradient(180deg,var(--gold-light) 0%,var(--gold) 40%,var(--gold-dark) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-header{position:absolute;top:80px;left:80px;right:80px;z-index:5}
+.section-header h2{font-size:48px;font-weight:900;letter-spacing:3px;margin-bottom:8px}
+.section-header h2.en{font-family:'Share Tech Mono','JetBrains Mono',monospace;font-size:15px;font-weight:400;letter-spacing:4px;color:var(--gray);margin-bottom:2px;text-transform:uppercase}
+.section-header .sub{font-size:19px;color:var(--gray);letter-spacing:1px}
+.section-header .gold-bar{width:70px;height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-dark));border-radius:2px;margin-top:16px}
+.slide-header{position:absolute;top:0;left:0;right:0;height:72px;display:flex;align-items:center;padding:0 80px;border-bottom:1px solid var(--border);z-index:10;background:linear-gradient(180deg,rgba(10,14,39,0.9) 0%,transparent 100%)}
+.slide-header .section-tag{font-size:13px;letter-spacing:3px;color:var(--gray);text-transform:uppercase}
+.slide-header .page-num{margin-left:auto;font-size:13px;color:rgba(138,143,168,0.4)}
+.tag{display:inline-block;padding:4px 14px;border-radius:20px;font-size:13px;letter-spacing:1px;font-weight:500}
+.tag-gold{background:rgba(212,168,67,0.12);color:var(--gold);border:1px solid rgba(212,168,67,0.25)}
+.tag-blue{background:rgba(74,127,181,0.12);color:var(--blue-light);border:1px solid rgba(74,127,181,0.25)}
+.tag-mint{background:rgba(91,175,138,0.12);color:var(--mint);border:1px solid rgba(91,175,138,0.25)}
+.tag-violet{background:rgba(123,107,160,0.12);color:var(--violet-light);border:1px solid rgba(123,107,160,0.25)}
+.tag-rose{background:rgba(197,123,138,0.12);color:var(--rose);border:1px solid rgba(197,123,138,0.25)}
+.code-block{background:var(--bg-code);border:1px solid rgba(74,127,181,0.2);border-radius:8px;padding:18px 22px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.7;color:#C8D3E0}
+.code-kw{color:#7B9FD0}.code-type{color:#5BAF8A}.code-val{color:#D4A843}.code-cmt{color:#5A6080;font-style:italic}.code-str{color:#C57B8A}.code-fn{color:#C8A040}.code-num{color:#7DD4AA}
+.code-inline{font-family:'JetBrains Mono',monospace;background:rgba(74,127,181,0.1);color:var(--blue-bright);padding:1px 6px;border-radius:3px;font-size:0.9em}
+.stat-big{font-family:'Share Tech Mono','JetBrains Mono',monospace;font-size:72px;font-weight:400;line-height:1;letter-spacing:-2px}
+.mini-detail{background:var(--bg-card2);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:16px 18px}
+.mini-detail .md-title{font-size:12px;letter-spacing:2px;font-weight:600;margin-bottom:6px}
+.mini-detail .md-body{font-size:14px;color:var(--gray);line-height:1.6}
+.mini-detail .md-mono{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--blue-light)}
+.result-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:13px;font-weight:600;letter-spacing:.5px}
+
+/* NAV */
+#nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;z-index:9999;background:rgba(10,14,39,0.85);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:40px;padding:10px 24px}
+#nav button{background:none;border:1px solid rgba(212,168,67,0.3);color:var(--gold);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+#nav button:hover{background:rgba(212,168,67,0.12);border-color:var(--gold)}
+#nav button:disabled{opacity:.3;cursor:default}
+#page-indicator{color:var(--gray);font-size:14px;letter-spacing:1px;min-width:60px;text-align:center}
+#page-indicator span{color:var(--gold);font-weight:700}
+.dot-nav{display:flex;gap:8px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(138,143,168,0.3);cursor:pointer;transition:all .2s}
+.dot.active{background:var(--gold);transform:scale(1.3)}
+.dot:hover{background:rgba(212,168,67,0.5)}
+
+/* S1 COVER */
+#slide-1{align-items:center;justify-content:center;position:relative}
+.s1-rope{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:5;display:flex;flex-direction:column;align-items:center}
+.s1-rope-line{width:3px;height:220px;background:linear-gradient(to bottom,#A08060,#C4A87C,#8B7355);box-shadow:0 0 1px rgba(0,0,0,.5)}
+.s1-title-area{text-align:center;z-index:6;margin-top:40px}
+.s1-title-area .t1{font-family:'Noto Serif SC',serif;font-size:120px;font-weight:900;letter-spacing:12px;line-height:1.1;margin-bottom:12px}
+.s1-title-area .t2{font-size:38px;font-weight:300;color:var(--white);letter-spacing:20px;margin-bottom:10px}
+.s1-title-area .t2b{font-size:18px;font-weight:500;color:var(--blue-light);letter-spacing:8px;margin-bottom:36px}
+.s1-sep{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 36px}
+.s1-title-area .course{font-size:18px;color:var(--gray);letter-spacing:8px}
+.s1-tech-stack{display:flex;gap:20px;justify-content:center;margin-top:24px}
+.s1-hand{position:absolute;right:60px;top:50%;transform:translateY(-50%);z-index:4;opacity:.3}
+.s1-nuggets{position:absolute;bottom:55px;left:50%;transform:translateX(-50%);display:flex;gap:20px;align-items:flex-end;z-index:5}
+.s1-nuggets img{filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
+.s1-spotlight{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:900px;height:200px;background:radial-gradient(ellipse at center bottom,rgba(212,168,67,0.07) 0%,transparent 70%);pointer-events:none;z-index:3}
+.s1-github{position:absolute;bottom:170px;left:50%;transform:translateX(-50%);font-size:16px;color:var(--blue-light);letter-spacing:1px;font-family:'JetBrains Mono',monospace;z-index:6;opacity:.7}
+
+/* S2 */
+#slide-2 .s2-body{position:absolute;top:90px;left:80px;right:80px;bottom:50px;display:grid;grid-template-columns:1fr 80px 1fr;gap:0;align-items:center}
+.s2-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:48px 44px;height:870px;display:flex;flex-direction:column;justify-content:space-between}
+.s2-panel-title{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:700;letter-spacing:3px;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.s2-item{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px}
+.s2-item-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.s2-item-text .label{font-size:17px;font-weight:600;color:var(--white);margin-bottom:4px}
+.s2-item-text .desc{font-size:14px;color:var(--gray);line-height:1.6}
+.s2-x{display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:72px;font-weight:400}
+.s2-tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.s2-tech-chip{background:var(--bg-card2);border:1px solid rgba(74,127,181,0.2);border-radius:8px;padding:14px 16px;text-align:center}
+.s2-tech-chip .name{font-size:16px;font-weight:700;color:var(--blue-light)}
+.s2-tech-chip .ver{font-size:12px;color:var(--gray);margin-top:3px;font-family:'JetBrains Mono',monospace}
+
+/* S3 */
+#slide-3 .s3-body{position:absolute;top:108px;left:50px;right:50px;bottom:50px;display:grid;grid-template-columns:1fr 60px 1fr 60px 1fr;grid-template-rows:1fr auto;gap:0;align-items:stretch}
+.s3-col{display:flex;flex-direction:column;gap:14px}
+.s3-card-main{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:28px 26px;display:flex;flex-direction:column;box-shadow:0 4px 30px rgba(0,0,0,.2)}
+.s3-card-head{font-size:11px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:4px}
+.s3-card-name{font-family:'Share Tech Mono','JetBrains Mono',monospace;font-size:22px;font-weight:700;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08);letter-spacing:1px}
+.s3-enum-item{padding:8px 12px;border-radius:6px;margin-bottom:6px;font-family:'JetBrains Mono',monospace;font-size:14px;display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.03)}
+.s3-enum-item .ev{font-weight:700;font-size:15px;white-space:nowrap}
+.s3-enum-item .ed{font-size:12px;color:var(--gray)}
+.s3-field{display:grid;grid-template-columns:130px 90px 1fr;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.03);gap:8px}
+.s3-field:last-child{border-bottom:none}
+.s3-field .fname{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--white)}
+.s3-field .ftype{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mint);text-align:center}
+.s3-field .fdesc{font-size:12px;color:var(--gray);text-align:right}
+.s3-card-footer{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,.05)}
+.s3-arrow-col{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:20px 0}
+.s3-arrow-line{width:2px;flex:1;min-height:60px;background:linear-gradient(to bottom,rgba(212,168,67,.05),var(--gold),rgba(212,168,67,.05))}
+.s3-arrow-svg{color:var(--gold);opacity:.7}
+.s3-arrow-label{font-size:11px;color:var(--gray);letter-spacing:2px;text-align:center}
+.s3-bottom-detail{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:8px}
+.s3-bd-item{background:var(--bg-card2);border:1px solid rgba(255,255,255,.03);border-radius:10px;padding:16px 18px}
+.s3-bd-item .title{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;margin-bottom:8px;letter-spacing:1px}
+.s3-bd-item .desc{font-size:13px;color:var(--gray);line-height:1.6}
+
+/* S4 */
+#slide-4 .s4-body{position:absolute;top:108px;left:60px;right:60px;bottom:50px;display:flex;flex-direction:column;gap:24px}
+.s4-pipeline{display:flex;align-items:stretch;gap:0}
+.s4-step{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:28px 20px 24px;text-align:center;position:relative;display:flex;flex-direction:column}
+.s4-step-num{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--bg-deep);font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(212,168,67,.3)}
+.s4-step-icon{font-size:42px;margin-bottom:12px;margin-top:6px}
+.s4-step-title{font-size:19px;font-weight:700;color:var(--white);margin-bottom:6px}
+.s4-step-api{font-family:'JetBrains Mono',monospace;font-size:12px;margin-bottom:8px;letter-spacing:.5px}
+.s4-step-sub{font-size:13px;color:var(--gray);line-height:1.5}
+.s4-step-tag{margin-top:auto;padding-top:12px}
+.s4-connector{width:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.s4-connector svg{color:var(--gold);opacity:.45}
+.s4-detail-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}
+.s4-detail-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:24px 26px}
+.s4-detail-box h4{font-size:14px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:16px;text-transform:uppercase}
+.s4-detail-box .d-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:14px}
+.s4-detail-box .d-row:last-child{border-bottom:none}
+.s4-detail-box .d-k{color:var(--gray)}
+.s4-detail-box .d-v{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500}
+.s4-detail-box .d-vm{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:700}
+
+/* S5 */
+#slide-5 .s5-body{position:absolute;top:108px;left:60px;right:60px;bottom:50px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto;gap:20px}
+.s5-engine{background:var(--bg-card);border-radius:14px;padding:28px 32px;display:flex;flex-direction:column;gap:10px}
+.s5-engine-head{display:flex;align-items:center;gap:16px;margin-bottom:8px}
+.s5-engine-badge{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.s5-engine-name{font-size:22px;font-weight:700;letter-spacing:1px}
+.s5-engine-class{font-family:'JetBrains Mono',monospace;font-size:13px;opacity:.6;margin-top:2px}
+.s5-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:14px}
+.s5-row:last-child{border-bottom:none}
+.s5-row .k{color:var(--gray)}
+.s5-row .v{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500}
+.s5-time-control{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.s5-tc-box{background:var(--bg-card2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:20px}
+.s5-tc-num{font-family:'Share Tech Mono',monospace;font-size:52px;font-weight:700;line-height:1;flex-shrink:0}
+.s5-tc-info .label{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px}
+.s5-tc-info .desc{font-size:13px;color:var(--gray);line-height:1.5}
+.s5-table-wrap{grid-column:1/-1;background:var(--bg-card);border-radius:14px;padding:24px 32px}
+.s5-table-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:16px;letter-spacing:2px}
+.s5-table{width:100%;border-collapse:collapse}
+.s5-table th{font-size:12px;color:var(--gray);font-weight:500;letter-spacing:2px;padding:0 16px 10px 0;text-align:left;border-bottom:1px solid var(--border);text-transform:uppercase}
+.s5-table td{padding:10px 16px 10px 0;font-size:14px;color:var(--white);border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+.s5-table tr:last-child td{border-bottom:none}
+.s5-table td.scene{color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:13px}
+.s5-table td.strategy{color:var(--gray);font-size:13px}
+
+/* S6 */
+#slide-6 .s6-body{position:absolute;top:108px;left:60px;right:60px;bottom:50px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.s6-pattern{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:36px 32px;display:flex;flex-direction:column;gap:0;height:100%}
+.s6-icon-wrap{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:24px;align-self:center}
+.s6-en{font-family:'Share Tech Mono',monospace;font-size:28px;font-weight:700;text-align:center;margin-bottom:4px;letter-spacing:1px}
+.s6-zh{font-size:18px;color:var(--gray);text-align:center;letter-spacing:3px;margin-bottom:28px}
+.s6-sep{width:60px;height:2px;margin:0 auto 28px}
+.s6-where-title{font-size:12px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.s6-where-val{font-size:15px;color:var(--white);font-weight:600;margin-bottom:20px;line-height:1.5}
+.s6-benefit{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.s6-benefit .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:7px}
+.s6-benefit .txt{font-size:13px;color:var(--gray);line-height:1.6}
+.s6-code-block{margin-top:auto;background:var(--bg-code);border:1px solid rgba(74,127,181,.12);border-radius:8px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AB0C8;line-height:1.65;overflow:hidden}
+
+/* S7 */
+#slide-7 .s7-body{position:absolute;top:108px;left:60px;right:60px;bottom:50px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.s7-layer{border-radius:14px;padding:22px 36px;display:flex;align-items:center;gap:28px;position:relative;overflow:hidden}
+.s7-layer-num{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;flex-shrink:0}
+.s7-layer-name{font-size:22px;font-weight:700;min-width:140px}
+.s7-layer-desc{font-size:14px;color:var(--gray);flex:1;line-height:1.5}
+.s7-layer-modules{display:flex;gap:8px;flex-wrap:wrap}
+.s7-mod{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.5px;font-family:'JetBrains Mono',monospace}
+.s7-arrow-down{text-align:center;color:var(--gold);font-size:20px;opacity:.25;line-height:1}
+
+/* S8 */
+#slide-8 .s8-body{position:absolute;top:108px;left:60px;right:60px;bottom:50px;display:flex;flex-direction:column;gap:24px}
+.s8-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.s8-metric-card{background:var(--bg-card);border-radius:16px;padding:36px 32px;border:1px solid var(--border);text-align:center;position:relative;overflow:hidden}
+.s8-metric-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.s8-metric-num{font-family:'Share Tech Mono',monospace;font-size:80px;font-weight:700;line-height:1;margin-bottom:6px;letter-spacing:-3px}
+.s8-metric-unit{font-size:32px;font-weight:300}
+.s8-metric-label{font-size:16px;color:var(--gray);margin-bottom:14px;letter-spacing:2px}
+.s8-metric-target{font-size:13px;color:var(--gray);opacity:.5}
+.s8-metric-badge{display:inline-block;margin-top:14px;padding:4px 16px;border-radius:20px;font-size:13px;font-weight:700;letter-spacing:1px}
+.s8-btm-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1}
+.s8-test-box{background:var(--bg-card);border-radius:14px;padding:24px 30px}
+.s8-test-box h4{font-size:14px;font-weight:700;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.s8-tr{display:grid;grid-template-columns:2fr 2fr 1.2fr;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:14px}
+.s8-tr:last-child{border-bottom:none}
+.s8-tr .rk{color:var(--white)}
+.s8-tr .rv{color:var(--gray);font-size:13px}
+.s8-tr .rs{text-align:right}
+.s8-th{display:grid;grid-template-columns:2fr 2fr 1.2fr;padding:0 0 8px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:4px}
+.s8-th span{color:var(--gray);font-size:12px;letter-spacing:1px;text-transform:uppercase}
+
+/* S9 */
+#slide-9 .s9-body{position:absolute;top:108px;left:50px;right:50px;bottom:50px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:22px}
+.s9-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:38px 38px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.s9-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+.s9-card-top{display:flex;align-items:center;gap:16px}
+.s9-icon{font-size:42px;flex-shrink:0}
+.s9-title-area .s9a-title{font-size:24px;font-weight:700;color:var(--white);letter-spacing:1px;margin-bottom:2px}
+.s9-title-area .s9a-sub{font-size:13px;opacity:.6;font-family:'JetBrains Mono',monospace}
+.s9-body-text{font-size:14px;color:var(--gray);line-height:1.75;flex:1}
+.s9-tech-details{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.s9-tech-chip{padding:4px 12px;border-radius:14px;font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace}
+
+/* S10 */
+#slide-10{align-items:center;justify-content:center}
+.s10-content{text-align:center;z-index:6}
+.s10-thanks{font-family:'Noto Serif SC',serif;font-size:96px;font-weight:900;letter-spacing:20px;margin-bottom:32px}
+.s10-sep{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 32px}
+.s10-project{font-size:28px;font-weight:300;color:var(--white);letter-spacing:4px;margin-bottom:12px}
+.s10-github{font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--blue-light);letter-spacing:1px;margin-bottom:40px}
+.s10-team{font-size:16px;color:var(--gray);letter-spacing:4px}
+.s10-minerals{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);display:flex;gap:24px;align-items:flex-end;z-index:5}
+.s10-minerals img{filter:drop-shadow(0 4px 12px rgba(0,0,0,.6));opacity:.8}
+.s10-hook-wrap{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:5}
+</style>
+</head>
+<body>
+<div id="ppt-wrapper"><div class="slide-stage" id="stage">
+</parameter>
+<!-- ═══ S1: COVER ═══ -->
+<div class="slide active" id="slide-1">
+<svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.035;pointer-events:none" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="g" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M 80 0 L 0 0 0 80" fill="none" stroke="#4A7FB5" stroke-width=".8"/></pattern></defs><rect width="100%" height="100%" fill="url(#g)"/></svg>
+<div class="s1-rope"><div class="s1-rope-line"></div>
+<svg width="100" height="130" viewBox="0 0 120 140" style="margin-top:-8px"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#D4A843"/><stop offset="30%" stop-color="#E8D080"/><stop offset="60%" stop-color="#B8860B"/><stop offset="100%" stop-color="#D4A843"/></linearGradient><filter id="hs"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity=".5"/></filter></defs><circle cx="60" cy="20" r="8" fill="none" stroke="url(#hg)" stroke-width="3" filter="url(#hs)"/><path d="M60 28 L60 60 Q60 85 42 100 Q30 110 35 125 Q40 135 55 130 Q65 126 62 112 Q58 98 45 92" fill="none" stroke="url(#hg)" stroke-width="6" stroke-linecap="round" filter="url(#hs)"/><path d="M35 125 L28 138" fill="none" stroke="url(#hg)" stroke-width="5" stroke-linecap="round" filter="url(#hs)"/></svg></div>
+<div class="s1-title-area"><div class="t1 gold-text">黄金矿工</div><div class="t2">手势识别版</div><div class="t2b">GOLD MINER · VISION EDITION</div><div class="s1-sep"></div><div class="course">C++ 课程设计汇报 · 2026</div><div class="s1-tech-stack"><span class="tag tag-gold">Cocos2d-x 4.0</span><span class="tag tag-blue">OpenCV 4.5.5</span><span class="tag tag-mint">C++17</span><span class="tag tag-violet">Cloud AI</span></div></div>
+<div class="s1-github">github.com/mzk-C4/gold-miner-vision</div>
+<div class="s1-hand"><svg width="280" height="360" viewBox="0 0 320 400"><defs><linearGradient id="hnd" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4A7FB5" stop-opacity=".8"/><stop offset="100%" stop-color="#3A6090" stop-opacity=".3"/></linearGradient><filter id="hndg"><feGaussianBlur stdDeviation="5" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M120 200 Q100 150 110 100 Q115 70 130 60 Q140 55 145 65 L145 140 Q148 100 152 55 Q155 30 165 25 Q175 22 178 40 L175 130 Q180 85 185 45 Q188 20 198 18 Q208 20 205 60 L198 140 Q205 100 215 65 Q220 40 228 42 Q236 50 230 95 L210 170 Q200 210 180 240 Q160 260 140 260 Q120 258 115 240 Q108 220 120 200Z" fill="url(#hnd)" filter="url(#hndg)" opacity=".7"/><g opacity=".5" stroke="#4A7FB5" stroke-width="1" fill="none"><path d="M145 65 L155 40 Q160 22 168 12" stroke-dasharray="3,3"/><circle cx="168" cy="12" r="3" fill="rgba(74,127,181,0.6)"/><path d="M178 40 L182 18 Q186 6 192 0" stroke-dasharray="3,3"/><circle cx="192" cy="0" r="3" fill="rgba(74,127,181,0.6)"/><path d="M205 60 L210 42 Q214 26 218 16" stroke-dasharray="3,3"/><circle cx="218" cy="16" r="3" fill="rgba(74,127,181,0.6)"/></g></svg></div>
+<div class="s1-spotlight"></div>
+<div class="s1-nuggets"><img src="assets/gold-large-2.png" style="height:90px;width:auto"><img src="assets/diamond-2.png" style="height:62px;width:auto"><img src="assets/gold-nugget-4.png" style="height:68px;width:auto"><img src="assets/treasure.png" style="height:72px;width:auto"><img src="assets/stone-2.png" style="height:50px;width:auto"><img src="assets/gold-nugget-1.png" style="height:52px;width:auto"><img src="assets/tnt.png" style="height:66px;width:auto"><img src="assets/gen-diamond.png" style="height:60px;width:auto"><img src="assets/gold-nugget-3.png" style="height:56px;width:auto"></div>
+</div>
+
+<!-- ═══ S2: BACKGROUND ═══ -->
+<div class="slide" id="slide-2">
+<div class="slide-header"><span class="section-tag">项目背景</span><span class="page-num">02 / 10</span></div>
+<div class="section-header"><h2 class="gold-text">经典 × 创新</h2><div class="sub">经典黄金矿工游戏与手势识别技术的深度融合，打造全新交互范式</div><div class="gold-bar"></div></div>
+<div class="s2-body">
+<div class="s2-panel"><div>
+<div class="s2-panel-title" style="color:var(--gold)">🎮 经典黄金矿工</div>
+<div class="s2-item"><div class="s2-item-icon" style="background:rgba(212,168,67,0.1)">🪝</div><div class="s2-item-text"><div class="label">钩子摆动与释放</div><div class="desc">正弦函数驱动的周期性摆动，按下释放键后钩子沿当前角度射出，触碰矿物后抓取回收</div></div></div>
+<div class="s2-item"><div class="s2-item-icon" style="background:rgba(212,168,67,0.1)">💎</div><div class="s2-item-text"><div class="label">矿物价值体系</div><div class="desc">钻石 600 · 大金块 500 · 小金块 200 · 石头 20，不同矿物重量影响回收速度</div></div></div>
+<div class="s2-item"><div class="s2-item-icon" style="background:rgba(212,168,67,0.1)">🛒</div><div class="s2-item-text"><div class="label">道具策略系统</div><div class="desc">炸药(150)炸重物、力量药水(200)提拉速、钻石书(300)翻倍、矿石书(100)石头卖钱</div></div></div>
+<div class="s2-item"><div class="s2-item-icon" style="background:rgba(212,168,67,0.1)">🏆</div><div class="s2-item-text"><div class="label">5关递增难度</div><div class="desc">关卡目标金额递增：$500→$800→$1200→$1800→$2500，大金块出现概率逐关下降</div></div></div></div>
+<div style="margin-top:auto;padding-top:20px;border-top:1px solid var(--border)"><div style="font-size:12px;color:var(--gray);letter-spacing:1px;margin-bottom:10px">基于开源项目改造</div><div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--blue-light)">ZhongTaoTian / GoldMiner</div></div></div>
+<div class="s2-x gold-text">×</div>
+<div class="s2-panel"><div>
+<div class="s2-panel-title" style="color:var(--blue-light)">🤚 手势识别引擎</div>
+<div class="s2-item"><div class="s2-item-icon" style="background:rgba(74,127,181,0.1)">📷</div><div class="s2-item-text"><div class="label">实时摄像头捕获</div><div class="desc">持续采集 640×480 摄像头帧，JPEG 编码压缩后推入异步识别队列</div></div></div>
+<div class="s2-item"><div class="s2-item-icon" style="background:rgba(74,127,181,0.1)">🧠</div><div class="s2-item-text"><div class="label">双引擎协同架构</div><div class="desc">本地 OpenCV 高频识别(30ms/帧) + 云端 AI 低频精确校验，形成互补识别体系</div></div></div>
+<div class="s2-item"><div class="s2-item-icon" style="background:rgba(74,127,181,0.1)">✋</div><div class="s2-item-text"><div class="label">四种手势指令</div><div class="desc">张开手掌→瞄准 · 握拳→释放钩子 · 左右倾斜→控制方向 · 长握1.5s→引爆</div></div></div>
+<div class="s2-item"><div class="s2-item-icon" style="background:rgba(74,127,181,0.1)">⌨️</div><div class="s2-item-text"><div class="label">智能降级兜底</div><div class="desc">摄像头不可用或识别失败时自动切换键盘模式(空格释放/B爆炸/Esc暂停)</div></div></div></div>
+<div style="margin-top:auto;padding-top:20px;border-top:1px solid var(--border)"><div style="font-size:12px;color:var(--gray);letter-spacing:1px;margin-bottom:12px">核心技术栈</div><div class="s2-tech-grid"><div class="s2-tech-chip"><div class="name">Cocos2d-x</div><div class="ver">v4.0 · 游戏引擎</div></div><div class="s2-tech-chip"><div class="name">OpenCV</div><div class="ver">v4.5.5 · 视觉识别</div></div><div class="s2-tech-chip"><div class="name">C++17</div><div class="ver">Modern C++</div></div><div class="s2-tech-chip"><div class="name">libcurl</div><div class="ver">HTTP通信</div></div></div></div></div>
+</div></div>
+
+<!-- ═══ S3: DATA STRUCTURES (DEEPLY ENHANCED) ═══ -->
+<div class="slide" id="slide-3">
+<div class="slide-header"><span class="section-tag">核心数据结构</span><span class="page-num">03 / 10</span></div>
+<div class="section-header"><h2 class="gold-text">数据流：手势 → 识别 → 指令</h2><div class="sub">三种核心结构体构建从摄像头帧输入到游戏操控输出的完整类型安全通道</div><div class="gold-bar"></div></div>
+<div class="s3-body">
+<!-- Col 1: GestureType -->
+<div class="s3-col"><div class="s3-card-main" style="border-color:rgba(212,168,67,.3)">
+<div class="s3-card-head">enum class</div><div class="s3-card-name" style="color:var(--gold)">GestureType</div>
+<div class="s3-enum-item" style="background:rgba(212,168,67,.08);border-color:rgba(212,168,67,.15)"><span class="ev" style="color:var(--gold)">OPEN_PALM</span><span class="ed">手掌张开 · 瞄准中</span></div>
+<div class="s3-enum-item" style="background:rgba(74,127,181,.08);border-color:rgba(74,127,181,.15)"><span class="ev" style="color:var(--blue-light)">FIST</span><span class="ed">握拳 · 释放触发</span></div>
+<div class="s3-enum-item" style="background:rgba(138,143,168,.05)"><span class="ev" style="color:var(--gray)">UNKNOWN</span><span class="ed">无手势 · 保持状态</span></div>
+<div class="s3-card-footer"><span class="tag tag-gold" style="font-size:11px">策略模式输入 · 强类型枚举</span></div>
+</div></div>
+<!-- Arrow -->
+<div class="s3-arrow-col"><div class="s3-arrow-line"></div><div class="s3-arrow-svg"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div><div class="s3-arrow-line"></div><div class="s3-arrow-label">识别引擎<br>输出映射</div></div>
+<!-- Col 2: GestureResult -->
+<div class="s3-col"><div class="s3-card-main" style="border-color:rgba(91,175,138,.3)">
+<div class="s3-card-head">struct</div><div class="s3-card-name" style="color:var(--mint)">GestureResult</div>
+<div class="s3-field"><span class="fname">gesture</span><span class="ftype">GestureType</span><span class="fdesc">当前手势枚举</span></div>
+<div class="s3-field"><span class="fname">angle</span><span class="ftype">float</span><span class="fdesc">[−65°, +65°]</span></div>
+<div class="s3-field"><span class="fname">confidence</span><span class="ftype">float</span><span class="fdesc">[0.0, 1.0]</span></div>
+<div class="s3-field"><span class="fname">isValid</span><span class="ftype">bool</span><span class="fdesc">低置信度过滤</span></div>
+<div class="s3-field"><span class="fname">isLocked</span><span class="ftype">bool</span><span class="fdesc">FIST 锁定态</span></div>
+<div class="s3-field"><span class="fname">source</span><span class="ftype">std::string</span><span class="fdesc">"local"/"cloud"</span></div>
+<div class="s3-card-footer"><span class="tag tag-mint" style="font-size:11px">识别引擎统一输出 · 跨线程传递</span></div>
+</div></div>
+<!-- Arrow -->
+<div class="s3-arrow-col"><div class="s3-arrow-line"></div><div class="s3-arrow-svg"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div><div class="s3-arrow-line"></div><div class="s3-arrow-label">融合决策<br>指令转换</div></div>
+<!-- Col 3: GestureCommand -->
+<div class="s3-col"><div class="s3-card-main" style="border-color:rgba(123,107,160,.3)">
+<div class="s3-card-head">struct</div><div class="s3-card-name" style="color:var(--violet-light)">GestureCommand</div>
+<div class="s3-field"><span class="fname">shouldReleaseHook</span><span class="ftype">bool</span><span class="fdesc">释放钩子信号</span></div>
+<div class="s3-field"><span class="fname">shouldDetonateBomb</span><span class="ftype">bool</span><span class="fdesc">引爆炸药信号</span></div>
+<div class="s3-field"><span class="fname">targetAngle</span><span class="ftype">float</span><span class="fdesc">钩子目标角度</span></div>
+<div class="s3-field"><span class="fname">isValid</span><span class="ftype">bool</span><span class="fdesc">指令有效性</span></div>
+<div class="s3-card-footer"><span class="tag tag-violet" style="font-size:11px">游戏引擎消费 · 最终指令载体</span></div>
+</div></div>
+<!-- Bottom detail row -->
+<div class="s3-bottom-detail">
+<div class="s3-bd-item"><div class="title" style="color:var(--gold)">类型安全</div><div class="desc">enum class 强类型枚举，编译期防止隐式转换，避免魔法数字</div></div>
+<div class="s3-bd-item"><div class="title" style="color:var(--mint)">跨线程传递</div><div class="desc">std::atomic 包裹关键字段，识别线程与游戏线程安全共享</div></div>
+<div class="s3-bd-item"><div class="title" style="color:var(--blue-light)">置信度过滤</div><div class="desc">confidence &lt; 0.6 时标记 isValid=false，融入决策时直接丢弃</div></div>
+<div class="s3-bd-item"><div class="title" style="color:var(--violet-light)">来源追溯</div><div class="desc">source 字段记录识别源，用于调试和融合决策优先级判断</div></div>
+<div class="s3-bd-item"><div class="title" style="color:var(--rose)">状态锁定</div><div class="desc">isLocked 标记 FIST 后进入锁定态，避免重复触发云端请求</div></div>
+</div>
+</div></div>
+
+<!-- ═══ S4: LOCAL CV PIPELINE (DEEPLY ENHANCED) ═══ -->
+<div class="slide" id="slide-4">
+<div class="slide-header"><span class="section-tag">本地 CV 识别流水线</span><span class="page-num">04 / 10</span></div>
+<div class="section-header"><h2 class="gold-text">5 步算法流水线</h2><h2 class="en">PIPELINE · 30MS PER FRAME</h2><div class="sub">基于 OpenCV 4.5.5 的实时手势识别，从原始摄像头帧到 GestureResult 全流程 ~30ms</div><div class="gold-bar"></div></div>
+<div class="s4-body">
+<!-- Pipeline -->
+<div class="s4-pipeline">
+<div class="s4-step" style="border-color:rgba(212,168,67,.3)"><div class="s4-step-num">1</div><div class="s4-step-icon">🎨</div><div class="s4-step-title">HSV 颜色分割</div><div class="s4-step-api" style="color:var(--gold)">cv::cvtColor + cv::inRange</div><div class="s4-step-sub">BGR→HSV 空间转换<br>肤色阈值：[0,20,70]~[20,255,255]<br>高斯模糊降噪</div><div class="s4-step-tag"><span class="tag tag-gold" style="font-size:11px">ColorMask · ~5ms</span></div></div>
+<div class="s4-connector"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+<div class="s4-step" style="border-color:rgba(74,127,181,.3)"><div class="s4-step-num">2</div><div class="s4-step-icon">🔍</div><div class="s4-step-title">轮廓检测</div><div class="s4-step-api" style="color:var(--blue-light)">cv::findContours</div><div class="s4-step-sub">RETR_EXTERNAL 模式<br>取最大轮廓为手部区域<br>面积过滤噪点</div><div class="s4-step-tag"><span class="tag tag-blue" style="font-size:11px">Contour · ~8ms</span></div></div>
+<div class="s4-connector"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+<div class="s4-step" style="border-color:rgba(91,175,138,.3)"><div class="s4-step-num">3</div><div class="s4-step-icon">✋</div><div class="s4-step-title">凸包分析</div><div class="s4-step-api" style="color:var(--mint)">cv::convexHull + convexityDefects</div><div class="s4-step-sub">计算手部轮廓凸包<br>提取凸缺陷点<br>筛选指尖候选</div><div class="s4-step-tag"><span class="tag tag-mint" style="font-size:11px">ConvexHull · ~6ms</span></div></div>
+<div class="s4-connector"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+<div class="s4-step" style="border-color:rgba(197,123,138,.3)"><div class="s4-step-num">4</div><div class="s4-step-icon">☝️</div><div class="s4-step-title">指尖识别</div><div class="s4-step-api" style="color:var(--rose)">几何特征 + 角度过滤</div><div class="s4-step-sub">凸缺陷深度阈值<br>相邻指尖距离约束<br>计算手掌张开度</div><div class="s4-step-tag"><span class="tag tag-rose" style="font-size:11px">Fingertip · ~5ms</span></div></div>
+<div class="s4-connector"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+<div class="s4-step" style="border-color:rgba(123,107,160,.3)"><div class="s4-step-num">5</div><div class="s4-step-icon">📐</div><div class="s4-step-title">角度计算</div><div class="s4-step-api" style="color:var(--violet-light)">重心偏移 → 角度映射</div><div class="s4-step-sub">手部重心相对 ROI 中心偏移<br>线性映射至 [−65°,+65°]<br>时域 EMA 平滑滤波</div><div class="s4-step-tag"><span class="tag tag-violet" style="font-size:11px">AngleOutput · ~3ms</span></div></div>
+</div>
+<!-- Detail boxes -->
+<div class="s4-detail-row">
+<div class="s4-detail-box" style="border-color:rgba(212,168,67,.2)"><h4>📋 算法参数配置</h4>
+<div class="d-row"><span class="d-k">输入分辨率</span><span class="d-v" style="color:var(--white)">640 × 480</span></div>
+<div class="d-row"><span class="d-k">帧编码格式</span><span class="d-v" style="color:var(--blue-light)">JPEG (quality 85)</span></div>
+<div class="d-row"><span class="d-k">HSV 肤色 Lower</span><span class="d-v" style="color:var(--mint)">[0, 20, 70]</span></div>
+<div class="d-row"><span class="d-k">HSV 肤色 Upper</span><span class="d-v" style="color:var(--mint)">[20, 255, 255]</span></div>
+<div class="d-row"><span class="d-k">高斯核大小</span><span class="d-v" style="color:var(--violet-light)">5×5, σ=0.8</span></div>
+<div class="d-row"><span class="d-k">EMA 平滑系数</span><span class="d-v" style="color:var(--rose)">α = 0.7</span></div>
+<div class="d-row"><span class="d-k">置信度阈值</span><span class="d-v" style="color:var(--gold)">≥ 0.60</span></div></div>
+<div class="s4-detail-box" style="border-color:rgba(74,127,181,.2)"><h4>⏱ 时域滤波策略</h4>
+<div class="d-row"><span class="d-k">滤波方式</span><span class="d-v" style="color:var(--blue-light)">EMA 指数平滑</span></div>
+<div class="d-row"><span class="d-k">窗口大小</span><span class="d-v" style="color:var(--white)">最近 5 帧</span></div>
+<div class="d-row"><span class="d-k">手势去抖</span><span class="d-v" style="color:var(--mint)">连续 ≥ 3 帧才切换</span></div>
+<div class="d-row"><span class="d-k">角度去抖</span><span class="d-v" style="color:var(--violet-light)">增量 ≤ 5°/帧</span></div>
+<div class="d-row"><span class="d-k">无效帧丢弃</span><span class="d-v" style="color:var(--rose)">conf &lt; 0.6 即丢弃</span></div>
+<div class="d-row"><span class="d-k">总延迟</span><span class="d-vm" style="color:var(--gold)">~85ms</span></div></div>
+<div class="s4-detail-box" style="border-color:rgba(91,175,138,.2)"><h4>📐 角度映射公式</h4>
+<div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#C8D3E0;line-height:2;margin-top:8px">
+<span class="code-cmt">// 重心偏移 → 角度</span><br>
+<span class="code-type">float</span> offset =<br>
+&nbsp;&nbsp;(<span class="code-val">cx</span> - roiCenterX) /<br>
+&nbsp;&nbsp;(roiWidth * <span class="code-num">0.5</span>);<br><br>
+<span class="code-type">float</span> angle =<br>
+&nbsp;&nbsp;offset * <span class="code-num">65.0</span>;<br><br>
+<span class="code-cmt">// 钳制 + EMA 平滑</span><br>
+angle = clamp(angle,<br>
+&nbsp;&nbsp;<span class="code-num">-65.0</span>, <span class="code-num">+65.0</span>);<br>
+angle = <span class="code-fn">prevAngle</span> * <span class="code-num">0.3</span><br>
+&nbsp;&nbsp;+ angle * <span class="code-num">0.7</span>;
+</div></div>
+</div>
+</div></div>
+</parameter>
+<!-- ═══ S5: FUSION STRATEGY (ENHANCED) ═══ -->
+<div class="slide" id="slide-5">
+<div class="slide-header"><span class="section-tag">双引擎融合策略</span><span class="page-num">05 / 10</span></div>
+<div class="section-header"><h2 class="gold-text">本地快 × 云端准 · 安全优先</h2><h2 class="en">FUSION · LOCAL + CLOUD COLLABORATIVE</h2><div class="sub">GestureFusion 单例协调两路异步识别结果，实现高频响应与精准确认的智能平衡</div><div class="gold-bar"></div></div>
+<div class="s5-body">
+<!-- Local Engine -->
+<div class="s5-engine" style="border:1px solid rgba(74,127,181,.3)">
+<div class="s5-engine-head"><div class="s5-engine-badge" style="background:rgba(74,127,181,.12)">🖥️</div><div><div class="s5-engine-name" style="color:var(--blue-light)">本地 CV 引擎</div><div class="s5-engine-class" style="color:var(--blue-light)">LocalGestureRecognizer</div></div></div>
+<div class="s5-row"><span class="k">识别频率</span><span class="v" style="color:var(--blue-light)">~30ms / 帧持续产出</span></div>
+<div class="s5-row"><span class="k">处理线程</span><span class="v" style="color:var(--white)">独立识别线程，不阻塞主循环</span></div>
+<div class="s5-row"><span class="k">核心职责</span><span class="v" style="color:var(--white)">实时角度计算 + 快速手势响应</span></div>
+<div class="s5-row"><span class="k">OPEN_PALM</span><span class="v" style="color:var(--mint)">直接输出角度 → 驱动钩子摆动</span></div>
+<div class="s5-row"><span class="k">FIST 检测</span><span class="v" style="color:var(--gold)">标记 isLocked → 触发云端校验</span></div>
+<div class="s5-row"><span class="k">降级触发</span><span class="v" style="color:var(--rose)">云端超时 2s 后自动接管</span></div>
+</div>
+<!-- Cloud Engine -->
+<div class="s5-engine" style="border:1px solid rgba(123,107,160,.3)">
+<div class="s5-engine-head"><div class="s5-engine-badge" style="background:rgba(123,107,160,.12)">☁️</div><div><div class="s5-engine-name" style="color:var(--violet-light)">云端 AI 引擎</div><div class="s5-engine-class" style="color:var(--violet-light)">CloudGestureRecognizer</div></div></div>
+<div class="s5-row"><span class="k">识别精度</span><span class="v" style="color:var(--violet-light)">MediaPipe 级手部关键点检测</span></div>
+<div class="s5-row"><span class="k">触发时机</span><span class="v" style="color:var(--white)">仅 FIST 首次检测时异步发起</span></div>
+<div class="s5-row"><span class="k">通信协议</span><span class="v" style="color:var(--white)">HTTP POST · Base64 JPEG · JSON</span></div>
+<div class="s5-row"><span class="k">返回内容</span><span class="v" style="color:var(--white)">手势分类 + 置信度 + 21 关键点</span></div>
+<div class="s5-row"><span class="k">超时策略</span><span class="v" style="color:var(--gold)">2s 无响应 → 本地 FIST 直接执行</span></div>
+<div class="s5-row"><span class="k">冲突处理</span><span class="v" style="color:var(--rose)">本地 ≠ 云端 → 安全放弃本次</span></div>
+</div>
+<!-- Time Control -->
+<div class="s5-time-control">
+<div class="s5-tc-box" style="border-color:rgba(212,168,67,.25);border-left:3px solid var(--gold)">
+<div class="s5-tc-num" style="color:var(--gold)">0.8<span style="font-size:24px;font-weight:300">s</span></div>
+<div class="s5-tc-info"><div class="label">COOLDOWN_DURATION</div><div class="desc">两次释放钩子的最小间隔，防止手势抖动导致连续误释放</div></div>
+</div>
+<div class="s5-tc-box" style="border-color:rgba(197,123,138,.25);border-left:3px solid var(--rose)">
+<div class="s5-tc-num" style="color:var(--rose)">1.5<span style="font-size:24px;font-weight:300">s</span></div>
+<div class="s5-tc-info"><div class="label">BOMB_HOLD_DURATION</div><div class="desc">握拳持续超过此阈值 → 判定为引爆意图，触发 shouldDetonateBomb</div></div>
+</div>
+</div>
+<!-- Decision Table -->
+<div class="s5-table-wrap">
+<div class="s5-table-title">🔀 融合决策规则表 — GestureFusion::tick() 核心逻辑</div>
+<table class="s5-table"><thead><tr><th>触发场景</th><th>本地识别</th><th>云端状态</th><th>融合策略</th><th style="text-align:center">结果</th></tr></thead><tbody>
+<tr><td class="scene">OPEN_PALM</td><td style="color:var(--blue-light);font-size:13px">持续产出角度</td><td style="color:var(--gray);font-size:13px">不触发</td><td class="strategy">直接使用本地角度，实时驱动钩子摆动</td><td style="text-align:center"><span class="result-badge" style="background:rgba(91,175,138,.1);color:var(--mint);border:1px solid rgba(91,175,138,.2)">✓ 输出角度</span></td></tr>
+<tr><td class="scene">FIST 首次</td><td style="color:var(--gold);font-size:13px">isLocked=true</td><td style="color:var(--violet-light);font-size:13px">发送 HTTP 请求</td><td class="strategy">设状态 PENDING，保留角度，等待云端回调</td><td style="text-align:center"><span class="result-badge" style="background:rgba(212,168,67,.08);color:var(--gold);border:1px solid rgba(212,168,67,.2)">⏳ 等待确认</span></td></tr>
+<tr><td class="scene">云端确认 FIST</td><td style="color:var(--gray);font-size:13px">—</td><td style="color:var(--mint);font-size:13px">conf ≥ 0.7</td><td class="strategy">执行释放钩子，写入 COOLDOWN 计时器</td><td style="text-align:center"><span class="result-badge" style="background:rgba(91,175,138,.1);color:var(--mint);border:1px solid rgba(91,175,138,.2)">✓ 释放钩子</span></td></tr>
+<tr><td class="scene">云端超时 2s</td><td style="color:var(--gray);font-size:13px">—</td><td style="color:var(--rose);font-size:13px">无响应</td><td class="strategy">降级：本地 FIST 直接执行，保证游戏连续性</td><td style="text-align:center"><span class="result-badge" style="background:rgba(74,127,181,.08);color:var(--blue-light);border:1px solid rgba(74,127,181,.2)">⚡ 降级执行</span></td></tr>
+<tr><td class="scene">本地≠云端</td><td style="color:var(--gold);font-size:13px">FIST</td><td style="color:var(--rose);font-size:13px">OPEN_PALM</td><td class="strategy">安全优先：放弃本次触发，防止误操作</td><td style="text-align:center"><span class="result-badge" style="background:rgba(197,123,138,.08);color:var(--rose);border:1px solid rgba(197,123,138,.2)">✗ 放弃本次</span></td></tr>
+</tbody></table>
+</div>
+</div></div>
+
+<!-- ═══ S6: DESIGN PATTERNS (ENHANCED) ═══ -->
+<div class="slide" id="slide-6">
+<div class="slide-header"><span class="section-tag">设计模式应用</span><span class="page-num">06 / 10</span></div>
+<div class="section-header"><h2 class="gold-text">三种经典模式 · 工程级实践</h2><h2 class="en">DESIGN PATTERNS · STRATEGY + SINGLETON + OBSERVER</h2><div class="sub">Strategy · Singleton · Observer —— 现代 C++ 设计模式在游戏识别系统中的工程应用</div><div class="gold-bar"></div></div>
+<div class="s6-body">
+<!-- Strategy -->
+<div class="s6-pattern" style="border-color:rgba(74,127,181,.3)">
+<div class="s6-icon-wrap" style="background:rgba(74,127,181,.1)">🔀</div>
+<div class="s6-en" style="color:var(--blue-light)">Strategy</div><div class="s6-zh">策略模式</div>
+<div class="s6-sep" style="background:rgba(74,127,181,.3)"></div>
+<div class="s6-where-title">应用场景</div>
+<div class="s6-where-val"><span class="code-inline">IGestureRecognizer</span> 纯虚接口统一抽象，<span class="code-inline">LocalGestureRecognizer</span>、<span class="code-inline">CloudGestureRecognizer</span>、<span class="code-inline">AIGestureRecognizer</span> 三种具体策略可运行时动态切换</div>
+<div class="s6-benefit"><div class="dot" style="background:var(--blue-light)"></div><div class="txt">开闭原则：新增识别器无需修改 GestureFusion 核心逻辑</div></div>
+<div class="s6-benefit"><div class="dot" style="background:var(--blue-light)"></div><div class="txt">各策略独立编译/链接，互不耦合</div></div>
+<div class="s6-benefit"><div class="dot" style="background:var(--blue-light)"></div><div class="txt">通过 <span class="code-inline">bool start()</span> 返回值自动 Fallback</div></div>
+<div class="s6-code-block"><span class="code-cmt">// 策略接口：所有识别器的统一契约</span>
+<span class="code-kw">class</span> <span class="code-type">IGestureRecognizer</span> {
+<span class="code-kw">public</span>:
+  <span class="code-kw">using</span> ResultCallback = std::function&lt;<span class="code-kw">void</span>(<span class="code-kw">const</span> GestureResult&amp;)&gt;;
+  <span class="code-kw">virtual</span> <span class="code-type">bool</span> start() = <span class="code-num">0</span>;
+  <span class="code-kw">virtual</span> <span class="code-type">void</span> stop() = <span class="code-num">0</span>;
+  <span class="code-kw">virtual</span> <span class="code-type">void</span> setCallback(ResultCallback cb) = <span class="code-num">0</span>;
+  <span class="code-kw">virtual</span> <span class="code-type">void</span> pushFrame(<span class="code-kw">const</span> vector&lt;<span class="code-type">uint8_t</span>&gt;&amp;) = <span class="code-num">0</span>;
+  <span class="code-kw">virtual</span> <span class="code-type">bool</span> isRunning() <span class="code-kw">const</span> = <span class="code-num">0</span>;
+  <span class="code-kw">virtual</span> <span class="code-kw">const</span> <span class="code-type">char</span>* name() <span class="code-kw">const</span> = <span class="code-num">0</span>;
+};</div>
+</div>
+<!-- Singleton -->
+<div class="s6-pattern" style="border-color:rgba(212,168,67,.3)">
+<div class="s6-icon-wrap" style="background:rgba(212,168,67,.1)">①</div>
+<div class="s6-en" style="color:var(--gold)">Singleton</div><div class="s6-zh">单例模式</div>
+<div class="s6-sep" style="background:rgba(212,168,67,.3)"></div>
+<div class="s6-where-title">应用场景</div>
+<div class="s6-where-val"><span class="code-inline">GestureFusion</span> 全局唯一融合器，集中管理所有识别引擎状态、融合决策逻辑和冷却计时器</div>
+<div class="s6-benefit"><div class="dot" style="background:var(--gold)"></div><div class="txt">确保全局唯一，消除多实例状态不一致风险</div></div>
+<div class="s6-benefit"><div class="dot" style="background:var(--gold)"></div><div class="txt">拷贝构造/赋值 = <span class="code-inline">delete</span>，强制单例约束</div></div>
+<div class="s6-benefit"><div class="dot" style="background:var(--gold)"></div><div class="txt">延迟初始化：<span class="code-inline">initialize()</span> 时注入云端凭证</div></div>
+<div class="s6-code-block"><span class="code-cmt">// 单例融合器：协调多引擎决策</span>
+<span class="code-kw">class</span> <span class="code-type">GestureFusion</span> {
+<span class="code-kw">public</span>:
+  <span class="code-kw">static</span> GestureFusion* <span class="code-fn">getInstance</span>();
+  <span class="code-type">bool</span> <span class="code-fn">initialize</span>(<span class="code-kw">const</span> string&amp; ep,
+                     <span class="code-kw">const</span> string&amp; key);
+  <span class="code-type">void</span> <span class="code-fn">shutdown</span>();
+  GestureCommand <span class="code-fn">tick</span>(<span class="code-type">float</span> dt);
+  <span class="code-type">void</span> <span class="code-fn">pushPreviewFrame</span>(...);
+<span class="code-kw">private</span>:
+  GestureFusion() = <span class="code-kw">default</span>;  <span class="code-cmt">// 私有构造</span>
+};</div>
+</div>
+<!-- Observer -->
+<div class="s6-pattern" style="border-color:rgba(91,175,138,.3)">
+<div class="s6-icon-wrap" style="background:rgba(91,175,138,.1)">👁️</div>
+<div class="s6-en" style="color:var(--mint)">Observer</div><div class="s6-zh">观察者模式</div>
+<div class="s6-sep" style="background:rgba(91,175,138,.3)"></div>
+<div class="s6-where-title">应用场景</div>
+<div class="s6-where-val">识别器通过 <span class="code-inline">ResultCallback</span> (std::function) 异步回调通知融合器，完全解耦生产者与消费者</div>
+<div class="s6-benefit"><div class="dot" style="background:var(--mint)"></div><div class="txt">识别线程与游戏主线程零阻塞通信</div></div>
+<div class="s6-benefit"><div class="dot" style="background:var(--mint)"></div><div class="txt"><span class="code-inline">std::function</span> + lambda 捕获，极简注册</div></div>
+<div class="s6-benefit"><div class="dot" style="background:var(--mint)"></div><div class="txt">支持多个观察者同时监听（调试用）</div></div>
+<div class="s6-code-block"><span class="code-cmt">// 回调注册：识别结果异步通知</span>
+<span class="code-cmt">// GestureFusion 中注册观察者：</span>
+recognizer-&gt;<span class="code-fn">setCallback</span>(
+  [<span class="code-kw">this</span>](<span class="code-kw">const</span> GestureResult&amp; r) {
+    <span class="code-kw">this</span>-&gt;<span class="code-fn">onResult</span>(r);
+  });
+<span class="code-cmt">// Game.cpp: tick() 中轮询消费</span>
+GestureCommand cmd = fusion-&gt;<span class="code-fn">tick</span>(dt);</div>
+</div>
+</div></div>
+</parameter>
+<!-- ═══ S7: ARCHITECTURE (ENHANCED) ═══ -->
+<div class="slide" id="slide-7">
+<div class="slide-header"><span class="section-tag">系统架构</span><span class="page-num">07 / 10</span></div>
+<div class="section-header"><h2 class="gold-text">四层分层架构</h2><h2 class="en">ARCHITECTURE · LAYERED + UNIDIRECTIONAL DEPENDENCY</h2><div class="sub">游戏层 → 融合层 → 识别层 → 云端服务，每层职责清晰，单向依赖，层间松耦合</div><div class="gold-bar"></div></div>
+<div class="s7-body">
+<div class="s7-layer" style="background:rgba(212,168,67,.06);border:1px solid rgba(212,168,67,.25)">
+<div class="s7-layer-num" style="background:rgba(212,168,67,.15);color:var(--gold)">1</div>
+<div class="s7-layer-name" style="color:var(--gold)">游戏表现层</div>
+<div class="s7-layer-desc">承载 Cocos2d-x 游戏主循环与 UI 渲染，消费 GestureCommand 驱动钩子动画、矿物回收、商店交易、音乐播放</div>
+<div class="s7-layer-modules">
+<span class="s7-mod" style="background:rgba(212,168,67,.1);color:var(--gold)">Game.cpp</span>
+<span class="s7-mod" style="background:rgba(212,168,67,.1);color:var(--gold)">Shop.cpp</span>
+<span class="s7-mod" style="background:rgba(212,168,67,.1);color:var(--gold)">MainRoot.cpp</span>
+<span class="s7-mod" style="background:rgba(212,168,67,.1);color:var(--gold)">Mineral.cpp</span>
+<span class="s7-mod" style="background:rgba(212,168,67,.1);color:var(--gold)">MusicPlayer</span>
+</div></div>
+<div class="s7-arrow-down">↓ <span style="font-size:12px;opacity:.5;margin-left:8px">GestureCommand 消费</span></div>
+<div class="s7-layer" style="background:rgba(74,127,181,.06);border:1px solid rgba(74,127,181,.25)">
+<div class="s7-layer-num" style="background:rgba(74,127,181,.15);color:var(--blue-light)">2</div>
+<div class="s7-layer-name" style="color:var(--blue-light)">融合决策层</div>
+<div class="s7-layer-desc">协调双引擎识别结果，执行融合决策逻辑（本地实时 + 云端校验），输出最终 GestureCommand</div>
+<div class="s7-layer-modules">
+<span class="s7-mod" style="background:rgba(74,127,181,.1);color:var(--blue-light)">GestureFusion.cpp</span>
+<span class="s7-mod" style="background:rgba(74,127,181,.1);color:var(--blue-light)">GestureData.hpp</span>
+<span class="s7-mod" style="background:rgba(74,127,181,.1);color:var(--blue-light)">COOLDOWN 计时器</span>
+</div></div>
+<div class="s7-arrow-down">↓ <span style="font-size:12px;opacity:.5;margin-left:8px">ResultCallback 注册 / 帧推送</span></div>
+<div class="s7-layer" style="background:rgba(91,175,138,.06);border:1px solid rgba(91,175,138,.25)">
+<div class="s7-layer-num" style="background:rgba(91,175,138,.15);color:var(--mint)">3</div>
+<div class="s7-layer-name" style="color:var(--mint)">识别引擎层</div>
+<div class="s7-layer-desc">实现 IGestureRecognizer 策略接口，本地 OpenCV 与云端 HTTP 两种策略独立运行、互不阻塞</div>
+<div class="s7-layer-modules">
+<span class="s7-mod" style="background:rgba(91,175,138,.1);color:var(--mint)">IGestureRecognizer.hpp</span>
+<span class="s7-mod" style="background:rgba(91,175,138,.1);color:var(--mint)">LocalGestureRecognizer</span>
+<span class="s7-mod" style="background:rgba(91,175,138,.1);color:var(--mint)">CloudGestureRecognizer</span>
+<span class="s7-mod" style="background:rgba(91,175,138,.1);color:var(--mint)">OpenCV 4.5.5</span>
+<span class="s7-mod" style="background:rgba(91,175,138,.1);color:var(--mint)">AIGestureRecognizer</span>
+</div></div>
+<div class="s7-arrow-down">↓ <span style="font-size:12px;opacity:.5;margin-left:8px">HTTP POST / Base64 JPEG</span></div>
+<div class="s7-layer" style="background:rgba(123,107,160,.06);border:1px solid rgba(123,107,160,.25)">
+<div class="s7-layer-num" style="background:rgba(123,107,160,.15);color:var(--violet-light)">4</div>
+<div class="s7-layer-name" style="color:var(--violet-light)">云端 AI 服务</div>
+<div class="s7-layer-desc">外部 AI 视觉 API 端点，提供手部 21 关键点检测 + 手势分类（含置信度）+ 角度计算能力</div>
+<div class="s7-layer-modules">
+<span class="s7-mod" style="background:rgba(123,107,160,.1);color:var(--violet-light)">REST API</span>
+<span class="s7-mod" style="background:rgba(123,107,160,.1);color:var(--violet-light)">libcurl</span>
+<span class="s7-mod" style="background:rgba(123,107,160,.1);color:var(--violet-light)">关键点检测</span>
+<span class="s7-mod" style="background:rgba(123,107,160,.1);color:var(--violet-light)">置信度输出</span>
+</div></div>
+</div></div>
+
+<!-- ═══ S8: TESTING (ENHANCED) ═══ -->
+<div class="slide" id="slide-8">
+<div class="slide-header"><span class="section-tag">测试与性能</span><span class="page-num">08 / 10</span></div>
+<div class="section-header"><h2 class="gold-text">三项关键指标全部达标</h2><h2 class="en">PERFORMANCE · 35FPS + 85MS + 92% ACCURACY</h2><div class="sub">全功能测试 × 性能基准测试 × 边界鲁棒性测试，以实测数据验证工程质量</div><div class="gold-bar"></div></div>
+<div class="s8-body">
+<div class="s8-metrics">
+<div class="s8-metric-card" style="border-color:rgba(91,175,138,.25)"><div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--mint),rgba(91,175,138,.3))"></div><div class="s8-metric-num" style="color:var(--mint)">35<span class="s8-metric-unit" style="color:var(--mint)">FPS</span></div><div class="s8-metric-label">游戏帧率</div><div class="s8-metric-target">目标 ≥ 30 FPS</div><div class="s8-metric-badge" style="background:rgba(91,175,138,.12);color:var(--mint);border:1px solid rgba(91,175,138,.25)">✓ 达标 +17%</div></div>
+<div class="s8-metric-card" style="border-color:rgba(212,168,67,.25)"><div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),rgba(212,168,67,.3))"></div><div class="s8-metric-num" style="color:var(--gold)">85<span class="s8-metric-unit" style="color:var(--gold)">ms</span></div><div class="s8-metric-label">识别延迟</div><div class="s8-metric-target">目标 ≤ 100ms</div><div class="s8-metric-badge" style="background:rgba(212,168,67,.1);color:var(--gold);border:1px solid rgba(212,168,67,.25)">✓ 达标 -15%</div></div>
+<div class="s8-metric-card" style="border-color:rgba(74,127,181,.25)"><div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),rgba(74,127,181,.3))"></div><div class="s8-metric-num" style="color:var(--blue-light)">92<span class="s8-metric-unit" style="color:var(--blue-light)">%</span></div><div class="s8-metric-label">识别准确率</div><div class="s8-metric-target">目标 ≥ 90%</div><div class="s8-metric-badge" style="background:rgba(74,127,181,.1);color:var(--blue-light);border:1px solid rgba(74,127,181,.25)">✓ 达标 +2%</div></div>
+</div>
+<div class="s8-btm-row">
+<div class="s8-test-box"><h4>📋 功能测试覆盖</h4><div class="s8-th"><span>测试项</span><span>测试方法</span><span style="text-align:right">预期结果</span></div>
+<div class="s8-tr"><span class="rk">手势识别</span><span class="rv">摄像头采集手部动作</span><span class="rs" style="color:var(--mint)">✓ OPEN_PALM / FIST</span></div>
+<div class="s8-tr"><span class="rk">角度控制</span><span class="rv">倾斜手部 ±30°, ±60°</span><span class="rs" style="color:var(--mint)">✓ 钩子跟随角度</span></div>
+<div class="s8-tr"><span class="rk">释放钩子</span><span class="rv">握拳动作</span><span class="rs" style="color:var(--mint)">✓ 释放并抓取</span></div>
+<div class="s8-tr"><span class="rk">引爆炸药</span><span class="rv">长握 1.5s</span><span class="rs" style="color:var(--mint)">✓ 爆炸效果触发</span></div>
+<div class="s8-tr"><span class="rk">商店购买</span><span class="rv">点击道具按钮</span><span class="rs" style="color:var(--mint)">✓ 金币减少生效</span></div>
+<div class="s8-tr"><span class="rk">键盘兜底</span><span class="rv">断开摄像头</span><span class="rs" style="color:var(--blue-light)">⚡ 自动切换</span></div>
+</div>
+<div class="s8-test-box"><h4>🛡 边界鲁棒性测试</h4><div class="s8-th"><span>测试场景</span><span>测试方法</span><span style="text-align:right">系统响应</span></div>
+<div class="s8-tr"><span class="rk">无手部输入</span><span class="rv">摄像头对准空白区域</span><span class="rs" style="color:var(--mint)">✓ 指令无效暂停</span></div>
+<div class="s8-tr"><span class="rk">剧烈光照变化</span><span class="rv">调整 50~500 lux</span><span class="rs" style="color:var(--mint)">✓ 识别保持稳定</span></div>
+<div class="s8-tr"><span class="rk">多人同框</span><span class="rv">3 人同时出现画面</span><span class="rs" style="color:var(--mint)">✓ 优先最大手部</span></div>
+<div class="s8-tr"><span class="rk">网络断连</span><span class="rv">断开 WiFi 连接</span><span class="rs" style="color:var(--gold)">⚡ 自动降级本地</span></div>
+<div class="s8-tr"><span class="rk">快速手势切换</span><span class="rv">张开↔握拳 5 次/s</span><span class="rs" style="color:var(--mint)">✓ 去抖稳定输出</span></div>
+<div class="s8-tr"><span class="rk">部分遮挡</span><span class="rv">遮挡 30% 手部区域</span><span class="rs" style="color:var(--blue-light)">⚠ 置信度下降过滤</span></div>
+</div>
+</div>
+</div></div>
+</parameter>
+<!-- ═══ S9: INNOVATION (DEEPLY ENHANCED) ═══ -->
+<div class="slide" id="slide-9">
+<div class="slide-header"><span class="section-tag">项目创新亮点</span><span class="page-num">09 / 10</span></div>
+<div class="section-header"><h2 class="gold-text">四大核心技术突破</h2><h2 class="en">INNOVATION · DUAL-ENGINE + GESTURE-AS-COMMAND + ASYNC + DEBOUNCE</h2><div class="sub">从架构设计到算法实现，多维度技术创新体现现代 C++ 工程开发深度</div><div class="gold-bar"></div></div>
+<div class="s9-body">
+<!-- Card 1: Dual Engine -->
+<div class="s9-card" style="border-color:rgba(74,127,181,.3)">
+<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),transparent)"></div>
+<div class="s9-card-top"><div class="s9-icon">🔀</div><div class="s9-title-area"><div class="s9a-title">双引擎融合架构</div><div class="s9a-sub" style="color:var(--blue-light)">LOCAL + CLOUD COLLABORATIVE</div></div></div>
+<div class="s9-body-text">创新性地将<b style="color:var(--blue-light)">本地 OpenCV 高频识别</b>与<b style="color:var(--violet-light)">云端 AI 精确校验</b>融合为协同体系。OPEN_PALM 模式下本地引擎每 30ms 驱动角度，FIST 触发后云端二次确认——<b style="color:var(--gold)">兼顾实时性与准确性</b>。云端不可用时自动降级，系统鲁棒性不受影响。</div>
+<div class="s9-tech-details">
+<span class="s9-tech-chip" style="background:rgba(74,127,181,.1);color:var(--blue-light);border:1px solid rgba(74,127,181,.2)">双识别器并行</span>
+<span class="s9-tech-chip" style="background:rgba(91,175,138,.1);color:var(--mint);border:1px solid rgba(91,175,138,.2)">安全优先策略</span>
+<span class="s9-tech-chip" style="background:rgba(212,168,67,.1);color:var(--gold);border:1px solid rgba(212,168,67,.2)">自动降级回退</span>
+<span class="s9-tech-chip" style="background:rgba(123,107,160,.1);color:var(--violet-light);border:1px solid rgba(123,107,160,.2)">置信度加权融合</span>
+</div>
+</div>
+<!-- Card 2: Gesture as Command -->
+<div class="s9-card" style="border-color:rgba(212,168,67,.3)">
+<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent)"></div>
+<div class="s9-card-top"><div class="s9-icon">🤚</div><div class="s9-title-area"><div class="s9a-title">手势即指令</div><div class="s9a-sub" style="color:var(--gold)">GESTURE-AS-COMMAND PARADIGM</div></div></div>
+<div class="s9-body-text">摒弃传统键盘鼠标中介，建立<b style="color:var(--gold)">从手势语义到游戏操作的直接映射管道</b>：张开手掌→瞄准 (OPEN_PALM→targetAngle)，握拳→释放(FIST→shouldReleaseHook)，长握 1.5s→引爆(BOMB_HOLD→shouldDetonateBomb)，左右倾斜手掌控制钩子偏转角。配合<b style="color:var(--blue-light)">键盘兜底模式</b>保证可玩性。</div>
+<div class="s9-tech-details">
+<span class="s9-tech-chip" style="background:rgba(212,168,67,.1);color:var(--gold);border:1px solid rgba(212,168,67,.2)">四种手势指令</span>
+<span class="s9-tech-chip" style="background:rgba(74,127,181,.1);color:var(--blue-light);border:1px solid rgba(74,127,181,.2)">键盘智能兜底</span>
+<span class="s9-tech-chip" style="background:rgba(91,175,138,.1);color:var(--mint);border:1px solid rgba(91,175,138,.2)">自然交互范式</span>
+<span class="s9-tech-chip" style="background:rgba(197,123,138,.1);color:var(--rose);border:1px solid rgba(197,123,138,.2)">无硬件依赖</span>
+</div>
+</div>
+<!-- Card 3: Async Architecture -->
+<div class="s9-card" style="border-color:rgba(91,175,138,.3)">
+<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--mint),transparent)"></div>
+<div class="s9-card-top"><div class="s9-icon">⚡</div><div class="s9-title-area"><div class="s9a-title">异步非阻塞架构</div><div class="s9a-sub" style="color:var(--mint)">ASYNC + NON-BLOCKING DESIGN</div></div></div>
+<div class="s9-body-text">识别线程与游戏 35FPS 主循环<b style="color:var(--mint)">完全解耦</b>。帧推送（pushFrame）即时返回，识别结果通过 ResultCallback 异步回调通知。使用 <span class="code-inline">std::atomic</span> 保证跨线程数据访问安全，<b style="color:var(--gold)">零互斥锁设计</b>避免主线程等待。云端 HTTP 请求同样异步，不会阻塞本地高频识别。</div>
+<div class="s9-tech-details">
+<span class="s9-tech-chip" style="background:rgba(91,175,138,.1);color:var(--mint);border:1px solid rgba(91,175,138,.2)">std::atomic 无锁</span>
+<span class="s9-tech-chip" style="background:rgba(74,127,181,.1);color:var(--blue-light);border:1px solid rgba(74,127,181,.2)">std::function 回调</span>
+<span class="s9-tech-chip" style="background:rgba(212,168,67,.1);color:var(--gold);border:1px solid rgba(212,168,67,.2)">零互斥锁设计</span>
+<span class="s9-tech-chip" style="background:rgba(123,107,160,.1);color:var(--violet-light);border:1px solid rgba(123,107,160,.2)">智能指针管理</span>
+</div>
+</div>
+<!-- Card 4: State Machine De-bounce -->
+<div class="s9-card" style="border-color:rgba(123,107,160,.3)">
+<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--violet),transparent)"></div>
+<div class="s9-card-top"><div class="s9-icon">🔒</div><div class="s9-title-area"><div class="s9a-title">状态机去抖设计</div><div class="s9a-sub" style="color:var(--violet-light)">FSM + EMA TEMPORAL FILTERING</div></div></div>
+<div class="s9-body-text">手势状态管理采用<b style="color:var(--violet-light)">有限状态机 (FSM)</b> 建模：IDLE → AIMING → LOCKED → RELEASED。配合<b style="color:var(--mint)">EMA 时域滤波</b>消除单帧识别抖动——手势需连续 ≥3 帧一致才切换，角度增量限幅 ≤5°/帧。COOLDOWN (0.8s) 防连击，BOMB_HOLD (1.5s) 区分释放/引爆意图，实现<b style="color:var(--gold)">工程级稳健性</b>。</div>
+<div class="s9-tech-details">
+<span class="s9-tech-chip" style="background:rgba(123,107,160,.1);color:var(--violet-light);border:1px solid rgba(123,107,160,.2)">FSM 状态建模</span>
+<span class="s9-tech-chip" style="background:rgba(91,175,138,.1);color:var(--mint);border:1px solid rgba(91,175,138,.2)">EMA 指数平滑</span>
+<span class="s9-tech-chip" style="background:rgba(212,168,67,.1);color:var(--gold);border:1px solid rgba(212,168,67,.2)">0.8s 冷却防连击</span>
+<span class="s9-tech-chip" style="background:rgba(197,123,138,.1);color:var(--rose);border:1px solid rgba(197,123,138,.2)">1.5s 长握引爆</span>
+</div>
+</div>
+</div></div>
+
+<!-- ═══ S10: CLOSING ═══ -->
+<div class="slide" id="slide-10">
+<svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.03;pointer-events:none" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="g2" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M 80 0 L 0 0 0 80" fill="none" stroke="#4A7FB5" stroke-width=".8"/></pattern></defs><rect width="100%" height="100%" fill="url(#g2)"/></svg>
+<div class="s10-hook-wrap"><div style="width:3px;height:160px;background:linear-gradient(to bottom,#A08060,#C4A87C);margin:0 auto"></div><svg width="80" height="100" viewBox="0 0 120 140" style="display:block;margin:-6px auto 0"><defs><linearGradient id="hg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#D4A843"/><stop offset="50%" stop-color="#E8D080"/><stop offset="100%" stop-color="#B8860B"/></linearGradient></defs><circle cx="60" cy="20" r="8" fill="none" stroke="url(#hg2)" stroke-width="3"/><path d="M60 28 L60 60 Q60 85 42 100 Q30 110 35 125 Q40 135 55 130 Q65 126 62 112 Q58 98 45 92" fill="none" stroke="url(#hg2)" stroke-width="6" stroke-linecap="round"/><path d="M35 125 L28 138" fill="none" stroke="url(#hg2)" stroke-width="5" stroke-linecap="round"/></svg></div>
+<div class="s10-content" style="margin-top:60px"><div class="s10-thanks gold-text">谢 谢</div><div class="s10-sep"></div><div class="s10-project">黄金矿工 · 手势识别版</div><div class="s10-github">github.com/mzk-C4/gold-miner-vision</div>
+<div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:40px">
+<span class="tag tag-gold">Cocos2d-x 4.0</span><span class="tag tag-blue">OpenCV 4.5.5</span><span class="tag tag-mint">C++17</span><span class="tag tag-violet">Cloud AI API</span><span class="tag tag-rose">libcurl</span>
+</div><div class="s10-team">mzk-C4 · 2026</div></div>
+<div class="s10-minerals"><img src="assets/gold-large-1.png" style="height:80px;width:auto"><img src="assets/diamond-1.png" style="height:60px;width:auto"><img src="assets/gen-potion.png" style="height:70px;width:auto"><img src="assets/gen-dynamite.png" style="height:72px;width:auto"><img src="assets/stone-1.png" style="height:48px;width:auto"><img src="assets/gold-nugget-2.png" style="height:58px;width:auto"><img src="assets/gen-clover.png" style="height:55px;width:auto"><img src="assets/treasure.png" style="height:68px;width:auto"></div>
+<div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:900px;height:200px;background:radial-gradient(ellipse at center bottom,rgba(212,168,67,0.07) 0%,transparent 70%);pointer-events:none"></div>
+</div>
+
+</div><!-- end slide-stage -->
+</div><!-- end ppt-wrapper -->
+
+<!-- ─── NAVIGATION ─── -->
+<div id="nav">
+<button id="btn-prev" onclick="prevSlide()" disabled>&#8592;</button>
+<div class="dot-nav" id="dots"></div>
+<div id="page-indicator"><span id="cur-page">1</span> / 10</div>
+<button id="btn-next" onclick="nextSlide()">&#8594;</button>
+</div>
+
+<script>
+(function(){var total=10;var cur=1;var slides=[];var dots=[];
+function init(){var stage=document.getElementById('stage');var dw=document.getElementById('dots');
+for(var i=1;i<=total;i++){slides.push(document.getElementById('slide-'+i));
+var d=document.createElement('div');d.className='dot'+(i===1?' active':'');
+d.dataset.i=i;d.onclick=(function(n){return function(){goTo(n);};})(i);
+dw.appendChild(d);dots.push(d);}
+scaleStage();window.addEventListener('resize',scaleStage);
+document.addEventListener('keydown',function(e){
+if(e.key==='ArrowRight'||e.key===' '||e.key==='ArrowDown'){e.preventDefault();nextSlide();}
+if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();prevSlide();}})}
+function scaleStage(){var ww=window.innerWidth,wh=window.innerHeight;
+var scale=Math.min(ww/1920,wh/1080);
+document.getElementById('stage').style.transform='scale('+scale+')';}
+function goTo(n){if(n<1||n>total)return;
+slides[cur-1].classList.remove('active');dots[cur-1].classList.remove('active');
+cur=n;slides[cur-1].classList.add('active');dots[cur-1].classList.add('active');
+document.getElementById('cur-page').textContent=cur;
+document.getElementById('btn-prev').disabled=cur===1;
+document.getElementById('btn-next').disabled=cur===total;}
+window.nextSlide=function(){goTo(cur+1);};
+window.prevSlide=function(){goTo(cur-1);};
+document.addEventListener('DOMContentLoaded',init);})();</script>
+</body></html>
+</parameter>
