@@ -1,0 +1,14 @@
+{
+  "name": "codex-ppt",
+  "version": "0.2.0",
+  "private": false,
+  "type": "module",
+  "description": "Create AI-rendered slide decks and optionally reconstruct them into editable PPTX files.",
+  "scripts": {
+    "help:editable": "node scripts/build_editable_ppt_from_layers.mjs --help"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  },
+  "license": "MIT"
+}

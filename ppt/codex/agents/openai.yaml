@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex PPT"
+  short_description: "AI slide decks as PDF or editable PPTX"
+  default_prompt: "Use $codex-ppt to turn this topic into a polished 16:9 deck; make it editable PPTX if I ask for selectable text and movable layers."

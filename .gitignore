@@ -1,0 +1,19 @@
+# Temp / dev files
+dev-temp/
+
+# Office lock files
+~$*
+
+# Build outputs
+build/
+bin/
+*.exe
+*.dll
+*.lib
+*.exp
+
+# IDE
+.vs/
+.vscode/
+*.user
+.DS_Store

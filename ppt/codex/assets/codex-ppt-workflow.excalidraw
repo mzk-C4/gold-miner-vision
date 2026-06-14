@@ -1,0 +1,44 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "elements": [
+    {"type":"rectangle","id":"brief","x":40,"y":120,"width":150,"height":70,"strokeColor":"#1e1e1e","backgroundColor":"#a5d8ff","fillStyle":"hachure","strokeWidth":2,"roughness":1},
+    {"type":"text","id":"t_brief","x":68,"y":136,"width":96,"height":38,"text":"Brief\n输入目标","fontSize":18,"fontFamily":1,"strokeColor":"#1e1e1e","textAlign":"center"},
+
+    {"type":"rectangle","id":"story","x":250,"y":120,"width":150,"height":70,"strokeColor":"#1e1e1e","backgroundColor":"#b2f2bb","fillStyle":"hachure","strokeWidth":2,"roughness":1},
+    {"type":"text","id":"t_story","x":270,"y":136,"width":110,"height":38,"text":"Storyline\n叙事链","fontSize":18,"fontFamily":1,"strokeColor":"#1e1e1e","textAlign":"center"},
+
+    {"type":"rectangle","id":"design","x":460,"y":120,"width":150,"height":70,"strokeColor":"#1e1e1e","backgroundColor":"#ffec99","fillStyle":"hachure","strokeWidth":2,"roughness":1},
+    {"type":"text","id":"t_design","x":482,"y":136,"width":106,"height":38,"text":"Design\n视觉系统","fontSize":18,"fontFamily":1,"strokeColor":"#1e1e1e","textAlign":"center"},
+
+    {"type":"rectangle","id":"prompts","x":670,"y":120,"width":150,"height":70,"strokeColor":"#1e1e1e","backgroundColor":"#d0bfff","fillStyle":"hachure","strokeWidth":2,"roughness":1},
+    {"type":"text","id":"t_prompts","x":692,"y":136,"width":108,"height":38,"text":"Prompts\n逐页提示词","fontSize":18,"fontFamily":1,"strokeColor":"#1e1e1e","textAlign":"center"},
+
+    {"type":"rectangle","id":"generate","x":880,"y":120,"width":150,"height":70,"strokeColor":"#1e1e1e","backgroundColor":"#ffc9c9","fillStyle":"hachure","strokeWidth":2,"roughness":1},
+    {"type":"text","id":"t_generate","x":898,"y":136,"width":114,"height":38,"text":"AI Slides\n整页生图","fontSize":18,"fontFamily":1,"strokeColor":"#1e1e1e","textAlign":"center"},
+
+    {"type":"diamond","id":"qa","x":1080,"y":98,"width":150,"height":114,"strokeColor":"#1e1e1e","backgroundColor":"#fff4e6","fillStyle":"hachure","strokeWidth":2,"roughness":1},
+    {"type":"text","id":"t_qa","x":1113,"y":136,"width":86,"height":38,"text":"QA\n通过?","fontSize":18,"fontFamily":1,"strokeColor":"#1e1e1e","textAlign":"center"},
+
+    {"type":"rectangle","id":"pdf","x":1285,"y":120,"width":150,"height":70,"strokeColor":"#1e1e1e","backgroundColor":"#b2f2bb","fillStyle":"hachure","strokeWidth":2,"roughness":1},
+    {"type":"text","id":"t_pdf","x":1317,"y":136,"width":86,"height":38,"text":"PDF\n交付","fontSize":18,"fontFamily":1,"strokeColor":"#1e1e1e","textAlign":"center"},
+
+    {"type":"rectangle","id":"regen","x":880,"y":310,"width":150,"height":70,"strokeColor":"#1e1e1e","backgroundColor":"#f3d9fa","fillStyle":"hachure","strokeWidth":2,"roughness":1},
+    {"type":"text","id":"t_regen","x":900,"y":326,"width":110,"height":38,"text":"Regenerate\n重写再生","fontSize":18,"fontFamily":1,"strokeColor":"#1e1e1e","textAlign":"center"},
+
+    {"type":"arrow","id":"a1","from":"brief","to":"story","strokeColor":"#1e1e1e","strokeWidth":2,"roughness":1},
+    {"type":"arrow","id":"a2","from":"story","to":"design","strokeColor":"#1e1e1e","strokeWidth":2,"roughness":1},
+    {"type":"arrow","id":"a3","from":"design","to":"prompts","strokeColor":"#1e1e1e","strokeWidth":2,"roughness":1},
+    {"type":"arrow","id":"a4","from":"prompts","to":"generate","strokeColor":"#1e1e1e","strokeWidth":2,"roughness":1},
+    {"type":"arrow","id":"a5","from":"generate","to":"qa","strokeColor":"#1e1e1e","strokeWidth":2,"roughness":1},
+    {"type":"arrow","id":"a6","from":"qa","to":"pdf","strokeColor":"#2f9e44","strokeWidth":3,"roughness":1},
+    {"type":"text","id":"label_pass","x":1238,"y":102,"width":40,"height":20,"text":"pass","fontSize":14,"fontFamily":3,"strokeColor":"#2f9e44"},
+    {"type":"arrow","id":"a7","from":"qa","to":"regen","strokeColor":"#e8590c","strokeWidth":2,"roughness":1,"strokeStyle":"dashed"},
+    {"type":"text","id":"label_fix","x":1032,"y":258,"width":62,"height":20,"text":"fix text","fontSize":14,"fontFamily":3,"strokeColor":"#e8590c"},
+    {"type":"arrow","id":"a8","from":"regen","to":"prompts","absolutePoints":true,"points":[[955,310],[955,250],[745,250],[745,190]],"strokeColor":"#862e9c","strokeWidth":2,"roughness":1,"strokeStyle":"dashed"},
+    {"type":"text","id":"label_loop","x":758,"y":226,"width":112,"height":20,"text":"rewrite prompt","fontSize":14,"fontFamily":3,"strokeColor":"#862e9c"},
+
+    {"type":"text","id":"title","x":40,"y":32,"width":600,"height":34,"text":"Codex PPT workflow: story first, then full-slide AI images","fontSize":28,"fontFamily":1,"strokeColor":"#1e1e1e"},
+    {"type":"text","id":"note","x":40,"y":430,"width":900,"height":24,"text":"Every final page is a complete AI-rendered slide image. QA failures go back to prompt rewriting, not local text repair.","fontSize":18,"fontFamily":1,"strokeColor":"#868e96"}
+  ]
+}
