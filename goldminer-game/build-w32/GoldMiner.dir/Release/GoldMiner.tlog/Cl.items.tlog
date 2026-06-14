@@ -9,8 +9,12 @@ D:\GOLD MINER\goldminer-game\Classes\Tool\SoundTool.cpp;D:\GOLD MINER\goldminer-
 D:\GOLD MINER\goldminer-game\Classes\Tool\MusicPlayer.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\MusicPlayer.obj
 D:\GOLD MINER\goldminer-game\Classes\gameobjects\Mineral.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\Mineral.obj
 D:\GOLD MINER\goldminer-game\Classes\services\LevelLoader.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\LevelLoader.obj
+D:\GOLD MINER\goldminer-game\Classes\services\GestureClient.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\GestureClient.obj
 D:\GOLD MINER\goldminer-game\Classes\services\PlayerManager.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\PlayerManager.obj
-D:\GOLD MINER\goldminer-game\Classes\MainScene\Gold.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\Gold.obj
-D:\GOLD MINER\goldminer-game\Classes\services\GestureStubs.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\GestureStubs.obj
+D:\GOLD MINER\goldminer-game\Classes\services\AIGestureService.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\AIGestureService.obj
+D:\GOLD MINER\goldminer-game\Classes\services\LocalGestureRecognizer.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\LocalGestureRecognizer.obj
+D:\GOLD MINER\goldminer-game\Classes\services\CloudGestureRecognizer.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\CloudGestureRecognizer.obj
+D:\GOLD MINER\goldminer-game\Classes\services\GestureFusion.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\GestureFusion.obj
+D:\GOLD MINER\goldminer-game\Classes\services\AIGestureRecognizer.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\AIGestureRecognizer.obj
 D:\GOLD MINER\goldminer-game\proj.win32\main.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\main.obj
 D:\cocos2d-x\cocos\precheader.cpp;D:\GOLD MINER\goldminer-game\build-w32\GoldMiner.dir\Release\precheader.obj

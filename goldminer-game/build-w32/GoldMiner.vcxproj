@@ -126,7 +126,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message>												</Message>
+      <Message>													Copying GestureServer.exe and OpenCV DLL to game output</Message>
       <Command>setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libssl-1_1.dll "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/Debug/libssl-1_1.dll"
 if %errorlevel% neq 0 goto :cmEnd
@@ -243,6 +243,17 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 :cmErrorLevel
 exit /b %1
 :cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "D:/GOLD MINER/goldminer-game/GestureServer/build/bin/GestureServer.exe" "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/Debug"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/Debug"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
@@ -306,7 +317,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message>												</Message>
+      <Message>													Copying GestureServer.exe and OpenCV DLL to game output</Message>
       <Command>setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libssl-1_1.dll "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/Release/libssl-1_1.dll"
 if %errorlevel% neq 0 goto :cmEnd
@@ -423,6 +434,17 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 :cmErrorLevel
 exit /b %1
 :cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "D:/GOLD MINER/goldminer-game/GestureServer/build/bin/GestureServer.exe" "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/Release"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/Release"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
@@ -486,7 +508,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message>												</Message>
+      <Message>													Copying GestureServer.exe and OpenCV DLL to game output</Message>
       <Command>setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libssl-1_1.dll "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/MinSizeRel/libssl-1_1.dll"
 if %errorlevel% neq 0 goto :cmEnd
@@ -603,6 +625,17 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 :cmErrorLevel
 exit /b %1
 :cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "D:/GOLD MINER/goldminer-game/GestureServer/build/bin/GestureServer.exe" "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/MinSizeRel"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/MinSizeRel"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
@@ -665,7 +698,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <PostBuildEvent>
-      <Message>												</Message>
+      <Message>													Copying GestureServer.exe and OpenCV DLL to game output</Message>
       <Command>setlocal
 "C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libssl-1_1.dll "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/RelWithDebInfo/libssl-1_1.dll"
 if %errorlevel% neq 0 goto :cmEnd
@@ -782,6 +815,17 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 :cmErrorLevel
 exit /b %1
 :cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "D:/GOLD MINER/goldminer-game/GestureServer/build/bin/GestureServer.exe" "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/RelWithDebInfo"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll "D:/GOLD MINER/goldminer-game/build-w32/bin/GoldMiner/RelWithDebInfo"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
@@ -881,9 +925,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\CloudGestureRecognizer.hpp" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureFusion.hpp" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureRecognizer.hpp" />
-    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Gold.hpp" />
-    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureRecognizer.hpp" />
-    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\utils\MatToTexture.hpp" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\proj.win32\main.h" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\proj.win32\resource.h" />
     <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Other\AppDelegate.cpp" />
@@ -897,10 +938,15 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Tool\MusicPlayer.cpp" />
     <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\gameobjects\Mineral.cpp" />
     <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\LevelLoader.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureClient.cpp" />
     <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\PlayerManager.cpp" />
-    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Gold.cpp" />
-    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureStubs.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureService.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\LocalGestureRecognizer.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\CloudGestureRecognizer.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureFusion.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureRecognizer.cpp" />
     <ClCompile Include="D:\GOLD MINER\goldminer-game\proj.win32\main.cpp" />
+    <ResourceCompile Include="D:\GOLD MINER\goldminer-game\proj.win32\game.rc" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Boom.plist" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Default\Button_Disable.png" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\GameLayer.csb" />
@@ -946,11 +992,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ShopScene.csb" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\StageTipsLayer.csb" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\TipsFailOrSucess.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ai_config.example.json" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ai_config.json" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level1.csb" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level2.csb" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level3.csb" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level4.csb" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level5.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level_data.json" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - Angel.mp3" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - Melody.mp3" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 二十二.mp3" />
@@ -1022,6 +1071,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 龙卷风.flac" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 龙卷风.mp3" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\Select.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\backMusic-exchange.flac" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\backMusic.mp3" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\bomb.mp3" />
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\finish.mp3" />

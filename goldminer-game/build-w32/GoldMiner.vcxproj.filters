@@ -34,13 +34,25 @@
     <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\LevelLoader.cpp">
       <Filter>Source Files\Classes\services</Filter>
     </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureClient.cpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClCompile>
     <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\PlayerManager.cpp">
       <Filter>Source Files\Classes\services</Filter>
     </ClCompile>
-    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Gold.cpp">
-      <Filter>Source Files\Classes\MainScene</Filter>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureService.cpp">
+      <Filter>Source Files\Classes\services</Filter>
     </ClCompile>
-    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureStubs.cpp">
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\LocalGestureRecognizer.cpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\CloudGestureRecognizer.cpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureFusion.cpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureRecognizer.cpp">
       <Filter>Source Files\Classes\services</Filter>
     </ClCompile>
     <ClCompile Include="D:\GOLD MINER\goldminer-game\proj.win32\main.cpp">
@@ -113,15 +125,6 @@
     </ClInclude>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureRecognizer.hpp">
       <Filter>Source Files\Classes\services</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Gold.hpp">
-      <Filter>Source Files\Classes\MainScene</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureRecognizer.hpp">
-      <Filter>Source Files\Classes\services</Filter>
-    </ClInclude>
-    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\utils\MatToTexture.hpp">
-      <Filter>Source Files\Classes\utils</Filter>
     </ClInclude>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\proj.win32\main.h">
       <Filter>Source Files\proj.win32</Filter>
@@ -264,6 +267,12 @@
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\TipsFailOrSucess.csb">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ai_config.example.json">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ai_config.json">
+      <Filter>Resources</Filter>
+    </ClInclude>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level1.csb">
       <Filter>Resources</Filter>
     </ClInclude>
@@ -277,6 +286,9 @@
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level5.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level_data.json">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - Angel.mp3">
@@ -492,6 +504,9 @@
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\Select.mp3">
       <Filter>Resources\music</Filter>
     </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\backMusic-exchange.flac">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
     <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\backMusic.mp3">
       <Filter>Resources\music</Filter>
     </ClInclude>
@@ -516,6 +531,11 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\GOLD MINER\goldminer-game\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="D:\GOLD MINER\goldminer-game\proj.win32\game.rc">
+      <Filter>Source Files\proj.win32</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -556,9 +576,6 @@
     </Filter>
     <Filter Include="Source Files\Classes\services">
       <UniqueIdentifier>{0D2BD9C7-B1D1-37D4-B877-A7BF3302CA47}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Classes\utils">
-      <UniqueIdentifier>{6933E69F-27B7-30F8-8C8B-529612671046}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\proj.win32">
       <UniqueIdentifier>{6C3E6E2F-3270-37ED-96C8-FDFC356DD9CE}</UniqueIdentifier>
