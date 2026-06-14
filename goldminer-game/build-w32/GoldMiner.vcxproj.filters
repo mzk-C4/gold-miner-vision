@@ -1,0 +1,567 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Other\AppDelegate.cpp">
+      <Filter>Source Files\Classes\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\MainRoot.cpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Game.cpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Shop.cpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Pause.cpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\StageTipsLayer.cpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Other\UserDataManager.cpp">
+      <Filter>Source Files\Classes\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Tool\SoundTool.cpp">
+      <Filter>Source Files\Classes\Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Tool\MusicPlayer.cpp">
+      <Filter>Source Files\Classes\Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\gameobjects\Mineral.cpp">
+      <Filter>Source Files\Classes\gameobjects</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\LevelLoader.cpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\PlayerManager.cpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Gold.cpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureStubs.cpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\proj.win32\main.cpp">
+      <Filter>Source Files\proj.win32</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\cocos2d-x\cocos\precheader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Other\AppDelegate.h">
+      <Filter>Source Files\Classes\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\MainRoot.hpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Game.hpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Shop.hpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Pause.hpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\StageTipsLayer.hpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Other\Const.hpp">
+      <Filter>Source Files\Classes\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Other\UserDataManager.hpp">
+      <Filter>Source Files\Classes\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Tool\SoundTool.hpp">
+      <Filter>Source Files\Classes\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Tool\MusicPlayer.hpp">
+      <Filter>Source Files\Classes\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\gameobjects\Mineral.hpp">
+      <Filter>Source Files\Classes\gameobjects</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\LevelLoader.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureClient.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\PlayerManager.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureService.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureData.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\IGestureRecognizer.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\LocalGestureRecognizer.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\CloudGestureRecognizer.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureFusion.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureRecognizer.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Gold.hpp">
+      <Filter>Source Files\Classes\MainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureRecognizer.hpp">
+      <Filter>Source Files\Classes\services</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\utils\MatToTexture.hpp">
+      <Filter>Source Files\Classes\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\proj.win32\main.h">
+      <Filter>Source Files\proj.win32</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\proj.win32\resource.h">
+      <Filter>Source Files\proj.win32</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Boom.plist">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Default\Button_Disable.png">
+      <Filter>Resources\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\GameLayer.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Hook.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Layer.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\MinerAnimtion.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\PauseLayer.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\button.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\dialog-background.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\general-sheet.plist">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\general-sheet.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\gold-miner-text.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\green.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\huancun.plist">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\huancun.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\level-sheet.plist">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\level-sheet.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-background-sky.jpg">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-background.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-miner.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-player-gold.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-start-gold.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG1.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG2.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG3.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG4.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG5.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\minerAction.plist">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\minerAction.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\one.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\quitbtn.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopBack.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shoper.plist">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shoper.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopper exchange.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopper new.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopper_exchange.plist">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopper_new.plist">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\stars.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\tableImage.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\tip.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\topbg.png">
+      <Filter>Resources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ShopScene.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\StageTipsLayer.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\TipsFailOrSucess.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level1.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level2.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level3.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level4.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level5.csb">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - Angel.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - Melody.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 二十二.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 寂寞的季节.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 小镇姑娘.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 就是爱你.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 找自己.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 普通朋友.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 暗恋.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 望春风.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 流沙.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 爱我还是他.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 爱，很简单.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 蝴蝶.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 讨厌红楼梦.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 飞机场的1030.mp3">
+      <Filter>Resources\music\David Tao</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 三年二班.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 三年二班.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 上海一九四三.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 上海一九四三.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 东风破.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 东风破.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 你听得到.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 你听得到.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 分裂.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 分裂.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 双刀.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 双刀.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 反方向的钟.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 反方向的钟.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 外婆.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 外婆.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 大笨钟.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 大笨钟.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 将军.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 将军.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 开不了口.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 开不了口.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 忍者.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 忍者.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 手语.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 手语.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 斗牛.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 斗牛.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 时光机.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 时光机.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 晴天.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 晴天.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 火车叨位去.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 火车叨位去.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 爱你没差.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 爱你没差.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 爱在西元前.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 爱在西元前.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 牛仔很忙.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 牛仔很忙.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 稻香.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 稻香.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 给我一首歌的时间.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 给我一首歌的时间.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 说走就走.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 说走就走.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 逆鳞.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 逆鳞.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 霍元甲.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 霍元甲.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 飘移.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 飘移.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 龙卷风.flac">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 龙卷风.mp3">
+      <Filter>Resources\music\JAY</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\Select.mp3">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\backMusic.mp3">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\bomb.mp3">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\finish.mp3">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\laend.mp3">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\largegold.mp3">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\lastart.mp3">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\level.mp3">
+      <Filter>Resources\music</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\GOLD MINER\goldminer-game\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{52AEE7BF-27E2-3011-A314-1E543D1603EE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Default">
+      <UniqueIdentifier>{FD6E381F-DD57-3204-8C70-FA7B55FD5C66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Resources">
+      <UniqueIdentifier>{FA424265-C633-361C-ADBF-82353E22FDD4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\music">
+      <UniqueIdentifier>{9E8A81D8-0243-317A-A2C7-62E37AD4C19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\music\David Tao">
+      <UniqueIdentifier>{BAE3C3B5-F86B-3D08-AB12-92D7F38420C7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\music\JAY">
+      <UniqueIdentifier>{E4C16EC9-5D85-3546-B24F-1C89C0F5B5D0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A0DD6467-194C-332A-B382-392AC145BFBF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes">
+      <UniqueIdentifier>{2A7B3CF4-80E7-32A5-874F-40104FD23B26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\MainScene">
+      <UniqueIdentifier>{2DDF07AE-4297-38C1-9031-8520689C6755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Other">
+      <UniqueIdentifier>{5B5DB18C-DA1D-3273-83C9-10CC49BEFCB6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Tool">
+      <UniqueIdentifier>{9492081A-4454-306D-9324-D92A6BA10019}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\gameobjects">
+      <UniqueIdentifier>{9CD6F1C5-DFC1-305B-B882-D5AEAEEA2DF6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\services">
+      <UniqueIdentifier>{0D2BD9C7-B1D1-37D4-B877-A7BF3302CA47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\utils">
+      <UniqueIdentifier>{6933E69F-27B7-30F8-8C8B-529612671046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\proj.win32">
+      <UniqueIdentifier>{6C3E6E2F-3270-37ED-96C8-FDFC356DD9CE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

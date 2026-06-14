@@ -1,0 +1,10 @@
+^D:\COCOS2D-X\EXTERNAL\POLY2TRI\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/GOLD MINER/goldminer-game" "-BD:/GOLD MINER/goldminer-game/build-w32" --check-stamp-file "D:/GOLD MINER/goldminer-game/build-w32/engine/external/poly2tri/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

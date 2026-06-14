@@ -1,0 +1,20 @@
+^D:\GOLD MINER\GOLDMINER-GAME\BUILD-W32\CMAKEFILES\16EE9CEC1AB010D51EF21A0A5CB90420\SYNC_RESOURCE-GOLDMINER.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "Copying resources for GoldMiner ..."
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\GOLD MINER\GOLDMINER-GAME\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/GOLD MINER/goldminer-game" "-BD:/GOLD MINER/goldminer-game/build-w32" --check-stamp-file "D:/GOLD MINER/goldminer-game/build-w32/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

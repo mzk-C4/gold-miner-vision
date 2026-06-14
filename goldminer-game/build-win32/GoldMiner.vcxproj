@@ -1,0 +1,1150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4A2F8A2E-0B4D-3A9A-9177-0256BE71F92A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>Win32</Platform>
+    <ProjectName>GoldMiner</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\GOLD MINER\goldminer-game\build-win32\bin\GoldMiner\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">GoldMiner.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">GoldMiner</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\GOLD MINER\goldminer-game\build-win32\bin\GoldMiner\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">GoldMiner.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">GoldMiner</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\GOLD MINER\goldminer-game\build-win32\bin\GoldMiner\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">GoldMiner.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">GoldMiner</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\GOLD MINER\goldminer-game\build-win32\bin\GoldMiner\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">GoldMiner.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">GoldMiner</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/cocos2d-x/external/Box2D/include" /external:I "D:/cocos2d-x/external/chipmunk/include" /external:I "D:/cocos2d-x/external/freetype2/include/win32/freetype2" /external:I "D:/cocos2d-x/external/bullet/include" /external:I "D:/cocos2d-x/external/bullet/include/bullet" /external:I "D:/cocos2d-x/external/jpeg/include/win32" /external:I "D:/cocos2d-x/external/openssl/include/win32" /external:I "D:/cocos2d-x/external/uv/include" /external:I "D:/cocos2d-x/external/webp/include/win32" /external:I "D:/cocos2d-x/external/websockets/include/win32" /external:I "D:/cocos2d-x/external/curl/include/win32" /external:I "D:/cocos2d-x/external/png/include/win32" /external:I "D:/cocos2d-x/external/win32-specific/gles/include/OGLES" /external:I "D:/cocos2d-x/external/win32-specific/icon/include" /external:I "D:/cocos2d-x/external/win32-specific/MP3Decoder/include" /external:I "D:/cocos2d-x/external/win32-specific/OggDecoder/include" /external:I "D:/cocos2d-x/external/win32-specific/OpenalSoft/include" /external:I "D:/cocos2d-x/external/glfw3/include/win32" /external:I "D:/cocos2d-x/external/zlib/../win32-specific/zlib/include" /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;COCOS2D_DEBUG=1;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG=1;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;D:\cocos2d-x\external\Box2D\include;D:\cocos2d-x\external\chipmunk\include;D:\cocos2d-x\external\freetype2\include\win32\freetype2;D:\cocos2d-x\external\bullet\include;D:\cocos2d-x\external\bullet\include\bullet;D:\cocos2d-x\external\jpeg\include\win32;D:\cocos2d-x\external\openssl\include\win32;D:\cocos2d-x\external\uv\include;D:\cocos2d-x\external\webp\include\win32;D:\cocos2d-x\external\websockets\include\win32;D:\cocos2d-x\external\curl\include\win32;D:\cocos2d-x\external\png\include\win32;D:\cocos2d-x\external\win32-specific\gles\include\OGLES;D:\cocos2d-x\external\win32-specific\icon\include;D:\cocos2d-x\external\win32-specific\MP3Decoder\include;D:\cocos2d-x\external\win32-specific\OggDecoder\include;D:\cocos2d-x\external\win32-specific\OpenalSoft\include;D:\cocos2d-x\external\glfw3\include\win32;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;D:\cocos2d-x\external\Box2D\include;D:\cocos2d-x\external\chipmunk\include;D:\cocos2d-x\external\freetype2\include\win32\freetype2;D:\cocos2d-x\external\bullet\include;D:\cocos2d-x\external\bullet\include\bullet;D:\cocos2d-x\external\jpeg\include\win32;D:\cocos2d-x\external\openssl\include\win32;D:\cocos2d-x\external\uv\include;D:\cocos2d-x\external\webp\include\win32;D:\cocos2d-x\external\websockets\include\win32;D:\cocos2d-x\external\curl\include\win32;D:\cocos2d-x\external\png\include\win32;D:\cocos2d-x\external\win32-specific\gles\include\OGLES;D:\cocos2d-x\external\win32-specific\icon\include;D:\cocos2d-x\external\win32-specific\MP3Decoder\include;D:\cocos2d-x\external\win32-specific\OggDecoder\include;D:\cocos2d-x\external\win32-specific\OpenalSoft\include;D:\cocos2d-x\external\glfw3\include\win32;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>													Copying GestureServer.exe and OpenCV DLL to game output</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libssl-1_1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/libssl-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libcrypto-1_1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/libcrypto-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/uv/prebuilt/win32/uv.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/uv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/websockets/prebuilt/win32/websockets.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/websockets.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/curl/prebuilt/win32/libcurl.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/libcurl.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/gles/prebuilt/glew32.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/glew32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/icon/prebuilt/iconv.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/iconv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/libmpg123.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libogg.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/libogg.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/libvorbis.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/libvorbisfile.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/OpenAL32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/zlib1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "D:/GOLD MINER/goldminer-game/GestureServer/build/bin/GestureServer.exe" "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\Debug\cocos2d.lib;lib\Debug\external.lib;D:\cocos2d-x\external\Box2D\prebuilt\win32\debug\libbox2d.lib;D:\cocos2d-x\external\chipmunk\prebuilt\win32\debug-lib\libchipmunk.lib;D:\cocos2d-x\external\freetype2\prebuilt\win32\freetype.lib;lib\Debug\ext_recast.lib;D:\cocos2d-x\external\bullet\prebuilt\win32\debug\libbullet.lib;D:\cocos2d-x\external\jpeg\prebuilt\win32\libjpeg.lib;D:\cocos2d-x\external\webp\prebuilt\win32\libwebp.lib;D:\cocos2d-x\external\websockets\prebuilt\win32\websockets.lib;D:\cocos2d-x\external\openssl\prebuilt\win32\libssl.lib;D:\cocos2d-x\external\openssl\prebuilt\win32\libcrypto.lib;D:\cocos2d-x\external\uv\prebuilt\win32\uv_a.lib;lib\Debug\ext_tinyxml2.lib;lib\Debug\ext_xxhash.lib;lib\Debug\ext_xxtea.lib;lib\Debug\ext_clipper.lib;lib\Debug\ext_edtaa3func.lib;lib\Debug\ext_convertUTF.lib;lib\Debug\ext_poly2tri.lib;lib\Debug\ext_md5.lib;D:\cocos2d-x\external\curl\prebuilt\win32\libcurl.lib;D:\cocos2d-x\external\png\prebuilt\win32\libpng.lib;D:\cocos2d-x\external\win32-specific\gles\prebuilt\glew32.lib;D:\cocos2d-x\external\win32-specific\icon\prebuilt\libiconv.lib;D:\cocos2d-x\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libogg.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;D:\cocos2d-x\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;D:\cocos2d-x\external\glfw3\prebuilt\win32\glfw3.lib;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\Debug\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>D:/GOLD MINER/goldminer-game/build-win32/Debug/GoldMiner.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Debug/GoldMiner.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/cocos2d-x/external/Box2D/include" /external:I "D:/cocos2d-x/external/chipmunk/include" /external:I "D:/cocos2d-x/external/freetype2/include/win32/freetype2" /external:I "D:/cocos2d-x/external/bullet/include" /external:I "D:/cocos2d-x/external/bullet/include/bullet" /external:I "D:/cocos2d-x/external/jpeg/include/win32" /external:I "D:/cocos2d-x/external/openssl/include/win32" /external:I "D:/cocos2d-x/external/uv/include" /external:I "D:/cocos2d-x/external/webp/include/win32" /external:I "D:/cocos2d-x/external/websockets/include/win32" /external:I "D:/cocos2d-x/external/curl/include/win32" /external:I "D:/cocos2d-x/external/png/include/win32" /external:I "D:/cocos2d-x/external/win32-specific/gles/include/OGLES" /external:I "D:/cocos2d-x/external/win32-specific/icon/include" /external:I "D:/cocos2d-x/external/win32-specific/MP3Decoder/include" /external:I "D:/cocos2d-x/external/win32-specific/OggDecoder/include" /external:I "D:/cocos2d-x/external/win32-specific/OpenalSoft/include" /external:I "D:/cocos2d-x/external/glfw3/include/win32" /external:I "D:/cocos2d-x/external/zlib/../win32-specific/zlib/include" /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;D:\cocos2d-x\external\Box2D\include;D:\cocos2d-x\external\chipmunk\include;D:\cocos2d-x\external\freetype2\include\win32\freetype2;D:\cocos2d-x\external\bullet\include;D:\cocos2d-x\external\bullet\include\bullet;D:\cocos2d-x\external\jpeg\include\win32;D:\cocos2d-x\external\openssl\include\win32;D:\cocos2d-x\external\uv\include;D:\cocos2d-x\external\webp\include\win32;D:\cocos2d-x\external\websockets\include\win32;D:\cocos2d-x\external\curl\include\win32;D:\cocos2d-x\external\png\include\win32;D:\cocos2d-x\external\win32-specific\gles\include\OGLES;D:\cocos2d-x\external\win32-specific\icon\include;D:\cocos2d-x\external\win32-specific\MP3Decoder\include;D:\cocos2d-x\external\win32-specific\OggDecoder\include;D:\cocos2d-x\external\win32-specific\OpenalSoft\include;D:\cocos2d-x\external\glfw3\include\win32;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;D:\cocos2d-x\external\Box2D\include;D:\cocos2d-x\external\chipmunk\include;D:\cocos2d-x\external\freetype2\include\win32\freetype2;D:\cocos2d-x\external\bullet\include;D:\cocos2d-x\external\bullet\include\bullet;D:\cocos2d-x\external\jpeg\include\win32;D:\cocos2d-x\external\openssl\include\win32;D:\cocos2d-x\external\uv\include;D:\cocos2d-x\external\webp\include\win32;D:\cocos2d-x\external\websockets\include\win32;D:\cocos2d-x\external\curl\include\win32;D:\cocos2d-x\external\png\include\win32;D:\cocos2d-x\external\win32-specific\gles\include\OGLES;D:\cocos2d-x\external\win32-specific\icon\include;D:\cocos2d-x\external\win32-specific\MP3Decoder\include;D:\cocos2d-x\external\win32-specific\OggDecoder\include;D:\cocos2d-x\external\win32-specific\OpenalSoft\include;D:\cocos2d-x\external\glfw3\include\win32;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>													Copying GestureServer.exe and OpenCV DLL to game output</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libssl-1_1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/libssl-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libcrypto-1_1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/libcrypto-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/uv/prebuilt/win32/uv.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/uv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/websockets/prebuilt/win32/websockets.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/websockets.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/curl/prebuilt/win32/libcurl.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/libcurl.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/gles/prebuilt/glew32.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/glew32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/icon/prebuilt/iconv.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/iconv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/libmpg123.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libogg.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/libogg.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/libvorbis.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/libvorbisfile.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/OpenAL32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/zlib1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "D:/GOLD MINER/goldminer-game/GestureServer/build/bin/GestureServer.exe" "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\Release\cocos2d.lib;lib\Release\external.lib;D:\cocos2d-x\external\Box2D\prebuilt\win32\release\libbox2d.lib;D:\cocos2d-x\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;D:\cocos2d-x\external\freetype2\prebuilt\win32\freetype.lib;lib\Release\ext_recast.lib;D:\cocos2d-x\external\bullet\prebuilt\win32\release\libbullet.lib;D:\cocos2d-x\external\jpeg\prebuilt\win32\libjpeg.lib;D:\cocos2d-x\external\webp\prebuilt\win32\libwebp.lib;D:\cocos2d-x\external\websockets\prebuilt\win32\websockets.lib;D:\cocos2d-x\external\openssl\prebuilt\win32\libssl.lib;D:\cocos2d-x\external\openssl\prebuilt\win32\libcrypto.lib;D:\cocos2d-x\external\uv\prebuilt\win32\uv_a.lib;lib\Release\ext_tinyxml2.lib;lib\Release\ext_xxhash.lib;lib\Release\ext_xxtea.lib;lib\Release\ext_clipper.lib;lib\Release\ext_edtaa3func.lib;lib\Release\ext_convertUTF.lib;lib\Release\ext_poly2tri.lib;lib\Release\ext_md5.lib;D:\cocos2d-x\external\curl\prebuilt\win32\libcurl.lib;D:\cocos2d-x\external\png\prebuilt\win32\libpng.lib;D:\cocos2d-x\external\win32-specific\gles\prebuilt\glew32.lib;D:\cocos2d-x\external\win32-specific\icon\prebuilt\libiconv.lib;D:\cocos2d-x\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libogg.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;D:\cocos2d-x\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;D:\cocos2d-x\external\glfw3\prebuilt\win32\glfw3.lib;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\Release\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>D:/GOLD MINER/goldminer-game/build-win32/Release/GoldMiner.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/Release/GoldMiner.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/cocos2d-x/external/Box2D/include" /external:I "D:/cocos2d-x/external/chipmunk/include" /external:I "D:/cocos2d-x/external/freetype2/include/win32/freetype2" /external:I "D:/cocos2d-x/external/bullet/include" /external:I "D:/cocos2d-x/external/bullet/include/bullet" /external:I "D:/cocos2d-x/external/jpeg/include/win32" /external:I "D:/cocos2d-x/external/openssl/include/win32" /external:I "D:/cocos2d-x/external/uv/include" /external:I "D:/cocos2d-x/external/webp/include/win32" /external:I "D:/cocos2d-x/external/websockets/include/win32" /external:I "D:/cocos2d-x/external/curl/include/win32" /external:I "D:/cocos2d-x/external/png/include/win32" /external:I "D:/cocos2d-x/external/win32-specific/gles/include/OGLES" /external:I "D:/cocos2d-x/external/win32-specific/icon/include" /external:I "D:/cocos2d-x/external/win32-specific/MP3Decoder/include" /external:I "D:/cocos2d-x/external/win32-specific/OggDecoder/include" /external:I "D:/cocos2d-x/external/win32-specific/OpenalSoft/include" /external:I "D:/cocos2d-x/external/glfw3/include/win32" /external:I "D:/cocos2d-x/external/zlib/../win32-specific/zlib/include" /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;D:\cocos2d-x\external\Box2D\include;D:\cocos2d-x\external\chipmunk\include;D:\cocos2d-x\external\freetype2\include\win32\freetype2;D:\cocos2d-x\external\bullet\include;D:\cocos2d-x\external\bullet\include\bullet;D:\cocos2d-x\external\jpeg\include\win32;D:\cocos2d-x\external\openssl\include\win32;D:\cocos2d-x\external\uv\include;D:\cocos2d-x\external\webp\include\win32;D:\cocos2d-x\external\websockets\include\win32;D:\cocos2d-x\external\curl\include\win32;D:\cocos2d-x\external\png\include\win32;D:\cocos2d-x\external\win32-specific\gles\include\OGLES;D:\cocos2d-x\external\win32-specific\icon\include;D:\cocos2d-x\external\win32-specific\MP3Decoder\include;D:\cocos2d-x\external\win32-specific\OggDecoder\include;D:\cocos2d-x\external\win32-specific\OpenalSoft\include;D:\cocos2d-x\external\glfw3\include\win32;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;D:\cocos2d-x\external\Box2D\include;D:\cocos2d-x\external\chipmunk\include;D:\cocos2d-x\external\freetype2\include\win32\freetype2;D:\cocos2d-x\external\bullet\include;D:\cocos2d-x\external\bullet\include\bullet;D:\cocos2d-x\external\jpeg\include\win32;D:\cocos2d-x\external\openssl\include\win32;D:\cocos2d-x\external\uv\include;D:\cocos2d-x\external\webp\include\win32;D:\cocos2d-x\external\websockets\include\win32;D:\cocos2d-x\external\curl\include\win32;D:\cocos2d-x\external\png\include\win32;D:\cocos2d-x\external\win32-specific\gles\include\OGLES;D:\cocos2d-x\external\win32-specific\icon\include;D:\cocos2d-x\external\win32-specific\MP3Decoder\include;D:\cocos2d-x\external\win32-specific\OggDecoder\include;D:\cocos2d-x\external\win32-specific\OpenalSoft\include;D:\cocos2d-x\external\glfw3\include\win32;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>													Copying GestureServer.exe and OpenCV DLL to game output</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libssl-1_1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/libssl-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libcrypto-1_1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/libcrypto-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/uv/prebuilt/win32/uv.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/uv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/websockets/prebuilt/win32/websockets.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/websockets.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/curl/prebuilt/win32/libcurl.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/libcurl.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/gles/prebuilt/glew32.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/glew32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/icon/prebuilt/iconv.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/iconv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/libmpg123.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libogg.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/libogg.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/libvorbis.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/libvorbisfile.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/OpenAL32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/zlib1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "D:/GOLD MINER/goldminer-game/GestureServer/build/bin/GestureServer.exe" "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\MinSizeRel\cocos2d.lib;lib\MinSizeRel\external.lib;D:\cocos2d-x\external\Box2D\prebuilt\win32\release\libbox2d.lib;D:\cocos2d-x\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;D:\cocos2d-x\external\freetype2\prebuilt\win32\freetype.lib;lib\MinSizeRel\ext_recast.lib;D:\cocos2d-x\external\bullet\prebuilt\win32\release\libbullet.lib;D:\cocos2d-x\external\jpeg\prebuilt\win32\libjpeg.lib;D:\cocos2d-x\external\webp\prebuilt\win32\libwebp.lib;D:\cocos2d-x\external\websockets\prebuilt\win32\websockets.lib;D:\cocos2d-x\external\openssl\prebuilt\win32\libssl.lib;D:\cocos2d-x\external\openssl\prebuilt\win32\libcrypto.lib;D:\cocos2d-x\external\uv\prebuilt\win32\uv_a.lib;lib\MinSizeRel\ext_tinyxml2.lib;lib\MinSizeRel\ext_xxhash.lib;lib\MinSizeRel\ext_xxtea.lib;lib\MinSizeRel\ext_clipper.lib;lib\MinSizeRel\ext_edtaa3func.lib;lib\MinSizeRel\ext_convertUTF.lib;lib\MinSizeRel\ext_poly2tri.lib;lib\MinSizeRel\ext_md5.lib;D:\cocos2d-x\external\curl\prebuilt\win32\libcurl.lib;D:\cocos2d-x\external\png\prebuilt\win32\libpng.lib;D:\cocos2d-x\external\win32-specific\gles\prebuilt\glew32.lib;D:\cocos2d-x\external\win32-specific\icon\prebuilt\libiconv.lib;D:\cocos2d-x\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libogg.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;D:\cocos2d-x\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;D:\cocos2d-x\external\glfw3\prebuilt\win32\glfw3.lib;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\MinSizeRel\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>D:/GOLD MINER/goldminer-game/build-win32/MinSizeRel/GoldMiner.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/MinSizeRel/GoldMiner.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/cocos2d-x/external/Box2D/include" /external:I "D:/cocos2d-x/external/chipmunk/include" /external:I "D:/cocos2d-x/external/freetype2/include/win32/freetype2" /external:I "D:/cocos2d-x/external/bullet/include" /external:I "D:/cocos2d-x/external/bullet/include/bullet" /external:I "D:/cocos2d-x/external/jpeg/include/win32" /external:I "D:/cocos2d-x/external/openssl/include/win32" /external:I "D:/cocos2d-x/external/uv/include" /external:I "D:/cocos2d-x/external/webp/include/win32" /external:I "D:/cocos2d-x/external/websockets/include/win32" /external:I "D:/cocos2d-x/external/curl/include/win32" /external:I "D:/cocos2d-x/external/png/include/win32" /external:I "D:/cocos2d-x/external/win32-specific/gles/include/OGLES" /external:I "D:/cocos2d-x/external/win32-specific/icon/include" /external:I "D:/cocos2d-x/external/win32-specific/MP3Decoder/include" /external:I "D:/cocos2d-x/external/win32-specific/OggDecoder/include" /external:I "D:/cocos2d-x/external/win32-specific/OpenalSoft/include" /external:I "D:/cocos2d-x/external/glfw3/include/win32" /external:I "D:/cocos2d-x/external/zlib/../win32-specific/zlib/include" /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;D:\cocos2d-x\external\Box2D\include;D:\cocos2d-x\external\chipmunk\include;D:\cocos2d-x\external\freetype2\include\win32\freetype2;D:\cocos2d-x\external\bullet\include;D:\cocos2d-x\external\bullet\include\bullet;D:\cocos2d-x\external\jpeg\include\win32;D:\cocos2d-x\external\openssl\include\win32;D:\cocos2d-x\external\uv\include;D:\cocos2d-x\external\webp\include\win32;D:\cocos2d-x\external\websockets\include\win32;D:\cocos2d-x\external\curl\include\win32;D:\cocos2d-x\external\png\include\win32;D:\cocos2d-x\external\win32-specific\gles\include\OGLES;D:\cocos2d-x\external\win32-specific\icon\include;D:\cocos2d-x\external\win32-specific\MP3Decoder\include;D:\cocos2d-x\external\win32-specific\OggDecoder\include;D:\cocos2d-x\external\win32-specific\OpenalSoft\include;D:\cocos2d-x\external\glfw3\include\win32;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\GOLD MINER\goldminer-game\Classes;D:\GOLD MINER\goldminer-game\Classes\Other;D:\GOLD MINER\goldminer-game\Classes\Tool;D:\GOLD MINER\goldminer-game\Classes\MainScene;D:\GOLD MINER\goldminer-game\Classes\gameobjects;D:\GOLD MINER\goldminer-game\Classes\services;D:\GOLD MINER\goldminer-game\Classes\utils;D:\cocos2d-x\cocos\audio\include;D:\cocos2d-x\cocos\editor-support\cocostudio;D:\cocos2d-x\external;D:\cocos2d-x;D:\cocos2d-x\cocos;D:\cocos2d-x\extensions;D:\cocos2d-x\cocos\platform;D:\cocos2d-x\cocos\editor-support;D:\cocos2d-x\cocos\base;D:\cocos2d-x\cocos\platform\win32;D:\cocos2d-x\external\recast\..;D:\cocos2d-x\external\tinyxml2\.;D:\cocos2d-x\external\xxhash\.;D:\cocos2d-x\external\xxtea\.;D:\cocos2d-x\external\clipper\.;D:\cocos2d-x\external\edtaa3func\.;D:\cocos2d-x\external\ConvertUTF\.;D:\cocos2d-x\external\poly2tri\..;D:\cocos2d-x\external\md5\..;D:\cocos2d-x\external\unzip\.;D:\cocos2d-x\external\Box2D\include;D:\cocos2d-x\external\chipmunk\include;D:\cocos2d-x\external\freetype2\include\win32\freetype2;D:\cocos2d-x\external\bullet\include;D:\cocos2d-x\external\bullet\include\bullet;D:\cocos2d-x\external\jpeg\include\win32;D:\cocos2d-x\external\openssl\include\win32;D:\cocos2d-x\external\uv\include;D:\cocos2d-x\external\webp\include\win32;D:\cocos2d-x\external\websockets\include\win32;D:\cocos2d-x\external\curl\include\win32;D:\cocos2d-x\external\png\include\win32;D:\cocos2d-x\external\win32-specific\gles\include\OGLES;D:\cocos2d-x\external\win32-specific\icon\include;D:\cocos2d-x\external\win32-specific\MP3Decoder\include;D:\cocos2d-x\external\win32-specific\OggDecoder\include;D:\cocos2d-x\external\win32-specific\OpenalSoft\include;D:\cocos2d-x\external\glfw3\include\win32;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>													Copying GestureServer.exe and OpenCV DLL to game output</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libssl-1_1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/libssl-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/openssl/prebuilt/win32/libcrypto-1_1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/libcrypto-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/uv/prebuilt/win32/uv.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/uv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/websockets/prebuilt/win32/websockets.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/websockets.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/curl/prebuilt/win32/libcurl.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/libcurl.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/gles/prebuilt/glew32.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/glew32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/icon/prebuilt/iconv.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/iconv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/libmpg123.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libogg.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/libogg.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/libvorbis.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/libvorbisfile.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/OpenAL32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different D:/cocos2d-x/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/zlib1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "D:/GOLD MINER/goldminer-game/GestureServer/build/bin/GestureServer.exe" "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll "D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\RelWithDebInfo\cocos2d.lib;lib\RelWithDebInfo\external.lib;D:\cocos2d-x\external\Box2D\prebuilt\win32\release\libbox2d.lib;D:\cocos2d-x\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;D:\cocos2d-x\external\freetype2\prebuilt\win32\freetype.lib;lib\RelWithDebInfo\ext_recast.lib;D:\cocos2d-x\external\bullet\prebuilt\win32\release\libbullet.lib;D:\cocos2d-x\external\jpeg\prebuilt\win32\libjpeg.lib;D:\cocos2d-x\external\webp\prebuilt\win32\libwebp.lib;D:\cocos2d-x\external\websockets\prebuilt\win32\websockets.lib;D:\cocos2d-x\external\openssl\prebuilt\win32\libssl.lib;D:\cocos2d-x\external\openssl\prebuilt\win32\libcrypto.lib;D:\cocos2d-x\external\uv\prebuilt\win32\uv_a.lib;lib\RelWithDebInfo\ext_tinyxml2.lib;lib\RelWithDebInfo\ext_xxhash.lib;lib\RelWithDebInfo\ext_xxtea.lib;lib\RelWithDebInfo\ext_clipper.lib;lib\RelWithDebInfo\ext_edtaa3func.lib;lib\RelWithDebInfo\ext_convertUTF.lib;lib\RelWithDebInfo\ext_poly2tri.lib;lib\RelWithDebInfo\ext_md5.lib;D:\cocos2d-x\external\curl\prebuilt\win32\libcurl.lib;D:\cocos2d-x\external\png\prebuilt\win32\libpng.lib;D:\cocos2d-x\external\win32-specific\gles\prebuilt\glew32.lib;D:\cocos2d-x\external\win32-specific\icon\prebuilt\libiconv.lib;D:\cocos2d-x\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libogg.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;D:\cocos2d-x\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;D:\cocos2d-x\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;D:\cocos2d-x\external\glfw3\prebuilt\win32\glfw3.lib;D:\cocos2d-x\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\RelWithDebInfo\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>D:/GOLD MINER/goldminer-game/build-win32/RelWithDebInfo/GoldMiner.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>D:/GOLD MINER/goldminer-game/build-win32/bin/GoldMiner/RelWithDebInfo/GoldMiner.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\GOLD MINER\goldminer-game\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/GOLD MINER/goldminer-game/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/GOLD MINER/goldminer-game" "-BD:/GOLD MINER/goldminer-game/build-win32" --check-stamp-file "D:/GOLD MINER/goldminer-game/build-win32/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\WindowsPaths.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeCCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeCXXCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeRCCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeSystem.cmake;D:\cocos2d-x\cmake\Modules\CocosBuildHelpers.cmake;D:\cocos2d-x\cmake\Modules\CocosBuildSet.cmake;D:\cocos2d-x\cmake\Modules\CocosConfigDefine.cmake;D:\cocos2d-x\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/GOLD MINER/goldminer-game/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/GOLD MINER/goldminer-game" "-BD:/GOLD MINER/goldminer-game/build-win32" --check-stamp-file "D:/GOLD MINER/goldminer-game/build-win32/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\WindowsPaths.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeCCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeCXXCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeRCCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeSystem.cmake;D:\cocos2d-x\cmake\Modules\CocosBuildHelpers.cmake;D:\cocos2d-x\cmake\Modules\CocosBuildSet.cmake;D:\cocos2d-x\cmake\Modules\CocosConfigDefine.cmake;D:\cocos2d-x\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/GOLD MINER/goldminer-game/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/GOLD MINER/goldminer-game" "-BD:/GOLD MINER/goldminer-game/build-win32" --check-stamp-file "D:/GOLD MINER/goldminer-game/build-win32/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\WindowsPaths.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeCCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeCXXCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeRCCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeSystem.cmake;D:\cocos2d-x\cmake\Modules\CocosBuildHelpers.cmake;D:\cocos2d-x\cmake\Modules\CocosBuildSet.cmake;D:\cocos2d-x\cmake\Modules\CocosConfigDefine.cmake;D:\cocos2d-x\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/GOLD MINER/goldminer-game/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/GOLD MINER/goldminer-game" "-BD:/GOLD MINER/goldminer-game/build-win32" --check-stamp-file "D:/GOLD MINER/goldminer-game/build-win32/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Diab-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Renesas-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Linker\MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-4.3\Modules\Platform\WindowsPaths.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeCCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeCXXCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeRCCompiler.cmake;D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\4.3.1\CMakeSystem.cmake;D:\cocos2d-x\cmake\Modules\CocosBuildHelpers.cmake;D:\cocos2d-x\cmake\Modules\CocosBuildSet.cmake;D:\cocos2d-x\cmake\Modules\CocosConfigDefine.cmake;D:\cocos2d-x\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\GOLD MINER\goldminer-game\build-win32\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Other\AppDelegate.h" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\MainRoot.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Game.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Shop.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Pause.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\StageTipsLayer.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Other\Const.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Other\UserDataManager.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Tool\SoundTool.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\Tool\MusicPlayer.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\gameobjects\Mineral.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\LevelLoader.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureClient.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\PlayerManager.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureService.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureData.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\IGestureRecognizer.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\LocalGestureRecognizer.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\CloudGestureRecognizer.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureFusion.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureRecognizer.hpp" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\proj.win32\main.h" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\proj.win32\resource.h" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Other\AppDelegate.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\MainRoot.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Game.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Shop.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\Pause.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\MainScene\StageTipsLayer.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Other\UserDataManager.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Tool\SoundTool.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\Tool\MusicPlayer.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\gameobjects\Mineral.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\LevelLoader.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureClient.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\PlayerManager.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureService.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\LocalGestureRecognizer.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\CloudGestureRecognizer.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\GestureFusion.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\Classes\services\AIGestureRecognizer.cpp" />
+    <ClCompile Include="D:\GOLD MINER\goldminer-game\proj.win32\main.cpp" />
+    <ResourceCompile Include="D:\GOLD MINER\goldminer-game\proj.win32\game.rc" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Boom.plist" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Default\Button_Disable.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\GameLayer.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Hook.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Layer.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\MinerAnimtion.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\PauseLayer.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\button.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\dialog-background.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\general-sheet.plist" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\general-sheet.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\gold-miner-text.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\green.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\huancun.plist" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\huancun.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\level-sheet.plist" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\level-sheet.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-background-sky.jpg" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-background.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-miner.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-player-gold.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\menu-start-gold.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG1.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG2.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG3.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG4.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\mineBG5.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\minerAction.plist" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\minerAction.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\one.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\quitbtn.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopBack.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shoper.plist" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shoper.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopper exchange.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopper new.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopper_exchange.plist" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\shopper_new.plist" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\stars.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\tableImage.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\tip.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\Resources\topbg.png" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ShopScene.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\StageTipsLayer.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\TipsFailOrSucess.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ai_config.example.json" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\ai_config.json" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level1.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level2.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level3.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level4.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level5.csb" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\level_data.json" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - Angel.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - Melody.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 二十二.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 寂寞的季节.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 小镇姑娘.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 就是爱你.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 找自己.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 普通朋友.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 暗恋.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 望春风.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 流沙.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 爱我还是他.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 爱，很简单.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 蝴蝶.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 讨厌红楼梦.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\David Tao\陶喆 - 飞机场的1030.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 三年二班.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 三年二班.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 上海一九四三.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 上海一九四三.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 东风破.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 东风破.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 你听得到.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 你听得到.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 分裂.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 分裂.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 双刀.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 双刀.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 反方向的钟.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 反方向的钟.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 外婆.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 外婆.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 大笨钟.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 大笨钟.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 将军.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 将军.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 开不了口.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 开不了口.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 忍者.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 忍者.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 手语.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 手语.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 斗牛.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 斗牛.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 时光机.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 时光机.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 晴天.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 晴天.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 火车叨位去.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 火车叨位去.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 爱你没差.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 爱你没差.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 爱在西元前.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 爱在西元前.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 牛仔很忙.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 牛仔很忙.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 稻香.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 稻香.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 给我一首歌的时间.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 给我一首歌的时间.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 说走就走.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 说走就走.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 逆鳞.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 逆鳞.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 霍元甲.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 霍元甲.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 飘移.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 飘移.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 龙卷风.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\JAY\周杰伦 - 龙卷风.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\Select.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\backMusic-exchange.flac" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\backMusic.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\bomb.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\finish.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\laend.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\largegold.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\lastart.mp3" />
+    <ClInclude Include="D:\GOLD MINER\goldminer-game\Resources\music\level.mp3" />
+    <ClCompile Include="D:\cocos2d-x\cocos\precheader.cpp" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\ZERO_CHECK.vcxproj">
+      <Project>{DAF9A369-4213-30C0-84D7-8C9270927A01}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\SYNC_RESOURCE-GoldMiner.vcxproj">
+      <Project>{C6944B47-CDD9-3A09-A91A-7471DA36884F}</Project>
+      <Name>SYNC_RESOURCE-GoldMiner</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\cocos\core\cocos2d.vcxproj">
+      <Project>{77F3C634-3E9B-369C-BC21-125543B6219F}</Project>
+      <Name>cocos2d</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\clipper\ext_clipper.vcxproj">
+      <Project>{442005DE-B51B-3DA4-A808-00B403523AFB}</Project>
+      <Name>ext_clipper</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\ConvertUTF\ext_convertUTF.vcxproj">
+      <Project>{9B7B3DE7-3124-30EC-A08B-E8F3C97B579D}</Project>
+      <Name>ext_convertUTF</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\edtaa3func\ext_edtaa3func.vcxproj">
+      <Project>{2C1B68C4-FEB3-30EB-8D60-E6E31FD982FE}</Project>
+      <Name>ext_edtaa3func</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\md5\ext_md5.vcxproj">
+      <Project>{8B11EC36-EFE7-3E42-A459-2ED61EBF2455}</Project>
+      <Name>ext_md5</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\poly2tri\ext_poly2tri.vcxproj">
+      <Project>{9C9AF8EA-D126-3B6C-997C-EA5454857AE9}</Project>
+      <Name>ext_poly2tri</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\recast\ext_recast.vcxproj">
+      <Project>{4CAAB61B-8F23-3756-9C76-033405637303}</Project>
+      <Name>ext_recast</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\tinyxml2\ext_tinyxml2.vcxproj">
+      <Project>{74656BD7-CA94-32E9-BB38-D0F5A15028C5}</Project>
+      <Name>ext_tinyxml2</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\unzip\ext_unzip.vcxproj">
+      <Project>{FEE0E716-C333-36AE-A7A5-58C164CB1A12}</Project>
+      <Name>ext_unzip</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\xxhash\ext_xxhash.vcxproj">
+      <Project>{6F1D2580-A1ED-3E0F-AF52-6533AA5AEEE6}</Project>
+      <Name>ext_xxhash</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\xxtea\ext_xxtea.vcxproj">
+      <Project>{CA1F65C0-DE8E-3227-AC83-D39CF3212D2E}</Project>
+      <Name>ext_xxtea</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\GOLD MINER\goldminer-game\build-win32\engine\external\external.vcxproj">
+      <Project>{130048E2-98AA-3487-BFFF-B292CE52DBD5}</Project>
+      <Name>external</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

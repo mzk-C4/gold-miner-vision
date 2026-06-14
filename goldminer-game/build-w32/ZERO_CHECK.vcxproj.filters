@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\GOLD MINER\goldminer-game\build-w32\CMakeFiles\16ee9cec1ab010d51ef21a0a5cb90420\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{4CD6C51A-0C0A-31EC-9111-83A3696A7AAB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

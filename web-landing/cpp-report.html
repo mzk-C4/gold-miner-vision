@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ 学习报告 — 黄金矿工手势识别版</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+        
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #FFD700;
+            --gold-dark: #B8860B;
+            --bg-dark: #080c14;
+            --bg-card: #0f1520;
+            --bg-card-hover: #161e2e;
+            --text-primary: #e8e0d0;
+            --text-secondary: #8a8070;
+            --accent-blue: #4a90d9;
+            --accent-purple: #7c3aed;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --cave-brown: #3d2b1f;
+            --cave-light: #5a4030;
+            --torch-glow: #ff9933;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ===== Cave Background Layer ===== */
+        .cave-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.18;
+        }
+        .cave-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cave-bg-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse at 50% 80%, rgba(255,120,20,0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 30% 50%, rgba(61,43,31,0.15) 0%, transparent 40%),
+                radial-gradient(ellipse at 70% 60%, rgba(61,43,31,0.12) 0%, transparent 35%),
+                linear-gradient(180deg, #05080e 0%, transparent 25%, transparent 75%, #05080e 100%);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: float linear infinite;
+            opacity: 0.5;
+            box-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+        }
+
+        .particle.spark {
+            background: var(--torch-glow);
+            box-shadow: 0 0 8px rgba(255, 153, 51, 0.6);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 40px 24px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 50% 80%, rgba(255, 153, 51, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 30% 60%, rgba(61, 43, 31, 0.4) 0%, transparent 40%),
+                radial-gradient(ellipse at 70% 70%, rgba(61, 43, 31, 0.3) 0%, transparent 35%),
+                radial-gradient(ellipse at 50% 40%, rgba(255, 215, 0, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, var(--bg-dark), transparent);
+            pointer-events: none;
+        }
+
+        /* Stalactites decoration */
+        .cave-decor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .stalactite {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 60px solid #1a1208;
+            filter: blur(0.5px);
+        }
+
+        .cave-floor {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to top, #1a1208, #0f0d08, transparent);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Torch flicker effects */
+        .torch {
+            position: absolute;
+            width: 6px;
+            height: 30px;
+            z-index: 2;
+        }
+
+        .torch::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 24px;
+            background: radial-gradient(ellipse, #ffcc33 0%, #ff8800 40%, transparent 70%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        .torch::after {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 153, 51, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+            100% { opacity: 0.85; transform: translateX(-50%) scale(0.98); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(255, 153, 51, 0.1);
+            border: 1px solid rgba(255, 153, 51, 0.3);
+            border-radius: 50px;
+            font-size: 14px;
+            color: var(--torch-glow);
+            margin-bottom: 32px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero h1 .gold-text {
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .vision-text {
+            background: linear-gradient(135deg, #4a90d9, #7c3aed, #4a90d9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-subtitle .highlight {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .hero-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            opacity: 0.75;
+            max-width: 600px;
+            margin-bottom: 48px;
+            animation: fadeInUp 0.8s ease 0.25s both;
+            line-height: 1.8;
+        }
+
+        .hero-desc .highlight {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #000;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-secondary);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Section Common ===== */
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(255, 153, 51, 0.1);
+            border: 1px solid rgba(255, 153, 51, 0.25);
+            border-radius: 50px;
+            font-size: 13px;
+            color: var(--torch-glow);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== Tech Stack ===== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .tech-card {
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.15));
+            border: 1px solid rgba(255, 153, 51, 0.08);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            border-color: rgba(255, 153, 51, 0.25);
+            box-shadow: 0 8px 30px rgba(255, 153, 51, 0.08);
+        }
+
+        .tech-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .tech-card h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .tech-card .version {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .tech-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        /* ===== Gesture Section ===== */
+        .gesture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .gesture-card {
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gesture-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--torch-glow), var(--gold));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gesture-card:hover::before {
+            opacity: 1;
+        }
+
+        .gesture-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.06);
+        }
+
+        .gesture-emoji {
+            font-size: 56px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .gesture-card h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .gesture-card .action {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(124, 58, 237, 0.15);
+            border-radius: 6px;
+            color: var(--accent-purple);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .gesture-card .g-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 12px;
+            line-height: 1.7;
+        }
+
+        .gesture-card .g-detail {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            line-height: 1.7;
+            opacity: 0.7;
+        }
+
+        /* ===== Recognition Mode ===== */
+        .mode-section {
+            background:
+                radial-gradient(ellipse at 50% 50%, rgba(255, 153, 51, 0.04) 0%, transparent 50%),
+                linear-gradient(180deg, transparent, rgba(61, 43, 31, 0.05), transparent);
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .mode-card {
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.08));
+            border: 1px solid rgba(255, 153, 51, 0.08);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 153, 51, 0.2);
+        }
+
+        .mode-card.featured {
+            border-color: rgba(255, 215, 0, 0.3);
+            background: linear-gradient(135deg, var(--bg-card), rgba(255, 215, 0, 0.03));
+        }
+
+        .mode-label {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .mode-label.local {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+        }
+
+        .mode-label.cloud {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--accent-purple);
+        }
+
+        .mode-label.keyboard {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .mode-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .mode-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .mode-features {
+            list-style: none;
+        }
+
+        .mode-features li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mode-features li .check {
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .mode-features li .warn {
+            color: var(--accent-orange);
+            font-weight: bold;
+        }
+
+        /* ===== Shop Section ===== */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .shop-card {
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.1));
+            border: 1px solid rgba(255, 153, 51, 0.08);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .shop-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.06);
+        }
+
+        .shop-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .shop-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .shop-card .price {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .shop-card .shop-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* ===== Mineral Section ===== */
+        .mineral-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .mineral-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        .mineral-table thead th {
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .mineral-table tbody tr {
+            background: var(--bg-card);
+            transition: all 0.3s ease;
+        }
+
+        .mineral-table tbody tr:hover {
+            background: var(--bg-card-hover);
+            transform: scale(1.01);
+        }
+
+        .mineral-table tbody td {
+            padding: 20px 24px;
+        }
+
+        .mineral-table tbody td:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        .mineral-table tbody td:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+
+        .mineral-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .mineral-name .icon {
+            font-size: 28px;
+        }
+
+        .value-bar {
+            width: 100px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .value-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .weight-bar .fill {
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-orange));
+        }
+
+        .value-bar .fill.gold {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+        }
+
+        .value-bar .fill.diamond {
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+        }
+
+        .value-bar .fill.stone {
+            background: linear-gradient(90deg, #666, #999);
+        }
+
+        .value-bar .fill.bag {
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-red));
+        }
+
+        /* ===== Architecture Section ===== */
+        .arch-diagram {
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.1));
+            border: 1px solid rgba(255, 153, 51, 0.08);
+            border-radius: 20px;
+            padding: 48px;
+            overflow-x: auto;
+        }
+
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .arch-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            text-align: center;
+            min-width: 160px;
+            transition: all 0.3s ease;
+        }
+
+        .arch-box:hover {
+            transform: scale(1.05);
+        }
+
+        .arch-box.scene {
+            background: rgba(74, 144, 217, 0.15);
+            border: 1px solid rgba(74, 144, 217, 0.3);
+            color: var(--accent-blue);
+        }
+
+        .arch-box.core {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: var(--gold);
+        }
+
+        .arch-box.service {
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            color: var(--accent-purple);
+        }
+
+        .arch-box.data {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+
+        .arch-arrow {
+            font-size: 24px;
+            color: var(--text-secondary);
+            padding: 8px 0;
+        }
+
+        .arch-arrow-h {
+            font-size: 24px;
+            color: var(--text-secondary);
+            padding: 0 4px;
+        }
+
+        /* ===== Highlights ===== */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .highlight-card {
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.1));
+            border: 1px solid rgba(255, 153, 51, 0.08);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.06);
+        }
+
+        .highlight-number {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .highlight-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .highlight-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-copy {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* ===== Video Section ===== */
+        .video-section {
+            background:
+                radial-gradient(ellipse at 50% 50%, rgba(255, 153, 51, 0.06) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg-dark), #0c0a06, var(--bg-dark));
+        }
+
+        .video-wrapper {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 153, 51, 0.15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 80px rgba(255, 153, 51, 0.08);
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            display: block;
+            border-radius: 14px;
+        }
+
+        .video-glow {
+            position: absolute;
+            inset: -2px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(255, 153, 51, 0.2), transparent, rgba(255, 215, 0, 0.1));
+            z-index: -1;
+            filter: blur(20px);
+        }
+
+        .video-caption {
+            text-align: center;
+            margin-top: 24px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .video-caption .torch-icon {
+            color: var(--torch-glow);
+        }
+
+        /* ===== Cave Section ===== */
+        .cave-section {
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(61, 43, 31, 0.3) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 20%, rgba(61, 43, 31, 0.2) 0%, transparent 35%),
+                linear-gradient(180deg, var(--bg-dark), #0d0a05, var(--bg-dark));
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cave-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 80'%3E%3Cpath d='M0,0 L0,60 L30,45 L60,55 L90,30 L120,50 L150,35 L180,55 L210,40 L240,60 L270,35 L300,50 L330,30 L360,55 L390,40 L420,60 L450,35 L480,50 L510,30 L540,55 L570,40 L600,60 L630,35 L660,50 L690,30 L720,55 L750,40 L780,60 L810,35 L840,50 L870,30 L900,55 L930,40 L960,60 L990,35 L1020,50 L1050,30 L1080,55 L1110,40 L1140,60 L1170,35 L1200,50 L1200,0 Z' fill='%231a1208'/%3E%3C/svg%3E") repeat-x;
+            background-size: 1200px 80px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cave-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60'%3E%3Cpath d='M0,60 L0,30 L40,40 L80,25 L120,35 L160,20 L200,30 L240,15 L280,25 L320,35 L360,20 L400,30 L440,15 L480,25 L520,35 L560,20 L600,30 L640,15 L680,25 L720,35 L760,20 L800,30 L840,15 L880,25 L920,35 L960,20 L1000,30 L1040,15 L1080,25 L1120,35 L1160,20 L1200,30 L1200,60 Z' fill='%231a1208'/%3E%3C/svg%3E") repeat-x;
+            background-size: 1200px 60px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cave-explore-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .cave-visual {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 153, 51, 0.1);
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #1a1208, #0d0a05);
+        }
+
+        .cave-visual canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .cave-info h3 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--torch-glow), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cave-info p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .cave-features {
+            list-style: none;
+        }
+
+        .cave-features li {
+            padding: 10px 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+        }
+
+        .cave-features li .icon {
+            font-size: 20px;
+            width: 32px;
+            text-align: center;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 0;
+            }
+
+            .arch-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .arch-arrow-h {
+                transform: rotate(90deg);
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cave-explore-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cave-visual {
+                max-height: 300px;
+            }
+
+            .code-tabs {
+                flex-wrap: wrap;
+            }
+
+            .mindmap-container {
+                overflow-x: auto;
+            }
+
+            .mindmap-svg {
+                min-width: 700px;
+            }
+        }
+
+        /* ===== Mind Map ===== */
+        .mindmap-section {
+            background:
+                radial-gradient(ellipse at 50% 50%, rgba(61, 43, 31, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg-dark), #0a0806, var(--bg-dark));
+        }
+
+        .mindmap-container {
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.08));
+            border: 1px solid rgba(255, 153, 51, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            overflow-x: auto;
+        }
+
+        .mindmap-svg {
+            width: 100%;
+            display: block;
+        }
+
+        .mindmap-svg text {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        /* ===== Code Section ===== */
+        .code-section {
+            background:
+                radial-gradient(ellipse at 30% 70%, rgba(61, 43, 31, 0.12) 0%, transparent 40%),
+                linear-gradient(180deg, #0a0806, var(--bg-dark));
+            position: relative;
+        }
+
+        .code-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60'%3E%3Cpath d='M0,0 L0,45 L25,35 L50,50 L75,30 L100,40 L125,25 L150,45 L175,30 L200,50 L225,25 L250,40 L275,30 L300,50 L325,35 L350,45 L375,25 L400,40 L425,30 L450,50 L475,35 L500,45 L525,25 L550,40 L575,30 L600,50 L625,35 L650,45 L675,25 L700,40 L725,30 L750,50 L775,35 L800,45 L825,25 L850,40 L875,30 L900,50 L925,35 L950,45 L975,25 L1000,40 L1025,30 L1050,50 L1075,35 L1100,45 L1125,25 L1150,40 L1175,30 L1200,45 L1200,0 Z' fill='%231a1208'/%3E%3C/svg%3E") repeat-x;
+            background-size: 1200px 60px;
+            pointer-events: none;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .code-tab {
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 153, 51, 0.15);
+            border-radius: 10px;
+            background: rgba(255, 153, 51, 0.04);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .code-tab:hover {
+            border-color: rgba(255, 153, 51, 0.3);
+            color: var(--torch-glow);
+        }
+
+        .code-tab.active {
+            background: rgba(255, 153, 51, 0.12);
+            border-color: rgba(255, 153, 51, 0.5);
+            color: var(--torch-glow);
+            box-shadow: 0 2px 12px rgba(255, 153, 51, 0.1);
+        }
+
+        .code-panel {
+            display: none;
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.06));
+            border: 1px solid rgba(255, 153, 51, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .code-panel.active {
+            display: block;
+        }
+
+        .code-file-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            background: rgba(255, 153, 51, 0.04);
+            border-bottom: 1px solid rgba(255, 153, 51, 0.08);
+        }
+
+        .file-badge {
+            padding: 3px 10px;
+            border-radius: 4px;
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--accent-purple);
+            font-size: 11px;
+            font-weight: 700;
+            font-family: 'Consolas', monospace;
+        }
+
+        .file-path {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            color: var(--accent-blue);
+        }
+
+        .file-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-left: auto;
+        }
+
+        .code-panel pre {
+            margin: 0;
+            padding: 24px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-x: auto;
+            color: #d0c8b8;
+        }
+
+        .code-panel pre .keyword { color: #c792ea; }
+        .code-panel pre .class-name { color: #82aaff; }
+        .code-panel pre .method { color: #82aaff; }
+        .code-panel pre .string { color: #c3e88d; }
+        .code-panel pre .comment { color: #5a6858; }
+        .code-panel pre .type { color: #ffcb6b; }
+        .code-panel pre .number { color: #f78c6c; }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 153, 51, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 153, 51, 0.5);
+        }
+
+        /* ===== Code Block ===== */
+        .code-showcase {
+            background: linear-gradient(135deg, var(--bg-card), rgba(61, 43, 31, 0.08));
+            border: 1px solid rgba(255, 153, 51, 0.08);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 48px;
+        }
+
+        .code-showcase .code-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #ef4444; }
+        .code-dot.yellow { background: #f59e0b; }
+        .code-dot.green { background: #10b981; }
+
+        pre {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-x: auto;
+            color: #e0e0e0;
+        }
+
+        pre .keyword { color: #c792ea; }
+        pre .class-name { color: #82aaff; }
+        pre .method { color: #82aaff; }
+        pre .string { color: #c3e88d; }
+        pre .comment { color: #546e7a; }
+        pre .type { color: #ffcb6b; }
+        pre .number { color: #f78c6c; }
+    
+        
+        .report-container { max-width: 900px; margin: 0 auto; padding: 120px 24px 100px; }
+        .report-container h1 { font-size: 2.2em; background: linear-gradient(180deg,#FFD700,#B8860B); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom: 12px; text-align:center; }
+        .report-container h2 { font-size:1.5em; color:#FFD700; margin-top:48px; margin-bottom:16px; border-bottom:1px solid rgba(255,215,0,0.15); padding-bottom:10px; }
+        .report-container h3 { font-size:1.2em; color:#e8c860; margin-top:32px; margin-bottom:12px; }
+        .report-container h4 { color:#c0a040; margin-top:22px; font-size:1.05em; }
+        .report-container p { margin-bottom:14px; line-height:1.9; font-size:0.98em; }
+        .report-container ul, .report-container ol { margin:12px 0 22px 24px; }
+        .report-container li { margin-bottom:8px; line-height:1.8; }
+        .report-container table { width:100%; border-collapse:collapse; margin:18px 0; background:rgba(15,21,32,0.6); border:1px solid rgba(255,215,0,0.12); border-radius:8px; overflow:hidden; font-size:0.94em; }
+        .report-container th { background:rgba(255,215,0,0.08); color:#FFD700; padding:12px 16px; text-align:left; font-weight:500; }
+        .report-container td { padding:10px 16px; border-top:1px solid rgba(255,215,0,0.06); color:#c0b898; }
+        .report-container code { background:rgba(255,215,0,0.06); color:#e8c860; padding:2px 7px; border-radius:4px; font-size:0.9em; font-family:'Cascadia Code','Fira Code','Consolas',monospace; }
+        .report-container pre { background:#0a0f1a; border:1px solid rgba(255,215,0,0.12); border-radius:8px; padding:18px 22px; overflow-x:auto; margin:18px 0; font-size:0.85em; line-height:1.65; }
+        .report-container pre code { background:none; color:#c8c0a0; padding:0; }
+        .report-container blockquote { border-left:3px solid #B8860B; padding:10px 18px; margin:18px 0; background:rgba(255,215,0,0.03); color:#a09880; border-radius:0 6px 6px 0; }
+        .report-container a { color:#4a90d9; text-decoration:none; }
+        .report-container a:hover { text-decoration:underline; }
+        .report-container hr { border:none; border-top:1px solid rgba(255,215,0,0.08); margin:40px 0; }
+        .report-container strong { color:#e8d080; }
+        .report-container em { color:#c0a060; }
+        .report-container img { max-width:100%; border-radius:8px; }
+        .report-container .highlight { background:linear-gradient(90deg, rgba(255,215,0,0.12), transparent); padding:2px 0; }
+        /* Hero subtitle */
+        .report-hero { text-align:center; margin-bottom:40px; padding-bottom:30px; border-bottom:1px solid rgba(255,215,0,0.08); }
+        .report-hero p { color:#8a8070; font-size:1.05em; max-width:600px; margin:0 auto; }
+        .report-hero .badge-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
+        .report-hero .badge { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; background:rgba(255,153,51,0.08); border:1px solid rgba(255,153,51,0.2); border-radius:50px; font-size:0.85em; color:#f0a040; }
+        /* Nav */
+        .nav-bar { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(8,12,20,0.92); backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,215,0,0.1); padding:14px 24px; display:flex; align-items:center; gap:24px; }
+        .nav-bar a { color:#e8e0d0; text-decoration:none; font-size:0.95em; transition:color 0.2s; }
+        .nav-bar a:hover { color:#FFD700; }
+        .nav-bar .nav-title { font-weight:700; color:#FFD700; font-size:1.1em; }
+        .nav-bar .nav-spacer { flex:1; }
+        /* Back to top */
+        .back-top { position:fixed; bottom:30px; right:30px; width:44px; height:44px; background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.2em; transition:all 0.2s; z-index:50; color:#FFD700; }
+        .back-top:hover { background:rgba(255,215,0,0.25); transform:translateY(-3px); }
+
+    </style>
+</head>
+<body>
+    <div class="cave-bg"><img src="images/hero-cave.jpg" alt=""></div>
+    <div class="cave-bg-overlay"></div>
+    <div class="particles" id="particles"></div>
+    <nav class="nav-bar">
+        <a href="/" class="nav-title">⛏️ 黄金矿工</a>
+        <a href="/">← 返回主页</a>
+        <span class="nav-spacer"></span>
+        <span style="color:#8a8070;font-size:0.85em">C++ 课程设计学习报告</span>
+    </nav>
+    <div class="report-container">
+        
+        <div class="report-hero">
+            <div class="badge-row">
+                <span class="badge">🖥️ C++17</span>
+                <span class="badge">🎮 Cocos2d-x 4.0</span>
+                <span class="badge">👁️ OpenCV</span>
+                <span class="badge">🤖 AI 大模型</span>
+                <span class="badge">🧵 多线程</span>
+                <span class="badge">📐 设计模式</span>
+            </div>
+        </div>
+
+        <h1 id="c">黄金矿工（手势识别版）—— C++ 课程设计学习报告</h1>
+<blockquote>
+<p>项目类型：C++ 课程设计 / 桌面游戏</p>
+<p>核心技术栈：C++17、Cocos2d-x 4.0、OpenCV、RapidJSON、libcurl、豆包大模型 API</p>
+<p>代码仓库：<code>goldminer-game/Classes/</code> 及 <code>GestureServer/main.cpp</code></p>
+</blockquote>
+<hr />
+<h2 id="_1">目录</h2>
+<ol>
+<li><a href="#1-项目概述">项目概述</a></li>
+<li><a href="#2-用到的-c-知识按主题分组">用到的 C++ 知识（按主题分组）</a></li>
+<li>2.1 面向对象基础</li>
+<li>2.2 C++11/14/17 现代特性</li>
+<li>2.3 模板、STL 容器与算法</li>
+<li>2.4 内存管理与资源生命周期</li>
+<li>2.5 多线程并发编程</li>
+<li>2.6 设计模式</li>
+<li>2.7 网络与外部库集成</li>
+<li>2.8 游戏引擎（Cocos2d-x）专用知识</li>
+<li>2.9 跨模块编程实践</li>
+<li><a href="#3-总体架构与模块连接">总体架构与模块连接</a></li>
+<li><a href="#4-核心算法流程">核心算法流程</a></li>
+<li><a href="#5-踩过的坑与解决方法">踩过的坑与解决方法</a></li>
+<li><a href="#6-如果重新开始会怎么做">如果重新开始会怎么做</a></li>
+<li><a href="#7结语c-学习心得">结语：C++ 学习心得</a></li>
+</ol>
+<hr />
+<h2 id="1">🎮 1. 项目概述</h2>
+<p>黄金矿工（手势识别版）是经典"黄金矿工"游戏的现代化重制版。玩家可以选择三种控制方式：</p>
+<ul>
+<li><strong>触摸/键鼠模式</strong>（传统）</li>
+<li><strong>OpenCV 本地手势识别模式</strong>（摄像头 + OpenCV 做手部检测）</li>
+<li><strong>AI 大模型手势识别模式</strong>（摄像头 + 豆包视觉大模型）</li>
+</ul>
+<p>游戏主体基于 Cocos2d-x 4.0 引擎用 C++17 开发，大约有 30 个 .cpp/.hpp 文件，约 6000 行 C++ 代码（不含引擎）。手势识别部分封装成一套完整的<strong>本地+云端双通道混合识别架构</strong>，用纯 C++17 实现，是项目最有技术含量的部分。</p>
+<p>项目源码所在目录：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">goldminer</span><span class="o">-</span><span class="nv">game</span><span class="o">/</span>
+├──<span class="w"> </span><span class="nv">Classes</span><span class="o">/</span>
+│<span class="w">   </span>├──<span class="w"> </span><span class="nv">MainScene</span><span class="o">/</span><span class="w">        </span>场景层：<span class="nv">Game</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">MainRoot</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">Shop</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">Pause</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">StageTipsLayer</span>
+│<span class="w">   </span>├──<span class="w"> </span><span class="nv">gameobjects</span><span class="o">/</span><span class="w">      </span>实体层：<span class="nv">Mineral</span>
+│<span class="w">   </span>├──<span class="w"> </span><span class="nv">services</span><span class="o">/</span><span class="w">         </span>服务层：手势识别<span class="w"> </span><span class="o">+</span><span class="w"> </span>存档<span class="w"> </span><span class="o">+</span><span class="w"> </span>关卡加载
+│<span class="w">   </span>├──<span class="w"> </span><span class="nv">Tool</span><span class="o">/</span><span class="w">             </span>工具层：<span class="nv">MusicPlayer</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">SoundTool</span>
+│<span class="w">   </span>├──<span class="w"> </span><span class="nv">utils</span><span class="o">/</span><span class="w">            </span>工具层：<span class="nv">MatToTexture</span>
+│<span class="w">   </span>└──<span class="w"> </span><span class="nv">Other</span><span class="o">/</span><span class="w">            </span>基础设施：<span class="nv">AppDelegate</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">Const</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">UserDataManager</span>
+├──<span class="w"> </span><span class="nv">GestureServer</span><span class="o">/</span><span class="w">        </span>独立进程：<span class="nv">OpenCV</span><span class="w"> </span>摄像头采集服务
+└──<span class="w"> </span><span class="nv">Resources</span><span class="o">/</span><span class="w">            </span>资源文件（.<span class="nv">csb</span><span class="w"> </span><span class="o">/</span><span class="w"> </span>.<span class="nv">plist</span><span class="w"> </span><span class="o">/</span><span class="w"> </span>.<span class="nv">json</span><span class="w"> </span><span class="o">/</span><span class="w"> </span>.<span class="nv">mp3</span><span class="w"> </span><span class="o">/</span><span class="w"> </span>.<span class="nv">png</span>）
+</code></pre></div>
+
+<hr />
+<h2 id="2-c">🧠 2. 用到的 C++ 知识（按主题分组）</h2>
+<h3 id="21">🏗️ 2.1 面向对象基础</h3>
+<h4 id="_2">🔷 类与对象</h4>
+<p>项目中的模块几乎全部以类的形式组织。代表性文件：</p>
+<ul>
+<li><a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/MainScene/Game.hpp">Game.hpp</a> — 游戏主场景类</li>
+<li><a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/gameobjects/Mineral.hpp">Mineral.hpp</a> — 矿物实体类</li>
+<li><a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/PlayerManager.hpp">PlayerManager.hpp</a> — 多玩家管理器</li>
+</ul>
+<p>每个类都用 <code>public / protected / private</code> 分区封装数据和行为。例如 <code>Mineral</code> 把价格、回收速度、钩子转角作为公共成员（其他类需要读取），而商店加成系数 <code>_power</code>、<code>_diamondsCoe</code>、<code>_stoneCoe</code> 作为 protected 成员（Mineral 内部逻辑使用）。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Mineral</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">cocos2d</span><span class="o">::</span><span class="n">Sprite</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">GOLD_SMALL</span><span class="p">,</span><span class="w"> </span><span class="n">GOLD_MEDIUM</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">  </span><span class="n">score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">hookRote</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">  </span><span class="n">backSpeed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Type</span><span class="w"> </span><span class="n">mineralType</span><span class="p">;</span>
+<span class="k">protected</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">_power</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">_stoneCoe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">_diamondsCoe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<h4 id="_3">🔶 继承与多态</h4>
+<ul>
+<li><code>Mineral : public cocos2d::Sprite</code> — 继承 Cocos 精灵，获得渲染能力</li>
+<li><strong>手势识别体系</strong>（最典型）：<code>IGestureRecognizer</code> 是纯虚基类，三个实现类继承并 override 全部接口：</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>IGestureRecognizer（抽象接口）
+  ├─ LocalGestureRecognizer   本地 OpenCV 高频识别
+  ├─ CloudGestureRecognizer   云端大模型低频校验
+  └─ AIGestureRecognizer      AI 独占模式
+</code></pre></div>
+
+<p>参考 <a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/IGestureRecognizer.hpp">IGestureRecognizer.hpp</a>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">IGestureRecognizer</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">ResultCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">GestureResult</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">IGestureRecognizer</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">start</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">stop</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setCallback</span><span class="p">(</span><span class="n">ResultCallback</span><span class="w"> </span><span class="n">cb</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">pushFrame</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">jpegData</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">isRunning</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="nf">name</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p><code>GestureFusion</code> 融合器在运行时根据玩家选择的模式切换识别器指针，实现<strong>运行时多态</strong>。</p>
+<h4 id="_4">🔐 访问控制、友元、静态成员</h4>
+<ul>
+<li>所有 Manager 类都把<strong>构造函数设为私有</strong>，配合静态单例指针和 <code>getInstance()</code> 实现单例模式（见 §2.6）。</li>
+<li><code>static InputMode _defaultInputMode</code>（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/MainScene/Game.hpp#L61">Game.hpp:61</a>）静态类成员在 .cpp 文件中单独定义。</li>
+</ul>
+<h3 id="22-c111417">2.2 C++11/14/17 现代特性</h3>
+<p>项目全面使用了 C++11 及之后的新语法。</p>
+<h4 id="enum-class-enum-class">🏷️ 强类型枚举 <code>enum class</code> <code>enum class</code></h4>
+<p>三处关键枚举：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">InputMode</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">TOUCH</span><span class="p">,</span><span class="w"> </span><span class="n">OPENCV</span><span class="p">,</span><span class="w"> </span><span class="n">AI</span><span class="w"> </span><span class="p">};</span><span class="w">          </span><span class="c1">// Game.hpp</span>
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">GestureType</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">OPEN_PALM</span><span class="p">,</span><span class="w"> </span><span class="n">FIST</span><span class="p">,</span><span class="w"> </span><span class="n">UNKNOWN</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// GestureData.hpp</span>
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Mineral</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">GOLD_SMALL</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span><span class="w">        </span><span class="c1">// Mineral.hpp</span>
+</code></pre></div>
+
+<p>避免了传统 <code>enum</code> 的命名空间污染，编译器帮助检查类型错误。</p>
+<h4 id="auto-for">🔄 <code>auto</code> 与范围 for</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">levelLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LevelLoader</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">minDef</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">levelDef</span><span class="o">-&gt;</span><span class="n">minerals</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">subNode</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">goldsLayout</span><span class="o">-&gt;</span><span class="n">getChildren</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<h4 id="lambda">🎣 Lambda 表达式 + 捕获 + 捕获</h4>
+<p>Cocos 事件系统里大量使用 <code>[=]</code> 捕获。例子见 <a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/MainScene/Game.cpp#L88-L92">Game.cpp:88-92</a>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">bompButton</span><span class="o">-&gt;</span><span class="n">addTouchEventListener</span><span class="p">([</span><span class="o">=</span><span class="p">](</span><span class="n">Ref</span><span class="o">*</span><span class="w"> </span><span class="n">ref</span><span class="p">,</span><span class="w"> </span><span class="n">Widget</span><span class="o">::</span><span class="n">TouchEventType</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Widget</span><span class="o">::</span><span class="n">TouchEventType</span><span class="o">::</span><span class="n">ENDED</span><span class="p">)</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">detonateBomb</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>手势指令回调 <a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/MainScene/Game.cpp#L545-L558">Game.cpp:545-558</a>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">fusion</span><span class="o">-&gt;</span><span class="n">setCommandCallback</span><span class="p">([</span><span class="k">this</span><span class="p">](</span><span class="k">const</span><span class="w"> </span><span class="n">GestureCommand</span><span class="o">&amp;</span><span class="w"> </span><span class="n">cmd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">shouldReleaseHook</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">ropeChangeing</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">isOpenHook</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">shouldDetonateBomb</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">detonateBomb</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<h4 id="stdmove-stdmove">📤 右值语义与 <code>std::move</code> <code>std::move</code></h4>
+<div class="codehilite"><pre><span></span><code><span class="n">jpegFrame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">jpegFrame</span><span class="p">);</span><span class="w">   </span><span class="c1">// 转移帧数据所有权</span>
+<span class="n">setCommandCallback</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cb</span><span class="p">));</span><span class="w">       </span><span class="c1">// 转移回调所有权</span>
+<span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">response</span><span class="p">)</span><span class="w">                      </span><span class="c1">// 闭包捕获时移动（AIGestureRecognizer）</span>
+</code></pre></div>
+
+<p>避免不必要的深拷贝，提升多线程环境下的内存效率。</p>
+<h4 id="stdnothrow-new-new">🛡️ <code>std::nothrow</code> 布局 new 布局 new</h4>
+<p><a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/MainScene/Game.cpp#L603-L614">Game.cpp:603-614</a> 中创建 <code>Image</code> / <code>Texture2D</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Image</span><span class="o">*</span><span class="w"> </span><span class="n">img</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nothrow</span><span class="p">)</span><span class="w"> </span><span class="n">Image</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">img</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">img</span><span class="o">-&gt;</span><span class="n">initWithImageData</span><span class="p">(</span><span class="n">jpegFrame</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">jpegFrame</span><span class="p">.</span><span class="n">size</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">img</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="default-delete">✂️ <code>= default</code> / <code>= delete</code></h4>
+<div class="codehilite"><pre><span></span><code><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">IGestureRecognizer</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w">   </span><span class="c1">// 合成默认析构</span>
+<span class="n">GestureFusion</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w">                 </span><span class="c1">// 合成默认构造</span>
+</code></pre></div>
+
+<h3 id="23-stl">📦 2.3 模板、STL 容器与算法</h3>
+<h4 id="_5">🗃️ 容器</h4>
+<table>
+<thead>
+<tr>
+<th>容器</th>
+<th>用途</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>std::vector&lt;T&gt;</code></td>
+<td>列表（矿物、关卡、历史、玩家名）</td>
+<td><code>std::vector&lt;MineralDef&gt; minerals</code>、<code>std::vector&lt;HistoryEntry&gt; history</code>、<code>std::vector&lt;std::string&gt; players</code>、<code>std::vector&lt;uint8_t&gt; jpegFrame</code></td>
+</tr>
+<tr>
+<td><code>std::string</code></td>
+<td>字符串</td>
+<td>解析 .csb 帧名、split 逗号列表</td>
+</tr>
+<tr>
+<td><code>std::function&lt;T&gt;</code></td>
+<td>函数包装器</td>
+<td>结果回调、指令回调</td>
+</tr>
+</tbody>
+</table>
+<h4 id="stl">🔍 STL 算法</h4>
+<ul>
+<li><code>std::string::find / substr / npos</code> — 拆分逗号分隔玩家列表（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/PlayerManager.cpp#L29-L36">PlayerManager.cpp:29-36</a>）、拆分 <code>.csb</code> 文件名。</li>
+<li><code>std::chrono::steady_clock::now()</code> — 记录 FIST 触发时间（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/GestureFusion.hpp#L83">GestureFusion.hpp:83</a>）。</li>
+<li><code>std::put_time + std::tm + localtime_s</code> — 生成 ISO 时间戳（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/PlayerManager.cpp#L124-L129">PlayerManager.cpp:124-129</a>）。</li>
+</ul>
+<h3 id="24">💾 2.4 内存管理与资源生命周期</h3>
+<h4 id="cocos">♻️ Cocos 的引用计数</h4>
+<p><code>new + init + autorelease</code> 两阶段构造：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Game</span><span class="o">*</span><span class="w"> </span><span class="nf">Game::create</span><span class="p">(...)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Game</span><span class="o">*</span><span class="w"> </span><span class="n">pRet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Game</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pRet</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">pRet</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">(...))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pRet</span><span class="o">-&gt;</span><span class="n">autorelease</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">pRet</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">delete</span><span class="w"> </span><span class="n">pRet</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="c_1">C++ 原生手动管理</h4>
+<p><code>std::nothrow new</code> + 错误路径上 <code>delete</code>；跨线程共享的 <code>std::vector&lt;uint8_t&gt;</code> 通过 <code>std::move</code> 转移所有权。</p>
+<h4 id="scope-guardraii-stdshared_ptr-deleter">🔒 Scope Guard（RAII 模式）（<code>std::shared_ptr</code> deleter 技巧）</h4>
+<p><a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/AIGestureService.cpp#L123-L125">AIGestureService.cpp:123-125</a> 中，无论线程正常结束还是中途 return，都能把原子标志位重置：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">guard</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">_requestInFlight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>这是一种<strong>RAII 模式</strong>：把"清理动作"塞进 <code>shared_ptr</code> 的删除器，生命周期绑定到 <code>guard</code> 变量本身，离开作用域时自动执行。</p>
+<h4 id="_6">🗑️ 引擎资源释放</h4>
+<p>Texture / Image 使用 <code>-&gt;release()</code> 手动递减引用计数（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/MainScene/Game.cpp#L632-L633">Game.cpp:632-633</a>）。</p>
+<h3 id="25">🔀 2.5 多线程并发编程</h3>
+<p>这是项目<strong>另一个重点收获</strong>。手势识别全部在独立线程运行，主线程只负责游戏渲染。</p>
+<h4 id="stdthread">🧵 <code>std::thread</code></h4>
+<p>三个识别器都是 <code>std::thread</code> + 成员函数：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// LocalGestureRecognizer 轮询线程</span>
+<span class="n">_thread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">LocalGestureRecognizer</span><span class="o">::</span><span class="n">pollThread</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+
+<span class="c1">// AIGestureRecognizer 推理线程</span>
+<span class="n">_thread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">AIGestureRecognizer</span><span class="o">::</span><span class="n">inferenceLoop</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+
+<span class="c1">// AIGestureService 单次异步请求（detach）</span>
+<span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([...]{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}).</span><span class="n">detach</span><span class="p">();</span>
+</code></pre></div>
+
+<h4 id="stdatomic">⚛️ <code>std::atomic</code></h4>
+<p>跨线程共享的布尔/标志位必须用原子变量，避免数据竞争：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_running</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_fistPendingCloud</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_requestInFlight</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+</code></pre></div>
+
+<p><code>GestureFusion</code> 用 <code>std::atomic&lt;bool&gt; _fistPendingCloud</code> 标记"FIST 已锁定、正等待云端确认"，由 UI 线程写、识别线程读，无锁即可安全。</p>
+<h4 id="stdmutex-stdlock_guard-stdlock_guard">🔐 <code>std::mutex</code> + <code>std::lock_guard</code> + <code>std::lock_guard</code></h4>
+<p>保护更复杂的共享状态（结构体、帧数据）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">_localMutex</span><span class="p">;</span>
+<span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">_cloudMutex</span><span class="p">;</span>
+<span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">_pendingMutex</span><span class="p">;</span>
+
+<span class="c1">// 写入侧</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">_localMutex</span><span class="p">);</span>
+<span class="w">    </span><span class="n">_latestLocal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// 读取侧</span>
+<span class="n">GestureResult</span><span class="w"> </span><span class="n">local</span><span class="p">;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">_localMutex</span><span class="p">);</span>
+<span class="w">    </span><span class="n">local</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_latestLocal</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>三个识别器 + GestureFusion 一共有 <strong>7 个 mutex</strong>，都是用来保护同一份数据在"识别线程写 + 游戏线程读"时不冲突。</p>
+<h4 id="-">🏭 生产者-消费者模型</h4>
+<p>识别器线程是<strong>生产者</strong>（产出 <code>GestureResult</code>），GestureFusion 和 Game 是<strong>消费者</strong>。融合器再做一层 EMA 平滑和状态机，最终产出 <code>GestureCommand</code> 交给游戏逻辑。</p>
+<h4 id="cocos_1">🔄 Cocos 主线程切换</h4>
+<p>识别器在 worker thread 拿到 AI 响应后，用 <code>Director::getInstance()-&gt;getScheduler()-&gt;performFunctionInCocosThread(...)</code> 切回 Cocos 主线程再操作 UI/回调（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/AIGestureRecognizer.cpp#L242-L300">AIGestureRecognizer.cpp:242-300</a>）。这是<strong>"任何涉及引擎对象的操作都必须在主线程"</strong>的铁则。</p>
+<h3 id="26">🎯 2.6 设计模式</h3>
+<h4 id="_7">♟️ 策略模式（核心）（核心）</h4>
+<p><code>IGestureRecognizer</code> 抽象接口 + 三种实现类。<code>GestureFusion::initialize()</code> 里根据参数挑选识别器，<code>Game::switchInputMode()</code> 里切换策略。</p>
+<p>优点：新增第四种识别器只需实现接口，不修改任何现有代码（<strong>开闭原则</strong>）。</p>
+<h4 id="1_1">1️⃣ 单例模式</h4>
+<p>几乎所有 Manager 类都是"私有构造 + 静态 getInstance"：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="n">GestureFusion</span><span class="o">*</span><span class="w"> </span><span class="n">s_fusionInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="n">GestureFusion</span><span class="o">*</span><span class="w"> </span><span class="nf">GestureFusion::getInstance</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">s_fusionInstance</span><span class="p">)</span><span class="w"> </span><span class="n">s_fusionInstance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">GestureFusion</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">s_fusionInstance</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>包括：GestureFusion、PlayerManager、LevelLoader、LocalGestureRecognizer、CloudGestureRecognizer、AIGestureRecognizer、UserDataManager、MusicPlayer、SoundTool。</p>
+<h4 id="_8">🏭 工厂模式（两阶段构造）（两阶段构造）</h4>
+<p>Cocos 推荐的 <code>static xxx* create(...)</code> + <code>bool init(...)</code> + <code>autorelease()</code>。<code>Game::create</code>、<code>Mineral::create</code>、<code>Scene::createScene</code> 都遵循这个模式。</p>
+<h4 id="_9">👀 观察者模式 / 回调 / 回调</h4>
+<ul>
+<li>Cocos 事件系统（<code>EventListenerPhysicsContact</code>、<code>EventListenerTouchOneByOne</code>、<code>EventMouse</code>、<code>EventCustom("nextStage")</code>）</li>
+<li>识别器的 <code>ResultCallback</code>（识别器 → 融合器）</li>
+<li>融合器的 <code>CommandCallback</code>（融合器 → Game）</li>
+</ul>
+<h4 id="_10">🌀 双通道混合架构（自主设计）（自主设计）</h4>
+<div class="codehilite"><pre><span></span><code>LocalGestureRecognizer（高频瞄准，≈30Hz）
+  + CloudGestureRecognizer（低频 FIST 确认）
+         ↓
+      GestureFusion（混合 + EMA 平滑 + 状态机）
+         ↓
+       GestureCommand（释放 / 角度 / 引爆）
+</code></pre></div>
+
+<h3 id="27">🌐 2.7 网络与外部库集成</h3>
+<h4 id="libcurl">🌊 libcurl</h4>
+<p>手写 HTTP POST 请求豆包大模型。完整流程见 <a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/AIGestureRecognizer.cpp#L172-L239">AIGestureRecognizer.cpp:172-239</a>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">CURL</span><span class="o">*</span><span class="w"> </span><span class="n">curl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curl_easy_init</span><span class="p">();</span>
+<span class="n">curl_easy_setopt</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span><span class="w"> </span><span class="n">CURLOPT_URL</span><span class="p">,</span><span class="w"> </span><span class="n">frameUrl</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="n">curl_easy_setopt</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span><span class="w"> </span><span class="n">CURLOPT_WRITEFUNCTION</span><span class="p">,</span><span class="w"> </span><span class="n">writeCb</span><span class="p">);</span>
+<span class="n">curl_easy_setopt</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span><span class="w"> </span><span class="n">CURLOPT_WRITEDATA</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frameResp</span><span class="p">);</span>
+<span class="n">curl_easy_setopt</span><span class="p">(</span><span class="n">curl</span><span class="p">,</span><span class="w"> </span><span class="n">CURLOPT_TIMEOUT_MS</span><span class="p">,</span><span class="w"> </span><span class="mf">500L</span><span class="p">);</span>
+<span class="n">curl_easy_perform</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
+<span class="n">curl_easy_cleanup</span><span class="p">(</span><span class="n">curl</span><span class="p">);</span>
+</code></pre></div>
+
+<p>第二跳请求豆包 API 时还要拼 <code>Content-Type: application/json</code> 和 <code>Authorization: Bearer xxx</code> 头。</p>
+<h4 id="rapidjson">📋 RapidJSON</h4>
+<p>项目里 JSON 出现三次：</p>
+<ul>
+<li><strong>关卡数据</strong>：<code>Resources/level_data.json</code> → LevelLoader</li>
+<li><strong>玩家档案持久化</strong>：PlayerManager（RapidJSON 序列化 + UserDefault）</li>
+<li><strong>AI 配置</strong>：<code>ai_config.json</code> → Game::switchInputMode 读取模型名和 API Key</li>
+<li><strong>AI 请求体构建</strong>：AIGestureRecognizer / AIGestureService 构建豆包 ChatCompletion 请求</li>
+<li><strong>AI 响应解析</strong>：C++ 字符串里找第一个 <code>{</code> 和最后一个 <code>}</code> 截取 JSON 片段再 parse（因为大模型有时会包 markdown 代码块）</li>
+</ul>
+<h4 id="base64">🔢 Base64 手写实现</h4>
+<p><a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/AIGestureRecognizer.cpp#L24-L39">AIGestureRecognizer.cpp:24-39</a> 用纯 C++ 写了 Base64 编码（位运算 + 查表），没有依赖第三方库。</p>
+<h4 id="opencv">👁️ OpenCV</h4>
+<ul>
+<li><code>cv::VideoCapture</code> 开摄像头（在独立的 <code>GestureServer/main.cpp</code> 中）</li>
+<li><code>cv::Mat</code> 颜色空间转换（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/utils/MatToTexture.cpp">MatToTexture.cpp</a>，BGR→RGB→RGBA）</li>
+<li><code>findContours / convexHull / moments</code> 做轮廓与凸包分析（在 Python server.py 中）</li>
+</ul>
+<h3 id="28-cocos2d-xcocos2d-x">🕹️ 2.8 游戏引擎（Cocos2d-x）专用知识（Cocos2d-x）专用知识</h3>
+<p>这部分不是标准 C++，但对项目来说是必须掌握的：</p>
+<table>
+<thead>
+<tr>
+<th>主题</th>
+<th>用到的能力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>场景/节点/层级</td>
+<td><code>Scene::createWithPhysics()</code>、<code>Layer</code>、<code>Node</code>、<code>addChild</code></td>
+</tr>
+<tr>
+<td>物理引擎</td>
+<td><code>PhysicsWorld</code>、<code>PhysicsBody::createCircle/createEdgeBox</code>、<code>PhysicsContact</code>、ContactTestBitmask、EventListenerPhysicsContact</td>
+</tr>
+<tr>
+<td>UI 系统</td>
+<td><code>Button</code>、<code>Text</code>、<code>ImageView</code>、<code>Layout</code>、<code>Helper::seekWidgetByName</code>、<code>TouchEventType</code></td>
+</tr>
+<tr>
+<td>Action 系统</td>
+<td><code>RotateTo</code>、<code>Sequence</code>、<code>RepeatForever</code>、<code>Spawn</code>、<code>MoveTo</code>、<code>ScaleTo</code>、<code>CallFuncN</code></td>
+</tr>
+<tr>
+<td>调度器</td>
+<td><code>schedule(selector, interval, repeat, delay)</code>、<code>unschedule</code>、<code>Director::getInstance()-&gt;getScheduler()-&gt;performFunctionInCocosThread</code></td>
+</tr>
+<tr>
+<td>CSLoader</td>
+<td>读取 .csb 编辑器二进制：<code>CSLoader::createNode</code>、<code>createTimeline</code></td>
+</tr>
+<tr>
+<td>资源</td>
+<td><code>SpriteFrameCache</code>、<code>FileUtils::fullPathForFilename</code>、<code>FileUtils::getStringFromFile</code>、<code>UserDefault</code></td>
+</tr>
+<tr>
+<td>音频</td>
+<td><code>CocosDenshion::SimpleAudioEngine</code>（SoundTool / MusicPlayer）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="29">🔗 2.9 跨模块编程实践</h3>
+<h4 id="_11">📜 数据结构协议</h4>
+<p>三个核心 struct 是整个服务层的"语言"：</p>
+<ul>
+<li><code>GestureType</code> / <code>GestureResult</code> / <code>GestureCommand</code> — <a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/GestureData.hpp">GestureData.hpp</a></li>
+<li><code>LevelDef</code> / <code>MineralDef</code> — <a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/LevelLoader.hpp">LevelLoader.hpp</a></li>
+<li><code>PlayerProfile</code> / <code>HistoryEntry</code> — <a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/PlayerManager.hpp">PlayerManager.hpp</a></li>
+</ul>
+<h4 id="_12">🧭 依赖方向</h4>
+<div class="codehilite"><pre><span></span><code>Game.cpp
+  ├─ GestureFusion ─┬─ LocalGestureRecognizer ─┐
+  │                 ├─ CloudGestureRecognizer  ├─ libcurl + RapidJSON
+  │                 └─ AIGestureRecognizer ─────┘
+  ├─ GestureClient (HTTP 客户端)
+  ├─ LevelLoader (RapidJSON + FileUtils)
+  ├─ PlayerManager (RapidJSON + UserDefault)
+  └─ Cocos 引擎模块
+</code></pre></div>
+
+<p>上层 include 下层，下层不 include 上层，<strong>没有循环依赖</strong>。</p>
+<h4 id="_13">📌 全局常量</h4>
+<p>统一放在 <a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/Other/Const.hpp">Const.hpp</a>（如 <code>kWinSizeWidth</code>、<code>kWinSizeHeight</code>）。</p>
+<h4 id="_14">⚡ 配置驱动</h4>
+<ul>
+<li>关卡：<code>level_data.json</code>（可随时加关卡）</li>
+<li>AI 凭据：<code>ai_config.json</code>（不硬编码）</li>
+<li>UI/动画：<code>.csb</code> 二进制（Cocos Studio 可视化编辑器导出）</li>
+<li>资源：<code>.plist</code> 图集 + <code>.mp3 / .wav</code> 音频</li>
+</ul>
+<h4 id="_15">📝 调试日志</h4>
+<p>每个模块都加了 <code>[ModuleName]</code> 前缀的 <code>CCLOG</code>，例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">CCLOG</span><span class="p">(</span><span class="s">&quot;[GestureFusion] Dual-channel hybrid architecture&quot;</span><span class="p">);</span>
+<span class="n">CCLOG</span><span class="p">(</span><span class="s">&quot;[AIGesture] Sending frame to %s (image=%d bytes b64)&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+<span class="n">CCLOG</span><span class="p">(</span><span class="s">&quot;[LevelLoader] Loaded %d levels from JSON&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+</code></pre></div>
+
+<hr />
+<h2 id="3">🏛️ 3. 总体架构与模块连接</h2>
+<h3 id="31">3.1 架构分层</h3>
+<div class="codehilite"><pre><span></span><code>┌──────────────────────────────────────────────────────────────┐
+│<span class="w">                      </span><span class="nv">Game</span><span class="w"> </span>场景层<span class="w">                              </span>│
+│<span class="w">  </span><span class="nv">Game</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">MainRoot</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">Shop</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">Pause</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">StageTipsLayer</span><span class="w">             </span>│
+│<span class="w">  </span>（管理游戏状态、<span class="nv">UI</span>、输入分发）<span class="w">                                </span>│
+└─────────────────────┬────────────────────────────────────────┘
+<span class="w">                      </span>│<span class="w"> </span><span class="nv">GestureCommand</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">setCommandCallback</span>
+┌─────────────────────┴────────────────────────────────────────┐
+│<span class="w">                    </span><span class="nv">GestureFusion</span><span class="w"> </span>融合器<span class="w">                       </span>│
+│<span class="w">  </span>（<span class="nv">EMA</span><span class="w"> </span>平滑<span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">FIST</span><span class="w"> </span>状态机<span class="w"> </span><span class="o">+</span><span class="w"> </span>双通道混合<span class="w"> </span><span class="o">+</span><span class="w"> </span>冷却）<span class="w">                </span>│
+└──────┬──────────────────────────┬───────────────────────────┘
+<span class="w">       </span>│<span class="w"> </span><span class="nv">ResultCallback</span><span class="w">            </span>│<span class="w"> </span><span class="nv">ResultCallback</span>
+┌──────┴──────────────────┐<span class="w">  </span>┌───┴─────────────────────┐
+│<span class="w"> </span><span class="nv">LocalGestureRecognizer</span><span class="w">   </span>│<span class="w">  </span>│<span class="w"> </span><span class="nv">CloudGestureRecognizer</span><span class="w">   </span>│
+│<span class="w"> </span>（<span class="nv">OpenCV</span><span class="w"> </span>本地高频检测）<span class="w">  </span>│<span class="w">  </span>│（豆包大模型低频校验）<span class="w">     </span>│
+└──────┬───────────────────┘<span class="w">  </span>└──┬───────────────────────┘
+<span class="w">       </span>│<span class="w"> </span><span class="nv">HTTP</span><span class="w">                    </span>│<span class="w"> </span><span class="nv">HTTP</span><span class="w"> </span><span class="ss">(</span><span class="nv">curl</span><span class="ss">)</span>
+┌──────┴───────────────────┐<span class="w">  </span>┌──┴───────────────────────┐
+│<span class="w"> </span><span class="nv">GestureServer</span>.<span class="nv">exe</span><span class="w"> </span><span class="ss">(</span>独立<span class="ss">)</span><span class="w">  </span>│<span class="w">  </span>│<span class="w"> </span>豆包<span class="w"> </span><span class="nv">API</span><span class="w"> </span><span class="ss">(</span>云端<span class="ss">)</span><span class="w">           </span>│
+│（<span class="nv">OpenCV</span><span class="w"> </span>摄像头<span class="w"> </span><span class="o">+</span><span class="w"> </span>手势）<span class="w">  </span>│<span class="w">  </span>└───────────────────────────┘
+└──────────────────────────┘
+</code></pre></div>
+
+<p>AI 模式是另一条独立管线：</p>
+<div class="codehilite"><pre><span></span><code>GestureFusion.initializeAI()
+  └─ AIGestureRecognizer
+      ├─ GestureServer.exe (仅采集 JPEG 帧)
+      └─ 推理线程 (curl → 豆包 Vision API → 角度/手势 → 回调)
+</code></pre></div>
+
+<h3 id="32">3.2 模块职责清单</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>单例</th>
+<th>线程</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Game</td>
+<td>否（场景实例）</td>
+<td>主线程</td>
+<td>游戏主循环、输入分发、物理碰撞、关卡流程</td>
+</tr>
+<tr>
+<td>Mineral</td>
+<td>否（实体）</td>
+<td>主线程</td>
+<td>矿物属性（分值、速度、转角）</td>
+</tr>
+<tr>
+<td>IGestureRecognizer</td>
+<td>接口</td>
+<td>—</td>
+<td>统一识别器接口</td>
+</tr>
+<tr>
+<td>LocalGestureRecognizer</td>
+<td>是</td>
+<td>worker</td>
+<td>轮询本地 GestureServer 的 /gesture 端点</td>
+</tr>
+<tr>
+<td>CloudGestureRecognizer</td>
+<td>是</td>
+<td>worker</td>
+<td>把帧发给豆包 API 做二次校验</td>
+</tr>
+<tr>
+<td>AIGestureRecognizer</td>
+<td>是</td>
+<td>worker</td>
+<td>直连豆包 Vision（采集 + 识别合一）</td>
+</tr>
+<tr>
+<td>GestureFusion</td>
+<td>是</td>
+<td>主线程 tick</td>
+<td>混合双通道结果 → GestureCommand</td>
+</tr>
+<tr>
+<td>GestureClient</td>
+<td>是</td>
+<td>内部线程</td>
+<td>HTTP 通信客户端</td>
+</tr>
+<tr>
+<td>AIGestureService</td>
+<td>是</td>
+<td>单次 detach</td>
+<td>封装 Base64 + curl + RapidJSON 的通用服务</td>
+</tr>
+<tr>
+<td>PlayerManager</td>
+<td>是</td>
+<td>主线程</td>
+<td>多玩家档案（RapidJSON + UserDefault）</td>
+</tr>
+<tr>
+<td>LevelLoader</td>
+<td>是</td>
+<td>主线程</td>
+<td>关卡 JSON 加载</td>
+</tr>
+<tr>
+<td>MusicPlayer / SoundTool</td>
+<td>是</td>
+<td>主线程（音频在后台线程）</td>
+<td>播放 BGM / 音效</td>
+</tr>
+<tr>
+<td>MatToTexture</td>
+<td>静态方法</td>
+<td>任何线程都可</td>
+<td>cv::Mat → Cocos Texture2D</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33">3.3 数据流向</h3>
+<div class="codehilite"><pre><span></span><code><span class="err">摄像头</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">JPEG</span><span class="w"> </span><span class="err">帧</span>
+<span class="w">         </span><span class="err">│</span>
+<span class="w">    </span><span class="err">┌────┴──────┐</span>
+<span class="w">    </span><span class="err">│</span><span class="w">           </span><span class="err">│</span>
+<span class="w">    </span><span class="err">▼</span><span class="w">           </span><span class="err">▼</span>
+<span class="n">GestureServer</span><span class="w">  </span><span class="n">AI</span><span class="w"> </span><span class="err">模式（直连大模型）</span>
+<span class="w">    </span><span class="err">│</span><span class="w">                    </span><span class="err">│</span>
+<span class="w">    </span><span class="err">▼</span><span class="w">                    </span><span class="err">▼</span>
+<span class="n">GestureClient</span><span class="w">      </span><span class="n">AIGestureRecognizer</span>
+<span class="w">    </span><span class="err">│</span><span class="w">                    </span><span class="err">│</span>
+<span class="w">    </span><span class="err">▼</span><span class="w">                    </span><span class="err">▼</span>
+<span class="n">LocalRecognizer</span><span class="w">    </span><span class="n">AIGestureRecognizer</span><span class="w"> </span><span class="p">(</span><span class="err">不同实例</span><span class="p">)</span>
+<span class="w">    </span><span class="err">│</span><span class="w">           </span><span class="err">│</span><span class="w">        </span><span class="err">│</span>
+<span class="w">    </span><span class="err">└─────┬─────┘</span><span class="w">        </span><span class="err">│</span>
+<span class="w">          </span><span class="err">▼</span><span class="w">              </span><span class="err">│</span>
+<span class="w">     </span><span class="n">GestureFusion</span><span class="w"> </span><span class="err">◄─────┘</span>
+<span class="w">          </span><span class="err">│</span><span class="w"> </span><span class="n">tick</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+<span class="w">          </span><span class="err">▼</span>
+<span class="w">    </span><span class="n">GestureCommand</span><span class="w"> </span><span class="p">(</span><span class="n">shouldReleaseHook</span><span class="p">,</span><span class="w"> </span><span class="n">targetAngle</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span>
+<span class="w">          </span><span class="err">│</span><span class="w"> </span><span class="n">setCommandCallback</span>
+<span class="w">          </span><span class="err">▼</span>
+<span class="w">       </span><span class="n">Game</span><span class="p">.</span><span class="n">cpp</span>
+<span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="n">OPEN_PALM</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">rope</span><span class="o">-&gt;</span><span class="n">setRotation</span><span class="p">(</span><span class="n">targetAngle</span><span class="p">)</span>
+<span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="n">FIST</span><span class="w"> </span><span class="err">短按</span><span class="p">(</span><span class="o">&lt;</span><span class="mf">1.5</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">释放钩子</span>
+<span class="w">    </span><span class="err">└─</span><span class="w"> </span><span class="n">FIST</span><span class="w"> </span><span class="err">长按</span><span class="p">(</span><span class="err">≥</span><span class="mf">1.5</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">引爆炸药</span>
+<span class="w">          </span><span class="err">│</span>
+<span class="w">          </span><span class="err">▼</span><span class="w"> </span><span class="p">(</span><span class="err">碰撞</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Mineral</span><span class="err">（查表判定类型</span><span class="o">/</span><span class="err">分值</span><span class="o">/</span><span class="err">速度）</span>
+<span class="w">          </span><span class="err">│</span>
+<span class="w">          </span><span class="err">▼</span>
+<span class="w">    </span><span class="err">加分动画</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">更新金币</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">PlayerManager</span><span class="w"> </span><span class="err">存档</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Shop</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">下一关</span>
+</code></pre></div>
+
+<hr />
+<h2 id="4">⚙️ 4. 核心算法流程</h2>
+<h3 id="41-touch">4.1 游戏主循环（TOUCH 模式）</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">Game</span><span class="o">::</span><span class="n">startGame</span><span class="p">()</span>
+<span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">EventListenerTouchOneByOne</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">touchCallBack</span><span class="p">()</span>
+<span class="w">  </span><span class="err">│</span><span class="w">   </span><span class="err">└─</span><span class="w"> </span><span class="err">点屏幕</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">停止摇摆动画</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">schedule</span><span class="p">(</span><span class="n">addRopeHeight</span><span class="p">,</span><span class="w"> </span><span class="mf">0.025</span><span class="p">)</span>
+<span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">EventListenerMouse</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">onRightMouseClick</span><span class="p">()</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">detonateBomb</span><span class="p">()</span>
+<span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="n">schedule</span><span class="p">(</span><span class="n">updateTime</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="kr">repeat</span><span class="o">=</span><span class="mi">59</span><span class="p">,</span><span class="w"> </span><span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="w">  </span><span class="c1">// 60 秒倒计时</span>
+
+<span class="err">每</span><span class="w"> </span><span class="mi">25</span><span class="n">ms</span><span class="o">:</span>
+<span class="w">  </span><span class="n">addRopeHeight</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">ropeHeight</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">rope</span><span class="o">-&gt;</span><span class="n">setContentSize</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">ropeHeight</span><span class="p">)</span>
+<span class="w">  </span><span class="err">（向下放绳）</span>
+
+<span class="n">PhysicsContact</span><span class="err">（钩子触碰到矿物）</span><span class="o">:</span>
+<span class="w">  </span><span class="n">physicsBegin</span><span class="p">()</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">pullGold</span><span class="p">()</span>
+<span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="err">创建</span><span class="w"> </span><span class="n">Mineral</span><span class="err">（</span><span class="n">name</span><span class="o">+</span><span class="n">scale</span><span class="w"> </span><span class="err">查表</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">backSpeed</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">hookRote</span><span class="err">）</span>
+<span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="err">把</span><span class="w"> </span><span class="n">Mineral</span><span class="w"> </span><span class="err">加到</span><span class="w"> </span><span class="n">middleCircle</span><span class="err">（跟随钩子移动）</span>
+<span class="w">    </span><span class="err">└─</span><span class="w"> </span><span class="err">切换为</span><span class="w"> </span><span class="n">schedule</span><span class="p">(</span><span class="n">subRopeHeight</span><span class="p">,</span><span class="w"> </span><span class="mf">0.025</span><span class="p">)</span><span class="w">  </span><span class="c1">// 开始收绳</span>
+
+<span class="err">每</span><span class="w"> </span><span class="mi">25</span><span class="n">ms</span><span class="o">:</span>
+<span class="w">  </span><span class="n">subRopeHeight</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">ropeHeight</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">backSpeed</span>
+<span class="w">    </span><span class="err">└─</span><span class="w"> </span><span class="n">ropeHeight</span><span class="w"> </span><span class="err">≤</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="err">时</span><span class="o">:</span>
+<span class="w">        </span><span class="err">├─</span><span class="w"> </span><span class="err">停收绳</span>
+<span class="w">        </span><span class="err">├─</span><span class="w"> </span><span class="err">恢复摇摆动画</span>
+<span class="w">        </span><span class="err">└─</span><span class="w"> </span><span class="err">如果钓着东西</span><span class="o">:</span>
+<span class="w">            </span><span class="err">├─</span><span class="w"> </span><span class="err">加分动画（</span><span class="n">Spawn</span><span class="p">(</span><span class="n">MoveTo</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ScaleTo</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">CallFuncN</span><span class="w"> </span><span class="err">回调）</span>
+<span class="w">            </span><span class="err">├─</span><span class="w"> </span><span class="n">curStageScore</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">Mineral</span><span class="p">.</span><span class="n">score</span>
+<span class="w">            </span><span class="err">└─</span><span class="w"> </span><span class="n">Mineral</span><span class="o">-&gt;</span><span class="n">removeFromParent</span><span class="p">()</span>
+
+<span class="err">倒计时到</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span>
+<span class="w">  </span><span class="n">stopGame</span><span class="p">()</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">比较</span><span class="w"> </span><span class="n">passScroe</span>
+<span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="err">够分</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">StageTipsLayer</span><span class="p">(</span><span class="kr">SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Shop</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">下一关</span>
+<span class="w">    </span><span class="err">└─</span><span class="w"> </span><span class="err">不够</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">StageTipsLayer</span><span class="p">(</span><span class="kr">FAIL</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">重玩</span>
+</code></pre></div>
+
+<p>目标分数公式（旧版兜底）：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">passScroe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">650</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">275</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">stage</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">410</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">stage</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</code></pre></div>
+
+<p>JSON 关卡则直接读取 <code>level_data.json</code> 里的 <code>targetMoney</code>。</p>
+<h3 id="42-opencv">4.2 手势识别流程（OpenCV 双通道模式）</h3>
+<div class="codehilite"><pre><span></span><code>Game::switchInputMode(OPENCV)
+  └─ GestureFusion::initialize(&quot;&quot;)
+      ├─ LocalGestureRecognizer::start()
+      │   └─ std::thread pollThread()
+      │       └─ 每 ~30ms: GET localhost:5000/gesture
+      │           └─ 得到 { gesture, angle, stable, locked }
+      │               └─ 回调 → GestureFusion::onLocalResult()
+      └─ CloudGestureRecognizer::start()  // endpointId/key 空则跳过
+
+Game::updateGestureAngle(dt) 每 50ms:
+  GestureFusion::tick(dt):
+    ├─ 读 _latestLocal（mutex 保护）
+    ├─ EMA 平滑: _gameAngle = 0.7 <span class="gs">* _gameAngle + 0.3 *</span> local.angle
+    ├─ FIST 上升沿 → _fistHoldTime = 0
+    ├─ FIST 持续   → _fistHoldTime += dt
+    ├─ FIST 下降沿（手张开）:
+    │   ├─ 0.8s &lt; t &lt; 1.5s 且（云端置信度&gt;0.85 或云端不可用）→ shouldReleaseHook
+    │   └─ 否则忽略
+    ├─ FIST 持续 ≥ 1.5s → shouldDetonateBomb
+    └─ 冷却 0.8s 防连发
+
+Game 收到 GestureCommand:
+  shouldReleaseHook → 触发 touchCallBack 同款逻辑（放绳）
+  shouldDetonateBomb → detonateBomb()（右键同款）
+</code></pre></div>
+
+<h3 id="43-ai">4.3 角度映射（AI 模式）</h3>
+<div class="codehilite"><pre><span></span><code>大模型返回:
+  {
+    &quot;gesture&quot;: &quot;open_palm&quot; | &quot;fist&quot; | &quot;unknown&quot;,
+    &quot;position&quot;: -1.0 ~ +1.0,       ← 手部 X 位置（归一化）
+    &quot;confidence&quot;: 0.0 ~ 1.0
+  }
+
+转换为物理角度:
+  angle = clamp(position * 65.0f, -65, +65)
+
+判定:
+  open_palm + confidence &gt; 0.7  → isStable = true，持续瞄准
+  fist      + confidence &gt; 0.7  → isLocked  = true，握拳计时
+  else                          → 维持当前状态（防抖）
+</code></pre></div>
+
+<h3 id="44-mineralinit">4.4 矿物类型判定表（Mineral::init）</h3>
+<p><code>Mineral::init</code> 是一张由 <code>sprite帧名 + scale百分比</code> 组成的查表：</p>
+<table>
+<thead>
+<tr>
+<th>sprite</th>
+<th>scale</th>
+<th>type</th>
+<th>score</th>
+<th>backSpeed</th>
+<th>hookRote</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gold-0-0.png</td>
+<td>40</td>
+<td>GOLD_SMALL</td>
+<td>100 × _power</td>
+<td>3</td>
+<td>16°</td>
+</tr>
+<tr>
+<td>gold-0-0.png</td>
+<td>65</td>
+<td>GOLD_MEDIUM</td>
+<td>200 × _power</td>
+<td>2</td>
+<td>36°</td>
+</tr>
+<tr>
+<td>pulled-gold-0-0.png</td>
+<td>90</td>
+<td>GOLD_LARGE</td>
+<td>400 × _power</td>
+<td>1.5</td>
+<td>35°</td>
+</tr>
+<tr>
+<td>stone-0.png</td>
+<td>80</td>
+<td>STONE_SMALL</td>
+<td>25 × _stoneCoe</td>
+<td>3</td>
+<td>15°</td>
+</tr>
+<tr>
+<td>stone-1.png</td>
+<td>100</td>
+<td>STONE_MEDIUM</td>
+<td>50 × _stoneCoe</td>
+<td>2</td>
+<td>30°</td>
+</tr>
+<tr>
+<td>stone-0.png</td>
+<td>150</td>
+<td>STONE_LARGE</td>
+<td>75 × _stoneCoe</td>
+<td>1.5</td>
+<td>30°</td>
+</tr>
+<tr>
+<td>diamond.png</td>
+<td>—</td>
+<td>DIAMOND</td>
+<td>500 × _diamondsCoe</td>
+<td>3</td>
+<td>6°</td>
+</tr>
+<tr>
+<td>treasure-bag.png</td>
+<td>—</td>
+<td>TREASURE_BAG</td>
+<td>rand()%200 + 50</td>
+<td>3</td>
+<td>5°</td>
+</tr>
+</tbody>
+</table>
+<p>商店道具效果：</p>
+<ul>
+<li>力量药水（200金）→ <code>_power = 1.2</code>，所有物品回收速度提升</li>
+<li>钻石升值书（300金）→ <code>_diamondsCoe = 3</code>，钻石价值三倍</li>
+<li>矿石收藏书（100金）→ <code>_stoneCoe = 3</code>，石头也能卖钱</li>
+<li>炸药（150金）→ 抓到重物可引爆</li>
+</ul>
+<h3 id="45">4.5 关卡加载（双通道）</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">Game</span><span class="p">::</span><span class="n">loadStageInfo</span><span class="p">():</span>
+<span class="w">  </span><span class="mf">1.</span><span class="w"> </span><span class="err">优先</span><span class="w"> </span><span class="n">JSON</span><span class="w"> </span><span class="p">(</span><span class="n">LevelLoader</span><span class="p">)</span>
+<span class="w">     </span><span class="err">└─</span><span class="w"> </span><span class="n">level_data</span><span class="o">.</span><span class="n">json</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">遍历</span><span class="w"> </span><span class="n">minerals</span><span class="p">[]</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">每个矿物</span><span class="w"> </span><span class="n">create</span><span class="w"> </span><span class="n">Sprite</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">PhysicsBody</span>
+<span class="w">  </span><span class="mf">2.</span><span class="w"> </span><span class="err">兜底</span><span class="w"> </span><span class="n">CSB</span><span class="w"> </span><span class="err">关卡文件</span>
+<span class="w">     </span><span class="err">└─</span><span class="w"> </span><span class="n">level1</span><span class="o">.</span><span class="n">csb</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">level5</span><span class="o">.</span><span class="n">csb</span><span class="w"> </span><span class="err">循环</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">遍历</span><span class="w"> </span><span class="n">goldPanel</span><span class="w"> </span><span class="err">子节点加</span><span class="w"> </span><span class="n">PhysicsBody</span>
+</code></pre></div>
+
+<h3 id="46">4.6 存档系统</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">PlayerManager</span><span class="err">（</span><span class="n">RapidJSON</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">UserDefault</span><span class="err">）</span><span class="p">:</span>
+<span class="w">  </span><span class="err">档案</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">allMoney</span><span class="p">,</span><span class="w"> </span><span class="n">stageNum</span><span class="p">,</span><span class="w"> </span><span class="n">history</span><span class="p">[]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">saveProfile</span><span class="p">()</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">UserDefault</span><span class="o">.</span><span class="n">setStringForKey</span><span class="p">(</span><span class="s2">&quot;player_profile_X&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">JSON</span><span class="p">)</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<span class="w">  </span><span class="n">loadProfile</span><span class="p">()</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">UserDefault</span><span class="o">.</span><span class="n">getStringForKey</span><span class="p">()</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">RapidJSON</span><span class="w"> </span><span class="n">parse</span>
+<span class="w">  </span><span class="err">玩家列表</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UserDefault</span><span class="o">.</span><span class="n">getStringForKey</span><span class="p">(</span><span class="s2">&quot;player_index&quot;</span><span class="p">)</span><span class="w">  </span><span class="err">（逗号分隔）</span>
+<span class="w">  </span><span class="n">history</span><span class="w"> </span><span class="err">只保留最近</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="err">条（</span><span class="n">erase</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="err">清理最旧）</span>
+
+<span class="n">UserDataManager</span><span class="err">（旧系统，</span><span class="n">UserDefault</span><span class="w"> </span><span class="err">直接存取标量）</span><span class="p">:</span>
+<span class="w">  </span><span class="n">UserDefault</span><span class="p">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getIntegerForKey</span><span class="p">(</span><span class="s2">&quot;allMoney&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">getStageNum</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="47">4.7 抓钩摇摆动画</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">rope</span><span class="o">-&gt;</span><span class="n">runAction</span><span class="p">(</span><span class="n">RepeatForever</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
+<span class="w">    </span><span class="n">Sequence</span><span class="p">(</span>
+<span class="w">        </span><span class="n">RotateTo</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mi">65</span><span class="p">),</span>
+<span class="w">        </span><span class="n">RotateTo</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span>
+<span class="w">        </span><span class="n">RotateTo</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">-65</span><span class="p">),</span>
+<span class="w">        </span><span class="n">RotateTo</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span>
+<span class="w">        </span><span class="nb">NULL</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="p">));</span>
+</code></pre></div>
+
+<p>周期 4 秒，最大摆角 ±65°。手势模式用 <code>rope-&gt;setRotation(_gestureAngle)</code> 逐帧平滑替代。</p>
+<hr />
+<h2 id="5">🐛 5. 踩过的坑与解决方法</h2>
+<h3 id="1-cocos">坑 1：跨线程访问 Cocos 对象崩溃</h3>
+<p><strong>现象</strong>：在识别器 worker thread 里直接 <code>Sprite::create()</code> 或 <code>setTexture()</code>，偶发崩溃。</p>
+<p><strong>原因</strong>：Cocos 不是线程安全的，引擎对象必须在主操作。</p>
+<p><strong>解决</strong>：所有 UI 操作切回主线程：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getScheduler</span><span class="p">()</span>
+<span class="w">    </span><span class="o">-&gt;</span><span class="n">performFunctionInCocosThread</span><span class="p">([</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">response</span><span class="p">)]()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 在主线程里 parse JSON、回调结果</span>
+<span class="w">    </span><span class="p">});</span>
+</code></pre></div>
+
+<h3 id="2-api">坑 2：识别频率过高触发 API 限流 + 游戏卡顿</h3>
+<p><strong>现象</strong>：每帧都想发给云端，API 调用爆 429，游戏渲染也因主线程等 curl 响应卡顿。</p>
+<p><strong>解决</strong>：<br />
+- curl 放在 <strong>worker thread</strong>，主线程不阻塞<br />
+- 云端只在 <strong>FIST 锁定时</strong> 才请求（OPEN_PALM 完全不走云端）<br />
+- 推理间隔 400ms（<code>std::this_thread::sleep_for(std::chrono::milliseconds(400))</code>）<br />
+- curl 超时短（500ms / 3s / 2s），避免网络卡整个游戏</p>
+<h3 id="3-fist">坑 3：竞态条件——两个 FIST 触发重叠</h3>
+<p><strong>现象</strong>：玩家快速握拳-张开-握拳，偶发钩子没放或连放两次。</p>
+<p><strong>解决</strong>：<br />
+- FIST 短按区间 0.8s &lt; t &lt; 1.5s，防抖动<br />
+- <strong>冷却 0.8s</strong>（<code>COOLDOWN_DURATION = 0.8f</code>），两次释放钩子必须间隔<br />
+- 用 <code>std::atomic&lt;bool&gt; _fistPendingCloud</code> + <code>std::mutex _pendingMutex</code> 保护"待云端确认"状态</p>
+<h3 id="4-markdown-json">坑 4：大模型返回 markdown 包裹的 JSON</h3>
+<p><strong>现象</strong>：<code>{"choices":[{"message":{"content":"```json {...} ```"}}]}</code>，直接 parse 失败。</p>
+<p><strong>解决</strong>：手动 find 第一个 <code>{</code> 和最后一个 <code>}</code> 截取纯 JSON 再 parse（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/services/AIGestureRecognizer.cpp#L253-L257">AIGestureRecognizer.cpp:253-257</a>）。</p>
+<h3 id="5-_latestlocal">坑 5：多线程共享 <code>_latestLocal</code> 不加锁</h3>
+<p><strong>现象</strong>：偶发崩溃或读到半更新的 <code>GestureResult</code> 结构体。</p>
+<p><strong>解决</strong>：每个 recognizer 一个 mutex，write 侧和 read 侧都必须 <code>std::lock_guard&lt;std::mutex&gt;</code>。</p>
+<h3 id="6curl_easy_init-curl_easy_cleanup">坑 6：<code>curl_easy_init</code> / <code>curl_easy_cleanup</code> 泄漏</h3>
+<p><strong>现象</strong>：长时间运行后内存上涨。</p>
+<p><strong>解决</strong>：每次请求结束必 <code>curl_easy_cleanup(curl)</code> + <code>curl_slist_free_all(headers)</code>；RAII scope guard（shared_ptr deleter）保证异常/提前 return 时也执行。</p>
+<h3 id="7mineral-scale">坑 7：Mineral 查表里 scale 是浮点数不能精确比较</h3>
+<p><strong>现象</strong>：<code>name == "gold-0-0.png" &amp;&amp; scale == 40</code> 有些情况下永远进不去。</p>
+<p><strong>解决</strong>：取整 <code>int scale = (int)(scaleX * 100);</code> 再比较整数。</p>
+<hr />
+<h2 id="6">🔄 6. 如果重新开始会怎么做</h2>
+<p>如果再写一次，我会做这些改进：</p>
+<ol>
+<li><strong>Mineral 查表</strong>：现在是一个巨型 <code>if/else</code>（<a href="file:///d:/GOLD%20MINER/goldminer-game/Classes/gameobjects/Mineral.cpp#L19-L93">Mineral.cpp:19-93</a>，30+ 分支）。应该改成：</li>
+</ol>
+<p><code>cpp
+   struct MineralStats { Type type; int score; float backSpeed; float hookRote; Vec2 offset; };
+   std::unordered_map&lt;std::string, MineralStats&gt; table = { ... };</code></p>
+<p>这样加新矿物类型只要加一行。</p>
+<ol>
+<li>
+<p><strong>减少单例</strong>：现在 9 个 getInstance() 单例其实可以注入。比如 Game 构造时传一个 ServiceContext 引用，里面持有 fusion、levelLoader、playerManager 指针，更容易写单元测试。</p>
+</li>
+<li>
+<p><strong>手势识别用回调链</strong>：现在每个识别器都手动 thread + mutex + atomic，可以封装一个"线程安全的异步识别器基类"，三个实现只关心"如何识别"，不关心线程模型。</p>
+</li>
+<li>
+<p><strong>关卡数据驱动矿物布局</strong>：现在 Mineral 有个兜底 CSB 关卡 + 硬编码 scale 的查表。改成 level_data.json 里直接定义每个矿物的 type/x/y/scale，Mineral 不做任何判断只负责渲染和返回 stats。</p>
+</li>
+<li>
+<p><strong>手势融合器拆成独立模块</strong>：GestureFusion 现在有 AI 模式 + 双通道模式两套逻辑。可以用"装饰器模式"——对 LocalRecognizer 套一个 CloudVerifierDecorator，或直接用 RecognizerSelector 做策略切换。</p>
+</li>
+<li>
+<p><strong>存档改成二进制</strong>：RapidJSON + UserDefault 够用但升级难。可以换 SQLite 或直接 <code>fwrite</code> 自定义格式。</p>
+</li>
+<li>
+<p><strong>手势识别测试</strong>：应该有单元测试（mock 掉摄像头，构造 GestureResult 序列）来验证 FIST 状态机、冷却、EMA 系数的正确性。</p>
+</li>
+</ol>
+<hr />
+<h2 id="7-c">7. 结语：C++ 学习心得</h2>
+<p>做完这个项目，C++ 学习最大的收获不是某个 API，而是<strong>对"怎么把东西搭起来"的整体感觉</strong>。</p>
+<p>具体地说：</p>
+<ol>
+<li>
+<p><strong>C++ 真的没有魔法</strong>。STL 容器、mutex、atomic、thread、shared_ptr 这些东西全是"让你自己声明意图，编译器/运行时帮你一点点"。不像 Python/JS 自动帮你做这么多。代价是写的时候想多写几行，好处是你对"每一份内存、每一个线程、每一次锁"都有明确的直觉。</p>
+</li>
+<li>
+<p><strong>多线程不是 <code>#include &lt;thread&gt;</code> 就完了</strong>。线程只是"执行的并行"，"状态的一致"全靠你自己 mutex + atomic + 生命周期管理。踩过"忘记加锁崩溃"和"忘记 reset atomic 第二次 FIST 无效"之后，对"每个共享变量都要有明确所有权"这件事会非常警惕。</p>
+</li>
+<li>
+<p><strong>现代 C++（C++11 及之后）真的好用</strong>。<code>enum class</code>、<code>auto</code>、lambda、<code>std::function</code>、<code>std::move</code>、<code>= default</code> 让代码简洁很多。但代价是要理解"右值是什么"、"shared_ptr deleter 能做 scope guard"这种高级技巧，需要持续学习。</p>
+</li>
+<li>
+<p><strong>设计模式不是玄学</strong>。策略模式解决了"三种识别器怎么切换"；单例模式解决了"全局唯一状态"；观察者模式/回调解决了"识别器怎么通知上层"；工厂模式解决了"Cocos 的两阶段构造"。这些都在项目里有实际代码可对照。</p>
+</li>
+<li>
+<p><strong>外部库集成是一门学问</strong>。libcurl + RapidJSON + OpenCV + Cocos 引擎全混在一起时，编译错误会让人崩溃。理解 <code>CMakeLists.txt</code>、include 路径、链接顺序、不同库的生命周期（Cocos autorelease vs C++ 原生 delete vs libcurl curl_easy_cleanup）是必须掌握的。</p>
+</li>
+<li>
+<p><strong>"能跑起来"和"长期维护"是两件事</strong>。Mineral 那个巨型 if/else、3 种手势识别器 200 行 Fusion 逻辑、PlayerManager 里 RapidJSON 手动读写——每个都能跑，但每次改都要非常小心。加注释、加日志、抽象出小模块会让自己少掉很多头发。</p>
+</li>
+<li>
+<p><strong>做"和硬件互动 + 网络请求 + 游戏循环"的项目最爽</strong>。单纯写算法题看不到 mutex/thread、看不到 libcurl、看不到 RapidJSON。而当你把"摄像头 → 本地识别 → 云端确认 → 融合器 → 游戏指令 → 物理碰撞 → 加分动画"这一整条链路用 C++ 串起来跑通时，那种成就感是写 LeetCode 无法比拟的。</p>
+</li>
+</ol>
+<p>C++ 学习没有捷径。最有效的方式就是<strong>选一个真有内容的小项目，全程用 C++ 实现，不逃避任何一个困难</strong>。</p>
+<hr />
+<blockquote>
+<p>报告整理于 2026 年 6 月，基于项目 <code>goldminer-game/</code> 当前代码。</p>
+</blockquote>
+    </div>
+    <a href="#" class="back-top" title="回到顶部">↑</a>
+    <script>
+        const pc=document.getElementById('particles');
+        for(let i=0;i<30;i++){const p=document.createElement('div');p.className=Math.random()>0.3?'particle':'particle spark';p.style.left=Math.random()*100+'%';p.style.animationDuration=(8+Math.random()*15)+'s';p.style.animationDelay=Math.random()*10+'s';pc.appendChild(p);}
+        document.querySelector('.back-top').addEventListener('click',e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});});
+    </script>
+</body>
+</html>
