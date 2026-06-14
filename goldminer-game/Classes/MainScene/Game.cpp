@@ -15,8 +15,11 @@
 #include "AIGestureService.hpp"
 #include "AIGestureRecognizer.hpp"
 #include "GestureFusion.hpp"
+#include "LevelLoader.hpp"
 #include "platform/CCImage.h"
 #include "base/CCEventListenerMouse.h"
+#include "json/rapidjson.h"
+#include "json/document-wrapper.h"
 #define kWorldTag 1000
 
 InputMode Game::_defaultInputMode = InputMode::TOUCH;
@@ -172,13 +175,61 @@ bool Game::physicsBegin(cocos2d::PhysicsContact &contact)
 
 void Game::loadStageInfo()
 {
-    // 加载关卡信息
     int stageNum = UserDataManager::getInstance()->getStageNum();
+
+    // ── 优先 JSON 关卡系统（LevelLoader）──
+    auto* levelLoader = LevelLoader::getInstance();
+    if (!levelLoader->isLoaded()) {
+        levelLoader->loadLevelFile("level_data.json");
+    }
+
+    if (levelLoader->isLoaded()) {
+        const LevelDef* levelDef = levelLoader->getLevel(stageNum);
+        if (levelDef) {
+            // 更新目标分数（JSON 驱动）
+            passScroe = levelDef->targetMoney;
+            targetMoney->setString(to_string(passScroe));
+
+            // 创建矿物容器
+            auto goldsLayout = Layout::create();
+            goldsLayout->setContentSize(Size(kWinSizeWidth, kWinSizeHeight));
+            goldsLayout->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+            goldsLayout->setPosition(Vec2::ZERO);
+            goldsLayout->setName("goldPanel");
+            this->addChild(goldsLayout);
+
+            for (const auto& minDef : levelDef->minerals) {
+                std::string frameName = LevelLoader::typeToFrameName(minDef.type);
+                auto sprite = Sprite::createWithSpriteFrameName(frameName);
+                if (!sprite) continue;
+
+                float px = minDef.x * kWinSizeWidth;
+                float py = minDef.y * kWinSizeHeight;
+                sprite->setPosition(px, py);
+                sprite->setScale(minDef.scale);
+                sprite->setName(frameName);
+                goldsLayout->addChild(sprite);
+
+                Size bodySize = Size(sprite->getContentSize().width * minDef.scale,
+                                     sprite->getContentSize().height * minDef.scale);
+                PhysicsBody* goldBody = PhysicsBody::createEdgeBox(bodySize);
+                goldBody->setCategoryBitmask(10);
+                goldBody->setCollisionBitmask(10);
+                goldBody->setContactTestBitmask(10);
+                sprite->addComponent(goldBody);
+            }
+            CCLOG("[Game] Loaded level %d from JSON (%d minerals)",
+                  levelDef->level, (int)levelDef->minerals.size());
+            return;
+        }
+    }
+
+    // ── 兜底：CSB 关卡文件 ──
     int levelIndex = stageNum % 5;
     if (levelIndex == 0) {
         levelIndex = 5;
     }
-    
+
     string levelCsbName = "level" + to_string(levelIndex) + ".csb";
     auto goldCsb = CSLoader::createNode(levelCsbName);
     if (!goldCsb) {
@@ -186,7 +237,7 @@ void Game::loadStageInfo()
         return;
     }
     this->addChild(goldCsb);
-    
+
     // 所有金块
     auto goldsLayout = Helper::seekWidgetByName(static_cast<Widget *>(goldCsb), "goldPanel");
     Vector<Node *> golds = goldsLayout->getChildren();
@@ -460,8 +511,21 @@ void Game::switchInputMode(InputMode mode)
 
             if (mode == InputMode::AI) {
                 // AI 模式：摄像头直连大模型，跳过 OpenCV/MediaPipe
+                // 从配置文件读取 API 凭据
                 std::string cloudEp = "doubao-seed-2-0-mini-260428";
-                std::string cloudKey = "09319510-56ea-4f89-9cdf-ced640510471";
+                std::string cloudKey = "";
+                std::string configPath = FileUtils::getInstance()->fullPathForFilename("ai_config.json");
+                if (!configPath.empty()) {
+                    std::string jsonData = FileUtils::getInstance()->getStringFromFile(configPath);
+                    if (!jsonData.empty()) {
+                        rapidjson::Document cfg;
+                        cfg.Parse(jsonData.c_str());
+                        if (!cfg.HasParseError()) {
+                            if (cfg.HasMember("model"))  cloudEp = cfg["model"].GetString();
+                            if (cfg.HasMember("apiKey")) cloudKey = cfg["apiKey"].GetString();
+                        }
+                    }
+                }
                 initOk = fusion->initializeAI(cloudEp, cloudKey);
                 CCLOG("[Game] AI mode: camera -> LLM direct gesture recognition");
             } else {

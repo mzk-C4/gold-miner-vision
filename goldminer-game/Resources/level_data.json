@@ -1,0 +1,73 @@
+{
+  "levels": [
+    {
+      "level": 1,
+      "targetMoney": 650,
+      "timeLimit": 60,
+      "minerals": [
+        {"type": "gold_small",  "x": 0.18, "y": 0.72, "scale": 0.40},
+        {"type": "gold_medium", "x": 0.35, "y": 0.62, "scale": 0.65},
+        {"type": "gold_small",  "x": 0.52, "y": 0.67, "scale": 0.40},
+        {"type": "stone_small", "x": 0.68, "y": 0.73, "scale": 0.80},
+        {"type": "gold_large",  "x": 0.78, "y": 0.58, "scale": 0.90},
+        {"type": "gold_small",  "x": 0.88, "y": 0.71, "scale": 0.40}
+      ]
+    },
+    {
+      "level": 2,
+      "targetMoney": 1335,
+      "timeLimit": 60,
+      "minerals": [
+        {"type": "gold_medium",  "x": 0.20, "y": 0.68, "scale": 0.65},
+        {"type": "stone_small",  "x": 0.38, "y": 0.72, "scale": 0.80},
+        {"type": "diamond",      "x": 0.50, "y": 0.55, "scale": 0.40},
+        {"type": "gold_small",   "x": 0.55, "y": 0.70, "scale": 0.40},
+        {"type": "gold_large",   "x": 0.72, "y": 0.62, "scale": 0.90},
+        {"type": "stone_medium", "x": 0.85, "y": 0.69, "scale": 1.00}
+      ]
+    },
+    {
+      "level": 3,
+      "targetMoney": 2020,
+      "timeLimit": 55,
+      "minerals": [
+        {"type": "gold_large",   "x": 0.15, "y": 0.65, "scale": 0.90},
+        {"type": "stone_medium", "x": 0.32, "y": 0.70, "scale": 1.00},
+        {"type": "gold_small",   "x": 0.48, "y": 0.60, "scale": 0.40},
+        {"type": "gold_medium",  "x": 0.52, "y": 0.67, "scale": 0.65},
+        {"type": "diamond",      "x": 0.68, "y": 0.55, "scale": 0.40},
+        {"type": "stone_small",  "x": 0.75, "y": 0.72, "scale": 0.80},
+        {"type": "treasure_bag", "x": 0.90, "y": 0.63, "scale": 0.50}
+      ]
+    },
+    {
+      "level": 4,
+      "targetMoney": 2705,
+      "timeLimit": 50,
+      "minerals": [
+        {"type": "stone_large",  "x": 0.18, "y": 0.64, "scale": 1.50},
+        {"type": "gold_medium",  "x": 0.35, "y": 0.58, "scale": 0.65},
+        {"type": "diamond",      "x": 0.42, "y": 0.50, "scale": 0.40},
+        {"type": "gold_large",   "x": 0.55, "y": 0.67, "scale": 0.90},
+        {"type": "stone_medium", "x": 0.70, "y": 0.71, "scale": 1.00},
+        {"type": "gold_small",   "x": 0.80, "y": 0.62, "scale": 0.40},
+        {"type": "treasure_bag", "x": 0.90, "y": 0.55, "scale": 0.50}
+      ]
+    },
+    {
+      "level": 5,
+      "targetMoney": 3390,
+      "timeLimit": 45,
+      "minerals": [
+        {"type": "gold_large",   "x": 0.15, "y": 0.62, "scale": 0.90},
+        {"type": "diamond",      "x": 0.28, "y": 0.52, "scale": 0.40},
+        {"type": "stone_large",  "x": 0.40, "y": 0.68, "scale": 1.50},
+        {"type": "gold_medium",  "x": 0.55, "y": 0.58, "scale": 0.65},
+        {"type": "gold_small",   "x": 0.65, "y": 0.65, "scale": 0.40},
+        {"type": "treasure_bag", "x": 0.72, "y": 0.53, "scale": 0.50},
+        {"type": "diamond",      "x": 0.82, "y": 0.57, "scale": 0.40},
+        {"type": "stone_medium", "x": 0.90, "y": 0.70, "scale": 1.00}
+      ]
+    }
+  ]
+}

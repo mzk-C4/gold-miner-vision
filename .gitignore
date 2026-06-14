@@ -95,5 +95,8 @@ vision/gesture-recognition/
 
 # Dev temp
 dev-temp/
+
+# Local secrets
+ai_config.json
 video/
 .DS_Store
