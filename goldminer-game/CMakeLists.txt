@@ -9,10 +9,6 @@ set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 include(CocosBuildSet)
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
-# OpenCV - MinGW build
-set(OpenCV_DIR "F:/toolbox/opencv/OpenCV-MinGW-Build/x64/mingw/lib")
-find_package(OpenCV REQUIRED)
-
 set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
 
 if(WINDOWS)
@@ -38,9 +34,9 @@ list(APPEND GAME_SOURCE
     Classes/services/CloudGestureRecognizer.cpp
     Classes/services/GestureFusion.cpp
     Classes/services/AIGestureRecognizer.cpp
+    # Classes/services/GestureRecognizer.cpp     # needs OpenCV headers
     Classes/MainScene/Gold.cpp
-    Classes/services/GestureRecognizer.cpp
-    Classes/utils/MatToTexture.cpp
+    # Classes/utils/MatToTexture.cpp             # needs OpenCV headers
 )
 
 list(APPEND GAME_HEADER
@@ -84,10 +80,9 @@ endif()
 set(all_code_files ${GAME_HEADER} ${GAME_SOURCE})
 add_executable(${APP_NAME} ${all_code_files})
 
-target_link_libraries(${APP_NAME} cocos2d ${OpenCV_LIBS})
+target_link_libraries(${APP_NAME} cocos2d)
 target_include_directories(${APP_NAME}
     PRIVATE Classes
-    PRIVATE ${OpenCV_INCLUDE_DIRS}
     PRIVATE Classes/Other
     PRIVATE Classes/Tool
     PRIVATE Classes/MainScene
@@ -115,14 +110,10 @@ if(WINDOWS)
 
     # Copy GestureServer.exe and OpenCV DLL to game output directory
     set(GESTURE_SERVER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/GestureServer/build/bin/GestureServer.exe")
-    set(OPENCV_DLL_DIR "F:/toolbox/opencv/OpenCV-MinGW-Build/x64/mingw/bin")
+    set(OPENCV_DLL_SRC "F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll")
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${GESTURE_SERVER_SRC}" "$<TARGET_FILE_DIR:${APP_NAME}>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_core452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_imgproc452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_highgui452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_videoio452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_imgcodecs452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
-        COMMENT "Copying GestureServer.exe and OpenCV DLLs to game output"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_SRC}" "$<TARGET_FILE_DIR:${APP_NAME}>"
+        COMMENT "Copying GestureServer.exe and OpenCV DLL to game output"
     )
 endif()
