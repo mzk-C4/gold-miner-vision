@@ -16,7 +16,7 @@ if(WINDOWS)
 endif()
 
 list(APPEND GAME_SOURCE
-    Classes/AppDelegate.cpp
+    Classes/Other/AppDelegate.cpp
     Classes/MainScene/MainRoot.cpp
     Classes/MainScene/Game.cpp
     Classes/MainScene/Shop.cpp
@@ -34,10 +34,13 @@ list(APPEND GAME_SOURCE
     Classes/services/CloudGestureRecognizer.cpp
     Classes/services/GestureFusion.cpp
     Classes/services/AIGestureRecognizer.cpp
+    Classes/MainScene/Gold.cpp
+    Classes/services/GestureRecognizer.cpp
+    Classes/utils/MatToTexture.cpp
 )
 
 list(APPEND GAME_HEADER
-    Classes/AppDelegate.h
+    Classes/Other/AppDelegate.h
     Classes/MainScene/MainRoot.hpp
     Classes/MainScene/Game.hpp
     Classes/MainScene/Shop.hpp
@@ -58,6 +61,9 @@ list(APPEND GAME_HEADER
     Classes/services/CloudGestureRecognizer.hpp
     Classes/services/GestureFusion.hpp
     Classes/services/AIGestureRecognizer.hpp
+    Classes/MainScene/Gold.hpp
+    Classes/services/GestureRecognizer.hpp
+    Classes/utils/MatToTexture.hpp
 )
 
 if(WINDOWS)
@@ -84,6 +90,7 @@ target_include_directories(${APP_NAME}
     PRIVATE Classes/gameobjects
     PRIVATE Classes/services
     PRIVATE Classes/utils
+    PRIVATE Classes/utils
     PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include
     PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/editor-support/cocostudio
     PRIVATE ${COCOS2DX_ROOT_PATH}/external
@@ -93,6 +100,8 @@ setup_cocos_app_config(${APP_NAME})
 
 if(MSVC)
     target_compile_options(${APP_NAME} PRIVATE /utf-8)
+else()
+    target_compile_options(${APP_NAME} PRIVATE -std=c++17 -Wall)
 endif()
 
 if(WINDOWS)
@@ -101,11 +110,15 @@ if(WINDOWS)
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 
     # Copy GestureServer.exe and OpenCV DLL to game output directory
-    set(GESTURE_SERVER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/GestureServer/build/bin/Release/GestureServer.exe")
-    set(OPENCV_DLL_SRC "F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll")
+    set(GESTURE_SERVER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/GestureServer/build/bin/GestureServer.exe")
+    set(OPENCV_DLL_DIR "F:/toolbox/opencv/OpenCV-MinGW-Build/x64/mingw/bin")
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${GESTURE_SERVER_SRC}" "$<TARGET_FILE_DIR:${APP_NAME}>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_SRC}" "$<TARGET_FILE_DIR:${APP_NAME}>"
-        COMMENT "Copying GestureServer.exe and OpenCV DLL to game output"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_core452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_imgproc452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_highgui452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_videoio452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OPENCV_DLL_DIR}/libopencv_imgcodecs452.dll" "$<TARGET_FILE_DIR:${APP_NAME}>"
+        COMMENT "Copying GestureServer.exe and OpenCV DLLs to game output"
     )
 endif()

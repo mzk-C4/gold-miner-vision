@@ -96,3 +96,4 @@ vision/gesture-recognition/
 # Dev temp
 dev-temp/
 video/
+.DS_Store
