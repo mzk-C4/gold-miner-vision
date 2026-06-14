@@ -460,8 +460,8 @@ void Game::switchInputMode(InputMode mode)
 
             if (mode == InputMode::AI) {
                 // AI 模式：摄像头直连大模型，跳过 OpenCV/MediaPipe
-                std::string cloudEp = "doubao-seed-2-0-mini-260428";
-                std::string cloudKey = "";  // see Resources/ai_config.json
+                std::string cloudEp = "doubao-vision-pro-32k";
+                std::string cloudKey = "";  // FIXME: 从配置文件读取 API Key
                 initOk = fusion->initializeAI(cloudEp, cloudKey);
                 CCLOG("[Game] AI mode: camera -> LLM direct gesture recognition");
             } else {
