@@ -9,6 +9,10 @@ set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 include(CocosBuildSet)
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
+# OpenCV - MinGW build
+set(OpenCV_DIR "F:/toolbox/opencv/OpenCV-MinGW-Build/x64/mingw/lib")
+find_package(OpenCV REQUIRED)
+
 set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
 
 if(WINDOWS)
@@ -73,7 +77,6 @@ if(WINDOWS)
     )
     list(APPEND GAME_SOURCE
         proj.win32/main.cpp
-        proj.win32/game.rc
         ${common_res_files}
     )
 endif()
@@ -81,9 +84,10 @@ endif()
 set(all_code_files ${GAME_HEADER} ${GAME_SOURCE})
 add_executable(${APP_NAME} ${all_code_files})
 
-target_link_libraries(${APP_NAME} cocos2d)
+target_link_libraries(${APP_NAME} cocos2d ${OpenCV_LIBS})
 target_include_directories(${APP_NAME}
     PRIVATE Classes
+    PRIVATE ${OpenCV_INCLUDE_DIRS}
     PRIVATE Classes/Other
     PRIVATE Classes/Tool
     PRIVATE Classes/MainScene
