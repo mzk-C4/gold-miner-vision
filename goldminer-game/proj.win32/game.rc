@@ -1,6 +1,6 @@
 #include "resource.h"
 
-IDI_ICON1 ICON "game.ico"
+// IDI_ICON1 ICON "game.ico"
 #include "winresrc.h"
 
 VS_VERSION_INFO VERSIONINFO

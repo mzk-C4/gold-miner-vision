@@ -16,7 +16,7 @@ if(WINDOWS)
 endif()
 
 list(APPEND GAME_SOURCE
-    Classes/Other/AppDelegate.cpp
+    Classes/AppDelegate.cpp
     Classes/MainScene/MainRoot.cpp
     Classes/MainScene/Game.cpp
     Classes/MainScene/Shop.cpp
@@ -37,7 +37,7 @@ list(APPEND GAME_SOURCE
 )
 
 list(APPEND GAME_HEADER
-    Classes/Other/AppDelegate.h
+    Classes/AppDelegate.h
     Classes/MainScene/MainRoot.hpp
     Classes/MainScene/Game.hpp
     Classes/MainScene/Shop.hpp
@@ -101,7 +101,7 @@ if(WINDOWS)
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 
     # Copy GestureServer.exe and OpenCV DLL to game output directory
-    set(GESTURE_SERVER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/GestureServer/build/bin/GestureServer.exe")
+    set(GESTURE_SERVER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/GestureServer/build/bin/Release/GestureServer.exe")
     set(OPENCV_DLL_SRC "F:/tools/opencv/build/x64/vc16/bin/opencv_world4120.dll")
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${GESTURE_SERVER_SRC}" "$<TARGET_FILE_DIR:${APP_NAME}>"
