@@ -2,18 +2,19 @@
 //  MainRoot.hpp
 //  GoldMiner
 //
-//  项目GitHub地址:https://github.com/ZhongTaoTian
-//  项目思路和架构讲解博客:http://www.jianshu.com/users/5fe7513c7a57/latest_articles
-//  微博:http://weibo.com/5622363113/fans?topnav=1&wvr=6&mod=message&need_filter=1
+//  Created by MacBook on 16/11/22.
+//
+//
 
 #ifndef MainRoot_hpp
 #define MainRoot_hpp
 
 #include <stdio.h>
 #include "Const.hpp"
+#include "services/PlayerManager.hpp"
 
 class MainLayer : public Layer {
-    
+
 public:
     static Scene *createScene();
     virtual bool init();
@@ -25,16 +26,34 @@ private:
     Sprite *leftLeg;
     Sprite *face;
     Sprite *light;
-    
+
 private:
     cocostudio::timeline::ActionTimeline *animation;
     virtual void onEnter();
     void moveCloud(ImageView *cloud, float time1, float time2);
     void playMinerAnimation(Sprite *sprite, string imageName, float frameDelat);
-    
+
 #pragma mark - Action
     void startButtonTouch(Ref *sender, Widget::TouchEventType type);
+
+    void showPlayerPanel();
+    void hidePlayerPanel();
+    void refreshPlayerList();
+    void updatePlayerLabel();
+
+    Node *_playerPanel = nullptr;
+    Button *_startBtn = nullptr;
+    Button *_playerBtn = nullptr;
+    bool _playerSelected = false;
+    bool _playerExplicitlySelected = false;
+    EventListenerTouchOneByOne *_panelDismissListener = nullptr;
+
+    // Mode selection
+    int _selectedMode = 0; // 0=TOUCH, 1=OPENCV, 2=AI
+    Button *_touchModeBtn = nullptr;
+    Button *_opencvModeBtn = nullptr;
+    Button *_aiModeBtn = nullptr;
+    void onModeBtnTouch(int mode);
 };
 
 #endif /* MainRoot_hpp */
-

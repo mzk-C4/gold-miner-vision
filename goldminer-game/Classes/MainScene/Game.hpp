@@ -2,16 +2,19 @@
 //  Game.hpp
 //  GoldMiner
 //
-//  项目GitHub地址:https://github.com/ZhongTaoTian
-//  项目思路和架构讲解博客:http://www.jianshu.com/users/5fe7513c7a57/latest_articles
-//  微博:http://weibo.com/5622363113/fans?topnav=1&wvr=6&mod=message&need_filter=1
+//  Created by MacBook on 16/11/27.
+//
+//
 
 #ifndef Game_hpp
 #define Game_hpp
 
 #include <stdio.h>
 #include "Const.hpp"
-#include "Gold.hpp"
+#include "Mineral.hpp"
+#include "GestureClient.hpp"
+
+enum class InputMode { TOUCH, OPENCV, AI };
 
 class Game : public Layer {
     
@@ -19,6 +22,8 @@ public:
     static Scene *createScene(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney);
     virtual bool init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney);
     static Game *create(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney);
+    static void setDefaultInputMode(InputMode mode) { _defaultInputMode = mode; }
+    static InputMode getDefaultInputMode() { return _defaultInputMode; }
 
 private:
     Text *allMoney;
@@ -40,16 +45,23 @@ private:
     bool ropeChangeing;
     int ropeHeight = 20;
     int curPayMoney;
-    
+
     Point circlePosition;
     bool isOpenHook;
-    
-    Gold *goldSprite;
-    
+    bool _isPaused = false;
+
+    Mineral *_hookedMineral;
+
     bool isBuyPotion;
     bool isBuyDiamonds;
     bool isBuyStoneBook;
     Button *bompButton;
+
+    // Gesture / input mode
+    static InputMode _defaultInputMode;
+    InputMode _inputMode = InputMode::TOUCH;
+    Sprite *_cameraPreview = nullptr;
+    float _gestureAngle = 0.0f;
     
 private:
     void addButtonAction(Node *csbNode);
@@ -63,15 +75,24 @@ private:
     
     void startShakeHookAnimation();
     void stopShakeHookAnimation();
-    
+
     void addRopeHeight(float dt);
     void subRopeHeight(float dt);
-    
+
     void loadStageInfo();
 
     bool touchCallBack(Touch *touch, Event *event);
     bool physicsBegin(PhysicsContact &contact);
     void pullGold(PhysicsContact &contact);
+
+    // Bomb / explosive
+    void detonateBomb();
+    void onRightMouseClick(EventMouse* event);
+
+    // Gesture mode
+    void switchInputMode(InputMode mode);
+    void updateGestureAngle(float dt);
+    void updateCameraPreview(float dt);
 };
 
 #endif /* Game_hpp */

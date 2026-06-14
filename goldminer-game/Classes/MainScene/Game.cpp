@@ -2,10 +2,8 @@
 //  Game.cpp
 //  GoldMiner
 //
-//  Created by 维尼的小熊 on 16/11/27.
-//  项目GitHub地址:https://github.com/ZhongTaoTian
-//  项目思路和架构讲解博客:http://www.jianshu.com/users/5fe7513c7a57/latest_articles
-//  微博:http://weibo.com/5622363113/fans?topnav=1&wvr=6&mod=message&need_filter=1
+//  Created by MacBook on 16/11/27.
+//
 //
 
 #include "Game.hpp"
@@ -13,8 +11,15 @@
 #include "UserDataManager.hpp"
 #include "StageTipsLayer.hpp"
 #include "Shop.hpp"
-
+#include "GestureClient.hpp"
+#include "AIGestureService.hpp"
+#include "AIGestureRecognizer.hpp"
+#include "GestureFusion.hpp"
+#include "platform/CCImage.h"
+#include "base/CCEventListenerMouse.h"
 #define kWorldTag 1000
+
+InputMode Game::_defaultInputMode = InputMode::TOUCH;
 
 Scene *Game::createScene(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney)
 {
@@ -39,7 +44,7 @@ Scene *Game::createScene(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, b
     node->setTag(kWorldTag);
     scene->addChild(node);
     
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("res/Resources/level-sheet.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Resources/level-sheet.plist");
     
     return scene;
 }
@@ -63,8 +68,12 @@ Game *Game::create(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool is
 bool Game::init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isStoneBook, int payMoney)
 {
     if (!Layer::init()) return false;
-    
+
     auto csb = CSLoader::createNode("GameLayer.csb");
+    if (!csb) {
+        CCLOG("ERROR: Failed to load GameLayer.csb");
+        return false;
+    }
     this->addChild(csb, 10);
     
     this->isBuyPotion = isBuyPotion;
@@ -75,27 +84,7 @@ bool Game::init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isSto
     bompButton->setVisible(isBuyBomb);
     bompButton->addTouchEventListener([=](Ref *ref, Widget::TouchEventType type){
         if (type == Widget::TouchEventType::ENDED) {
-            // click bomp
-            if (isOpenHook) {
-                bompButton->setVisible(false);
-                // 炸毁物品
-                backSpeed = 10;
-                
-                isOpenHook = false;
-                leftHook->setRotation(0);
-                rightHook->setRotation(0);
-                
-                //爆炸效果
-                auto postion = rope->convertToWorldSpace(middleCircle->getPosition());
-                ParticleSystemQuad *bompEm = ParticleSystemQuad::create("res/Boom.plist");
-                bompEm->setPosition(postion);
-                this->addChild(bompEm);
-                
-                SoundTool::getInstance()->playEffect("res/music/bomb.mp3");
-                
-                goldSprite->removeFromParent();
-                
-            }
+            this->detonateBomb();
         }
     });
     
@@ -104,6 +93,10 @@ bool Game::init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isSto
     this->runAction(minerTimeLine);
     
     auto hookCsb = CSLoader::createNode("Hook.csb");
+    if (!hookCsb) {
+        CCLOG("ERROR: Failed to load Hook.csb");
+        return false;
+    }
     hookCsb->setPosition(kWinSizeWidth * 0.48, kWinSizeHeight * 0.856);
     this->addChild(hookCsb, 11);
     
@@ -137,13 +130,25 @@ bool Game::init(bool isBuyBomb, bool isBuyPotion, bool isBuyDiamonds, bool isSto
         user->setAllMoney(UserDataManager::getInstance()->getAllMoney() - curPayMoney + curStageScore);
         user->setStageNum(user->getStageNum()+1);
         user->saveUserData();
-        
+
         // 进入商店
         Scene *shopScene = Shop::createScene();
         Director::getInstance()->replaceScene(shopScene);
     });
-    
+
+    _eventDispatcher->addCustomEventListener("resumeGame", [=](EventCustom *cus){
+        if (_isPaused) {
+            _isPaused = false;
+            this->startGame();
+        }
+    });
+
     loadStageInfo();
+
+    // Apply default mode from home screen
+    if (_defaultInputMode != InputMode::TOUCH) {
+        switchInputMode(_defaultInputMode);
+    }
 
     return true;
 }
@@ -176,6 +181,10 @@ void Game::loadStageInfo()
     
     string levelCsbName = "level" + to_string(levelIndex) + ".csb";
     auto goldCsb = CSLoader::createNode(levelCsbName);
+    if (!goldCsb) {
+        CCLOG("ERROR: Failed to load %s", levelCsbName.c_str());
+        return;
+    }
     this->addChild(goldCsb);
     
     // 所有金块
@@ -198,15 +207,44 @@ void Game::pullGold(cocos2d::PhysicsContact &contact)
     
     auto gold = contact.getShapeB()->getBody()->getNode();
     
-    goldSprite = Gold::create(gold->getName(), gold->getScaleX(), gold->getScaleY(), gold->getRotation(), isBuyPotion, isBuyDiamonds, isBuyStoneBook);
-    middleCircle->addChild(goldSprite);
+    _hookedMineral = Mineral::create(gold->getName(), gold->getScaleX(), gold->getScaleY(), gold->getRotation(), isBuyPotion, isBuyDiamonds, isBuyStoneBook);
+    middleCircle->addChild(_hookedMineral);
     contact.getShapeB()->getBody()->removeFromWorld();
-    this->backSpeed = goldSprite->backSpeed;
-    leftHook->runAction(RotateTo::create(0.05, -goldSprite->hookRote));
-    rightHook->runAction(RotateTo::create(0.05, goldSprite->hookRote));
+    this->backSpeed = _hookedMineral->backSpeed;
+    leftHook->runAction(RotateTo::create(0.05, -_hookedMineral->hookRote));
+    rightHook->runAction(RotateTo::create(0.05, _hookedMineral->hookRote));
     
     gold->getPhysicsBody()->setEnabled(false);
     gold->setVisible(false);
+}
+
+void Game::detonateBomb()
+{
+    if (!isOpenHook || !_hookedMineral) return;
+
+    bompButton->setVisible(false);
+    backSpeed = 10;
+
+    isOpenHook = false;
+    leftHook->setRotation(0);
+    rightHook->setRotation(0);
+
+    auto position = rope->convertToWorldSpace(middleCircle->getPosition());
+    ParticleSystemQuad* bombEm = ParticleSystemQuad::create("Boom.plist");
+    bombEm->setPosition(position);
+    this->addChild(bombEm);
+
+    SoundTool::getInstance()->playEffect("music/bomb.mp3");
+
+    _hookedMineral->removeFromParent();
+    _hookedMineral = nullptr;
+}
+
+void Game::onRightMouseClick(EventMouse* event)
+{
+    if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT) {
+        this->detonateBomb();
+    }
 }
 
 void Game::subRopeHeight(float dt)
@@ -227,18 +265,18 @@ void Game::subRopeHeight(float dt)
             leftHook->setRotation(0);
             rightHook->setRotation(0);
             
-            if (goldSprite != nullptr) {
+            if (_hookedMineral != nullptr) {
                 // 加分动画
                 Label *scoreLabel = Label::create();
                 scoreLabel->setColor(Color3B(50, 200, 0));
                 scoreLabel->setSystemFontSize(25);
-                scoreLabel->setString(to_string(goldSprite->score));
+                scoreLabel->setString(to_string(_hookedMineral->score));
                 scoreLabel->setPosition(rope->convertToWorldSpace(middleCircle->getPosition()));
                 this->addChild(scoreLabel, 1000);
                 
-                SoundTool::getInstance()->playEffect("res/music/laend.mp3");
+                SoundTool::getInstance()->playEffect("music/laend.mp3");
                 
-                curStageScore += goldSprite->score;
+                curStageScore += _hookedMineral->score;
                 auto spawn = Spawn::create(MoveTo::create(0.5, Vec2(allMoney->getPosition().x + 10, allMoney->getPosition().y)), Sequence::create(ScaleTo::create(0.25, 3), ScaleTo::create(0.25, 0.1), NULL), NULL);
                 auto seque = Sequence::create(spawn, CallFuncN::create([=](Node *node){
                     
@@ -249,13 +287,13 @@ void Game::subRopeHeight(float dt)
                 scoreLabel->runAction(seque);
                 
                 // 加分
-                goldSprite->removeFromParent();
-                goldSprite = nullptr;
+                _hookedMineral->removeFromParent();
+                _hookedMineral = nullptr;
             }
         }
     }
     
-    rope->setSize(Size(3, ropeHeight));
+    rope->setContentSize(Size(3, ropeHeight));
 }
 
 void Game::setUpText(Widget *csb)
@@ -278,15 +316,20 @@ void Game::setUpText(Widget *csb)
 void Game::onEnter()
 {
     Layer::onEnter();
-    
+
+    // MusicPlayer handles background music — don't restart backMusic
+
     if (!showStageTips) {
         showStageTips = true;
-        
-        SoundTool::getInstance()->playEffect("res/music/level.mp3");
-        
+
+        SoundTool::getInstance()->playEffect("music/level.mp3");
+
         StageTipsLayer::showStageTipsLayer(this, UserDataManager::getInstance()->getStageNum(), [=](){
             this->startGame();
         });
+    } else if (_isPaused) {
+        _isPaused = false;
+        this->startGame();
     }
 }
 
@@ -302,17 +345,29 @@ void Game::updateTime(float dt)
 
 void Game::startGame()
 {
-    // 添加点击事件
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = CC_CALLBACK_2(Game::touchCallBack, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-    
-    this->startShakeHookAnimation();
+    // 右键引爆（所有模式通用）
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(Game::onRightMouseClick, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
+    if (_inputMode == InputMode::TOUCH) {
+        // 触摸模式：点击屏幕释放钩子
+        auto listener = EventListenerTouchOneByOne::create();
+        listener->onTouchBegan = CC_CALLBACK_2(Game::touchCallBack, this);
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+        this->startShakeHookAnimation();
+    } else {
+        // 姿态模式：手势控制钩子，触摸仅用于 UI 按钮（炸弹等）
+        this->schedule(CC_SCHEDULE_SELECTOR(Game::updateGestureAngle), 0.05);
+        this->schedule(CC_SCHEDULE_SELECTOR(Game::updateCameraPreview), 0.1);
+    }
     schedule(CC_SCHEDULE_SELECTOR(Game::updateTime), 1, 59, 0);
 }
 
 void Game::startShakeHookAnimation()
 {
+    if (_inputMode != InputMode::TOUCH) return;
+
     rope->setRotation(0);
     
     float duration = 1;
@@ -325,9 +380,9 @@ void Game::stopGame()
     // 停止一切时间
     rope->stopAllActions();
     this->stopAllActions();
-    this->unscheduleAllSelectors();
-    
-    SoundTool::getInstance()->playEffect("res/music/finish.mp3");
+    this->unscheduleAllCallbacks();
+
+    SoundTool::getInstance()->playEffect("music/finish.mp3");
     
     // 判断获取的分数是否能过关
     if (passScroe > (UserDataManager::getInstance()->getAllMoney() - curPayMoney + curStageScore)) {
@@ -343,7 +398,7 @@ bool Game::touchCallBack(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     if (!ropeChangeing) {
         
-        SoundTool::getInstance()->playEffect("res/music/lastart.mp3");
+        SoundTool::getInstance()->playEffect("music/lastart.mp3");
         
         rope->stopAllActions();
         ropeChangeing = true;
@@ -358,17 +413,160 @@ void Game::addRopeHeight(float dt)
 {
     middleCircle->setPosition(circlePosition);
     ropeHeight += 10;
-    rope->setSize(Size(3, ropeHeight));
+    rope->setContentSize(Size(3, ropeHeight));
 }
 
 void Game::addButtonAction(Node *csbNode)
 {
     Button *settingBtn = static_cast<Button *>(Helper::seekWidgetByName(static_cast<Widget *>(csbNode), "settingButton"));
     settingBtn->addTouchEventListener([=](Ref *sender, Widget::TouchEventType type){
-        // 设置窗口
         if (type == Widget::TouchEventType::ENDED) {
+            this->unschedule(CC_SCHEDULE_SELECTOR(Game::updateTime));
+            _isPaused = true;
             Pause::showPause(Director::getInstance()->getRunningScene(), passScroe <= (UserDataManager::getInstance()->getAllMoney() - curPayMoney + curStageScore));
-            this->onExit();
         }
     });
 }
+
+void Game::stopShakeHookAnimation()
+{
+    rope->stopActionByTag(100);
+    rope->setRotation(0);
+}
+
+void Game::switchInputMode(InputMode mode)
+{
+    if (_inputMode == mode) return;
+    InputMode oldMode = _inputMode;
+    _inputMode = mode;
+
+    // Stop current mode
+    this->unschedule(CC_SCHEDULE_SELECTOR(Game::updateGestureAngle));
+    this->unschedule(CC_SCHEDULE_SELECTOR(Game::updateCameraPreview));
+    rope->stopActionByTag(100);
+
+    if (mode == InputMode::TOUCH) {
+        // 关闭手势识别
+        GestureFusion::getInstance()->shutdown();
+        if (_cameraPreview) {
+            _cameraPreview->setVisible(false);
+        }
+        this->startShakeHookAnimation();
+    } else {
+        if (oldMode == InputMode::TOUCH) {
+            // ── 手势识别架构初始化 ──
+            auto* fusion = GestureFusion::getInstance();
+            bool initOk = false;
+
+            if (mode == InputMode::AI) {
+                // AI 模式：摄像头直连大模型，跳过 OpenCV/MediaPipe
+                std::string cloudEp = "doubao-vision-pro-32k";
+                std::string cloudKey = "";  // FIXME: 从配置文件读取 API Key
+                initOk = fusion->initializeAI(cloudEp, cloudKey);
+                CCLOG("[Game] AI mode: camera -> LLM direct gesture recognition");
+            } else {
+                // OpenCV 模式：本地 GestureServer 手势检测
+                initOk = fusion->initialize("", "");
+                CCLOG("[Game] OpenCV mode: local GestureServer gesture recognition");
+            }
+
+            if (!initOk) {
+                CCLOG("[Game] WARNING: GestureFusion init failed, falling back to touch");
+                _inputMode = InputMode::TOUCH;
+                this->startShakeHookAnimation();
+                return;
+            }
+
+            // 注册手势指令回调（钩子释放 + 炸药引爆）
+            fusion->setCommandCallback([this](const GestureCommand& cmd) {
+                if (cmd.shouldReleaseHook && !ropeChangeing && !isOpenHook) {
+                    CCLOG("[Game] GestureFusion → RELEASE HOOK (angle=%.1f)", cmd.targetAngle);
+                    SoundTool::getInstance()->playEffect("music/lastart.mp3");
+                    rope->stopAllActions();
+                    ropeChangeing = true;
+                    minerTimeLine->gotoFrameAndPlay(0, 105, true);
+                    schedule(CC_SCHEDULE_SELECTOR(Game::addRopeHeight), 0.025);
+                }
+                if (cmd.shouldDetonateBomb) {
+                    CCLOG("[Game] GestureFusion → DETONATE BOMB");
+                    this->detonateBomb();
+                }
+            });
+        }
+
+        this->schedule(CC_SCHEDULE_SELECTOR(Game::updateGestureAngle), 0.05);
+        this->schedule(CC_SCHEDULE_SELECTOR(Game::updateCameraPreview), 0.1);
+    }
+}
+
+void Game::updateGestureAngle(float dt)
+{
+    if (_inputMode == InputMode::TOUCH) return;
+
+    // 从融合器获取本帧指令（包含 EMA 平滑后的角度 + 钩子释放信号）
+    GestureCommand cmd = GestureFusion::getInstance()->tick(dt);
+
+    if (cmd.isValid && !ropeChangeing && !isOpenHook) {
+        // 将融合器输出的角度应用到钩子旋转
+        float target = cmd.targetAngle;
+        float smooth = 0.25f;
+        _gestureAngle += (target - _gestureAngle) * smooth;
+        rope->setRotation(_gestureAngle);
+    }
+}
+
+void Game::updateCameraPreview(float dt)
+{
+    if (_inputMode == InputMode::TOUCH) return;
+
+    std::vector<uint8_t> jpegFrame;
+
+    if (_inputMode == InputMode::AI) {
+        // AI 模式：帧来自 AIGestureRecognizer（摄像头直连，无 OpenCV）
+        jpegFrame = AIGestureRecognizer::getInstance()->getLatestFrame();
+    } else {
+        // OpenCV 模式：帧来自 GestureClient（GestureServer 摄像头）
+        GestureData data = GestureClient::getInstance()->getData();
+        if (data.hasNewFrame && !data.jpegFrame.empty())
+            jpegFrame = std::move(data.jpegFrame);
+    }
+
+    if (jpegFrame.empty()) return;
+
+    // 推送帧给融合器
+    GestureFusion::getInstance()->pushPreviewFrame(jpegFrame);
+
+    Image* img = new (std::nothrow) Image();
+    if (!img->initWithImageData(jpegFrame.data(), jpegFrame.size())) {
+        delete img;
+        return;
+    }
+
+    Texture2D* tex = new (std::nothrow) Texture2D();
+    if (!tex->initWithImage(img)) {
+        delete img;
+        delete tex;
+        return;
+    }
+
+    if (!_cameraPreview) {
+        _cameraPreview = Sprite::create();
+        if (!_cameraPreview) {
+            delete tex;
+            delete img;
+            return;
+        }
+        _cameraPreview->setPosition(Vec2(kWinSizeWidth - 70, kWinSizeHeight - 80));
+        _cameraPreview->setScale(0.22f);
+        _cameraPreview->setGlobalZOrder(200);
+        this->addChild(_cameraPreview, 200);
+    }
+
+    _cameraPreview->setTexture(tex);
+    _cameraPreview->setVisible(true);
+
+    tex->release();
+    img->release();
+}
+
+// onGestureData 已移除 — 钩子释放逻辑由 GestureFusion::setCommandCallback 处理

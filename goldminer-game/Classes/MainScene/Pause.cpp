@@ -2,9 +2,9 @@
 //  Pause.cpp
 //  GoldMiner
 //
-//  项目GitHub地址:https://github.com/ZhongTaoTian
-//  项目思路和架构讲解博客:http://www.jianshu.com/users/5fe7513c7a57/latest_articles
-//  微博:http://weibo.com/5622363113/fans?topnav=1&wvr=6&mod=message&need_filter=1
+//  Created by sfbest on 2016/11/28.
+//
+//
 
 #include "Pause.hpp"
 #include "UserDataManager.hpp"
@@ -19,7 +19,7 @@ bool Pause::init(bool nextBtnCanClick)
     csb = CSLoader::createNode("PauseLayer.csb");
     addChild(csb);
     
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("res/Resources/general-sheet.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Resources/general-sheet.plist");
     
     Button *musicButton = static_cast<Button *>(Helper::seekWidgetByName(static_cast<Widget *>(csb), "musicButton"));
     musicButton->addTouchEventListener(CC_CALLBACK_2(Pause::musicButtonOnTouch, this));
@@ -47,9 +47,7 @@ bool Pause::init(bool nextBtnCanClick)
     Button *cancelButton = static_cast<Button *>(Helper::seekWidgetByName(static_cast<Widget *>(csb), "cancelButton"));
     cancelButton->addTouchEventListener([=](Ref *sender, Widget::TouchEventType type) {
         if (type == Widget::TouchEventType::ENDED) {
-            
-            Director::getInstance()->getRunningScene()->onEnter();
-            
+            _eventDispatcher->dispatchCustomEvent("resumeGame");
             this->removeFromParentAndCleanup(true);
         }
     });
@@ -70,7 +68,7 @@ void Pause::updateMusicButton()
         normal = "music-off-btn-0.png";
         press = "music-off-btn-1.png";
     }
-    musicButton->loadTextures(normal, press, "", TextureResType::PLIST);
+    musicButton->loadTextures(normal, press, "", Widget::TextureResType::PLIST);
 }
 
 class Pause *Pause::create(bool nextBtnCanClick)
@@ -101,7 +99,7 @@ void Pause::updateSoundButton()
         normal = "sound-off-btn-0.png";
         press = "sound-off-btn-1.png";
     }
-    soundButton->loadTextures(normal, press, "", TextureResType::PLIST);
+    soundButton->loadTextures(normal, press, "", Widget::TextureResType::PLIST);
 }
 
 void Pause::showPause(cocos2d::Node *parent, bool nextBtnCanClick)

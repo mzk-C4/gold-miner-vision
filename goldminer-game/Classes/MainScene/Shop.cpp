@@ -2,18 +2,33 @@
 //  Shop.cpp
 //  GoldMiner
 //
-//  项目GitHub地址:https://github.com/ZhongTaoTian
-//  项目思路和架构讲解博客:http://www.jianshu.com/users/5fe7513c7a57/latest_articles
-//  微博:http://weibo.com/5622363113/fans?topnav=1&wvr=6&mod=message&need_filter=1
+//  Created by sfbest on 2016/12/6.
+//
+//
 
 #include "Shop.hpp"
 #include "UserDataManager.hpp"
 #include "Game.hpp"
+#include "2d/CCSpriteFrameCache.h"
 
 #define kBombPrice 200
 #define kPotionPrice 300
 #define kDiamondsPrice 200
 #define kStoneBookPrice 100
+
+// Recursive search that traverses ALL children, not just Widgets.
+// Helper::seekWidgetByName only traverses Widget* nodes, so it misses
+// Sprite nodes (like "businessman") that are nested under other Sprites.
+static Node* seekNodeByName(Node* root, const std::string& name)
+{
+    if (!root) return nullptr;
+    if (root->getName() == name) return root;
+    for (const auto& child : root->getChildren()) {
+        Node* found = seekNodeByName(child, name);
+        if (found) return found;
+    }
+    return nullptr;
+}
 
 Scene *Shop::createScene()
 {
@@ -31,9 +46,49 @@ bool Shop::init()
         return false;
     }
     
+    // Pre-load original shoper.plist so CSB loader won't re-load it later
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "Resources/shoper.plist", "Resources/shoper.png");
+
+    // Load the new sprite sheet and collect its frames
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile(
+        "Resources/shopper_new.plist",
+        "Resources/shopper new.png");
+
+    Vector<SpriteFrame*> newFrames;
+    for (int i = 1; i <= 23; i++) {
+        char name[32];
+        snprintf(name, sizeof(name), "shopper_new%04d.png", i);
+        auto* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(name);
+        if (frame) {
+            newFrames.pushBack(frame);
+        }
+    }
+
+    // Replace the ORIGINAL shoper frames in SpriteFrameCache with our
+    // new ones BEFORE creating the CSB node. This way the merchant
+    // sprite is created with the new look from the start.
+    if (!newFrames.empty()) {
+        auto* frameCache = SpriteFrameCache::getInstance();
+        for (int i = 1; i <= 38; i++) {
+            char name[32];
+            snprintf(name, sizeof(name), "shoper%04d.png", i);
+            auto* oldFrame = frameCache->getSpriteFrameByName(name);
+            if (oldFrame) {
+                // Cycle new frames across old frame slots
+                auto* newFrame = newFrames.at((i - 1) % newFrames.size());
+                oldFrame->setTexture(newFrame->getTexture());
+                oldFrame->setRect(newFrame->getRect());
+                oldFrame->setRotated(newFrame->isRotated());
+                oldFrame->setOffsetInPixels(newFrame->getOffsetInPixels());
+                oldFrame->setOriginalSizeInPixels(newFrame->getOriginalSizeInPixels());
+            }
+        }
+    }
+
     auto csb = CSLoader::createNode("ShopScene.csb");
     this->addChild(csb);
-    
+
     goodsDesVec.push_back(Value("炸药.购买以后,当抓到较重且金额不多的物品时,按下上方炸药即可炸毁物品,以便节省时间.功效为下一关"));
     goodsDesVec.push_back(Value("力量药水.购买以后,在下一关力量会增加,抓到物品后拉回速度会增加20%.功效为下一关"));
     goodsDesVec.push_back(Value("优质矿石.购买后在下一关中收购钻石的价格将变成原价格的3倍,但不保证下一关一定会有钻石~其效果为下一关"));
